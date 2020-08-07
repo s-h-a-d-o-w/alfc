@@ -1,0 +1,21 @@
+{
+  "name": "alfc",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
+    "start:prod": "cross-env NODE_ENV=production node server/build",
+    "build": "npx tsc"
+  },
+  "dependencies": {
+    "cross-env": "7.0.2",
+    "serve": "11.3.2",
+    "typescript": "3.9.7"
+  },
+  "devDependencies": {
+    "concurrently": "5.2.0"
+  }
+}
