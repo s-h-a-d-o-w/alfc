@@ -6,9 +6,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
-    "start:prod": "cross-env NODE_ENV=production node server/build",
-    "build": "npx tsc"
+    "install": "yarn install:frontend && yarn install:server",
+    "install:frontend": "cd frontend && yarn install --frozen-lockfile",
+    "install:server": "cd server && yarn install --frozen-lockfile",
+    "start": "concurrently \"cd server && npm run start\" \"cd frontend && npm run start\"",
+    "start:prod": "cross-env NODE_ENV=production node server/build"
   },
   "dependencies": {
     "cross-env": "7.0.2",
@@ -16,6 +18,8 @@
     "typescript": "3.9.7"
   },
   "devDependencies": {
-    "concurrently": "5.2.0"
+    "@types/lodash": "4.14.159",
+    "concurrently": "5.2.0",
+    "kill-port": "1.6.1"
   }
 }

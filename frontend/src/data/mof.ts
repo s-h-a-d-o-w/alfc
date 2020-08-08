@@ -10,6 +10,7 @@ type Args = {
 type WmiMethods = {
   [name: string]: {
     methodId: string;
+    methodName: string;
     description: string;
     inArgs: Args[];
     outArgs: Args[];
@@ -18,7 +19,6 @@ type WmiMethods = {
 
 function parseMof(mof: string) {
   const methods: WmiMethods = {};
-
   const rawMethods = mof.split('\n');
   for (const rawMethod of rawMethods) {
     // parse metadata and raw args string
@@ -49,6 +49,7 @@ function parseMof(mof: string) {
 
       methods[methodName] = {
         methodId,
+        methodName,
         description,
         inArgs,
         outArgs,
@@ -56,7 +57,11 @@ function parseMof(mof: string) {
     }
   }
 
-  return methods;
+  const result: WmiMethods = {};
+  for (const key of Object.keys(methods).sort()) {
+    result[key] = methods[key];
+  }
+  return result;
 }
 
 export const getMethods = parseMof(mofGet);

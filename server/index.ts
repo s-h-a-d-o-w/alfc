@@ -1,32 +1,37 @@
 import express from 'express';
+import isElevated from 'is-elevated';
 import path from 'path';
-import ws from 'ws';
+import { initNativeServices } from './native';
+import { wsServer } from './websocket';
 
-const app = express();
+(async () => {
+  if (!(await isElevated())) {
+    console.log('======================= NOTE ==========================');
+    console.log('This needs to be run with elevated privileges.');
+    console.log('=======================================================');
+    process.exit(1);
+  }
 
-const port = 3001;
+  await initNativeServices();
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../frontend/build')));
-} else {
-  app.get('/', (req, res) => {
-    res.send('Hello Worlffd!');
+  const app = express();
+  const port = 5522;
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, './frontend')));
+  } else {
+    app.get('/', (req, res) => {
+      res.send('Nothing to see here.');
+    });
+  }
+
+  const server = app.listen(port, 'localhost', () => {
+    console.log(`Server running @ ${port}`);
   });
-}
 
-const server = app.listen(port, () => {
-  console.log('Server running');
-});
-
-const wsServer = new ws.Server({ noServer: true });
-wsServer.on('connection', (socket) => {
-  socket.on('message', (message) => {
-    console.log(message);
+  server.on('upgrade', (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, (socket) => {
+      wsServer.emit('connection', socket, request);
+    });
   });
-});
-
-server.on('upgrade', (request, socket, head) => {
-  wsServer.handleUpgrade(request, socket, head, (socket) => {
-    wsServer.emit('connection', socket, request);
-  });
-});
+})();

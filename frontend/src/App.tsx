@@ -1,29 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import '@csstools/normalize.css';
+import styled from '@emotion/styled';
+import React, { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
-import { Debug } from './components/Debug';
+import { CPUTuning } from './containers/CPUTuning';
+import { Debug } from './containers/Debug';
+import { FanTable } from './containers/FanTable';
+import { Toggles } from './containers/Toggles';
+import { Status } from './containers/Status';
+import { css } from 'emotion';
 
-const ws = new WebSocket('ws://localhost:3001');
-export const WebsocketContext = React.createContext(ws);
+const StyledApp = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-color: #3c3c49;
+  color: white;
+`;
+
+const StyledMain = styled.main`
+  display: flex;
+  justify-content: center;
+`;
 
 function App() {
-  const [isWebSocketOpen, setIsWebSocketOpen] = useState(false);
-
-  useEffect(() => {
-    ws.onopen = () => {
-      setIsWebSocketOpen(true);
-    };
-  }, []);
-
-  if (!isWebSocketOpen) {
-    return <div>Establishing connection to backend...</div>;
-  }
-
   return (
-    <WebsocketContext.Provider value={ws}>
-      <div className="App">
+    <div>
+      <StyledApp>
+        <div style={{ flexGrow: 1 }}>
+          <StyledMain>
+            <FanTable />
+            <div style={{ maxWidth: 300, marginLeft: 32, marginTop: 24 }}>
+              <Toggles />
+              <CPUTuning />
+            </div>
+          </StyledMain>
+          <Status />
+        </div>
         <Debug />
-      </div>
-    </WebsocketContext.Provider>
+        <ToastContainer style={{ borderRadius: 4 }} />
+      </StyledApp>
+    </div>
   );
 }
 

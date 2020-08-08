@@ -3,5 +3,10 @@
     "./**/*"
   ],
   "ext": "ts",
-  "exec": "ts-node ."
+  "exec": "ts-node .",
+  "events": {
+    "restart": "kill-port 5522",
+    "crash": "kill-port 5522"
+  },
+  "delay": "1500"
 }

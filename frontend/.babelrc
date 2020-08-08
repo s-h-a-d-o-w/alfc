@@ -1,0 +1,11 @@
+{
+  "presets": ["babel-preset-react-app"],
+  "env": {
+    "production": {
+      "plugins": ["emotion"]
+    },
+    "development": {
+      "plugins": [["emotion", { "sourceMap": true }]]
+    }
+  }
+}
