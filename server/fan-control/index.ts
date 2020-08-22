@@ -13,7 +13,7 @@ function fanPercentToSpeed(percent: number) {
 
 // Both CPU and GPU fan are set to the same speed
 // due to the shared heat pipes.
-function setFixedFan(percent: number) {
+export function setFixedFan(percent: number) {
   const speed = fanPercentToSpeed(percent);
 
   // SetFixedFanSpeed
@@ -76,12 +76,19 @@ export function fanControl() {
     return highestMatch;
   }
 
-  let appliedSpeed = 0;
+  let appliedSpeed = -1;
   let currRampDownCycle = 0;
   let currRampUpCycle = 0;
   let prevCPUFanTable = state.cpuFanTable;
   let prevGPUFanTable = state.gpuFanTable;
-  setInterval(async () => {
+  const autoFanInterval = setInterval(async () => {
+    // Interrupt if switching to fixed fan speed
+    if (state.doFixedSpeed) {
+      clearInterval(autoFanInterval);
+      setFixedFan(state.fixedPercentage);
+      return;
+    }
+
     // Collect average temperature throughout CYCLE_DURATION
     const { avgCPUTemp, avgGPUTemp } = await new Promise((resolve) => {
       const CPUTemps: number[] = [];
@@ -154,10 +161,17 @@ export function fanControl() {
         currRampDownCycle++;
       }
     } else {
+      // Need to reset if e.g. ramp down phase is
+      // interrupted by CPU getting hot again.
       currRampDownCycle = 0;
       currRampUpCycle = 0;
     }
 
-    sendActivity({ appliedSpeed, avgCPUTemp, avgGPUTemp, target });
+    sendActivity({
+      appliedSpeed: appliedSpeed === -1 ? null : appliedSpeed,
+      avgCPUTemp,
+      avgGPUTemp,
+      target,
+    });
   }, CYCLE_DURATION);
 }

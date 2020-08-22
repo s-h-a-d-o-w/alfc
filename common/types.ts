@@ -18,6 +18,8 @@ export enum MessageToServerKind {
   Set = 'set',
   Tune = 'tune',
   FanTable = 'fantable',
+  FixedPercentage = 'fixedpercentage',
+  DoFixedSpeed = 'dofixedspeed',
   RegisterActivitySocket = 'registeractivitysocket',
 }
 

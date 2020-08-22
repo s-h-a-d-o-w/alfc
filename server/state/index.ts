@@ -13,6 +13,10 @@ export type FanTable = [number, number][];
 export type State = {
   cpuFanTable: FanTable;
   gpuFanTable: FanTable;
+
+  doFixedSpeed: boolean;
+  fixedPercentage: number;
+
   gpuBoost: boolean;
   pl1: number;
   pl2: number;

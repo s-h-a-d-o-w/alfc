@@ -1,8 +1,9 @@
 import { getMethods, setMethods } from '../data/mof';
 import { toast } from 'react-toastify';
 import { css } from 'emotion';
+import { theme } from './consts';
 
-function sendMessage(ws: WebSocket | undefined, payload: any) {
+export function sendMessage(ws: WebSocket | undefined, payload: any) {
   if (ws && ws.readyState === ws.OPEN) {
     ws.send(JSON.stringify(payload));
   } else {
@@ -41,8 +42,12 @@ export function sendTune(ws: WebSocket | undefined, pl1: number, pl2: number) {
   });
 }
 
+export const errorToastStyle = css`
+  border-radius: 4px;
+`;
+
 const successToastStyle = css`
-  background: #acd132;
+  background: ${theme.primary};
   border-radius: 4px;
 `;
 
@@ -55,7 +60,7 @@ export function successToast(content: any) {
 
 export function errorToast(content: any) {
   toast.error(content, {
-    className: successToastStyle,
+    className: errorToastStyle,
     position: 'bottom-right',
     autoClose: false,
   });

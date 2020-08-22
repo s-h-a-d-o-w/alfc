@@ -3,5 +3,7 @@
   "gpuFanTable": [[40, 15], [78, 50], [83, 100]],
   "gpuBoost": true,
   "pl1": 38,
-  "pl2": 107
+  "pl2": 107,
+  "doFixedSpeed": false,
+  "fixedPercentage": 30
 }

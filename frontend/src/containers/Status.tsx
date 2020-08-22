@@ -44,7 +44,7 @@ Last applied: ${appliedSpeed}%`;
         value={status}
         rows={4}
         cols={25}
-        style={{ fontSize: 14 }}
+        style={{ fontSize: 14, cursor: 'default' }}
       />
     </StyledArea>
   );

@@ -1,4 +1,5 @@
-import { default as WebSocket, default as ws } from 'ws';
+import WebSocket from 'ws';
+import ws from 'ws';
 import {
   MessageToClientKind,
   MessageToServer,
@@ -6,6 +7,7 @@ import {
 } from '../../common/types';
 import { getCall, setCall, tune } from '../native';
 import { persistState, state } from '../state';
+import { setFixedFan, fanControl as autoFanControl } from '../fan-control';
 
 function sendState(socket: WebSocket) {
   const stateCopy = Object.assign({}, state);
@@ -41,6 +43,18 @@ wsServer.on('connection', (socket) => {
         case MessageToServerKind.RegisterActivitySocket:
           state.activitySocket = socket;
           return;
+        case MessageToServerKind.FixedPercentage:
+          state.fixedPercentage = payload.data;
+          setFixedFan(state.fixedPercentage);
+          persistState();
+          return sendSuccess(socket, payload);
+        case MessageToServerKind.DoFixedSpeed:
+          state.doFixedSpeed = payload.data;
+          if (!state.doFixedSpeed) {
+            autoFanControl();
+          }
+          persistState();
+          return sendSuccess(socket, payload);
         case MessageToServerKind.FanTable:
           if (payload.data) {
             state.cpuFanTable = payload.data.cpu;

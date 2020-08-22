@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { errorToastStyle } from './misc';
 
 export function useWebSocket() {
   const [ws, setWs] = useState<WebSocket>();
@@ -12,6 +13,7 @@ export function useWebSocket() {
 
     _ws.onclose = () => {
       toast.error('WebSocket connection was lost. Please refresh the page.', {
+        className: errorToastStyle,
         autoClose: false,
         closeButton: false,
         hideProgressBar: true,

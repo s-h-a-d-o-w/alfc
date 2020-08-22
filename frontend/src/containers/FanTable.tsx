@@ -1,15 +1,27 @@
+import styled from '@emotion/styled';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyledApplyButton } from '../components/StyledApplyButton';
 import { StyledArea } from '../components/StyledArea';
 import { useWebSocket } from '../utils/hooks';
-import { errorToast, successToast } from '../utils/misc';
+import { errorToast, sendMessage, successToast } from '../utils/misc';
 import { FanTableEditor } from './FanTableEditor';
-
-// const isWindows = navigator.platform === 'Win32';
+import { disabledFormStyle, enabledFormStyle } from './styles/misc';
+import { Status } from './Status';
 
 export type FanTableItems = [string, string][];
 
-export function FanTable() {
+const StyledForm = styled.form<{ disabled: boolean }>`
+  position: relative;
+
+  text-align: center;
+  padding: 0 32px;
+  margin: 32px;
+
+  ${({ disabled }) => enabledFormStyle(disabled)}
+  ${({ disabled }) => disabledFormStyle(disabled)}
+`;
+
+export function FanTable({ disabled }: { disabled: boolean }) {
   const submitRef = useRef<HTMLButtonElement>(null);
   const ws = useWebSocket();
 
@@ -36,21 +48,19 @@ export function FanTable() {
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     submitRef.current?.focus();
-    ws?.send(
-      JSON.stringify({
-        kind: 'fantable',
-        data: {
-          cpu: cpuTable.map((entry) => [
-            parseInt(entry[0], 10),
-            parseInt(entry[1], 10),
-          ]),
-          gpu: gpuTable.map((entry) => [
-            parseInt(entry[0], 10),
-            parseInt(entry[1], 10),
-          ]),
-        },
-      })
-    );
+    sendMessage(ws, {
+      kind: 'fantable',
+      data: {
+        cpu: cpuTable.map((entry) => [
+          parseInt(entry[0], 10),
+          parseInt(entry[1], 10),
+        ]),
+        gpu: gpuTable.map((entry) => [
+          parseInt(entry[0], 10),
+          parseInt(entry[1], 10),
+        ]),
+      },
+    });
   };
 
   if (!ws) {
@@ -58,26 +68,31 @@ export function FanTable() {
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ textAlign: 'center', marginTop: 32 }}>
+    <StyledForm disabled={disabled} onSubmit={onSubmit}>
       <div style={{ display: 'flex' }}>
         <StyledArea>
-          <h2>CPU</h2>
+          <h2 style={{ marginTop: 0 }}>CPU</h2>
           <FanTableEditor
             onChange={(nextCurvePoints) => setCPUTable(nextCurvePoints)}
             value={cpuTable}
           />
         </StyledArea>
-        <StyledArea>
-          <h2>GPU</h2>
+        <StyledArea style={{ marginRight: 0 }}>
+          <h2 style={{ marginTop: 0 }}>GPU</h2>
           <FanTableEditor
             onChange={(nextCurvePoints) => setGPUTable(nextCurvePoints)}
             value={gpuTable}
           />
         </StyledArea>
       </div>
-      <StyledApplyButton ref={submitRef} type="submit">
+      <StyledApplyButton
+        ref={submitRef}
+        type="submit"
+        style={{ marginBottom: 16 }}
+      >
         Apply
       </StyledApplyButton>
-    </form>
+      {!disabled && <Status />}
+    </StyledForm>
   );
 }

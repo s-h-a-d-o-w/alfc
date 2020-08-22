@@ -63,6 +63,7 @@ export function FanTableEditor({ onChange, value }: Props) {
         </td>
         <td>
           <StyledButton
+            type="button"
             onClick={() => {
               const nextValue = cloneDeep(value);
               let temperature = parseInt(tableItem[0], 10) - 1;
@@ -85,6 +86,7 @@ export function FanTableEditor({ onChange, value }: Props) {
         </td>
         <td>
           <StyledButton
+            type="button"
             onClick={() => {
               const nextValue = cloneDeep(value);
               nextValue.splice(idx, 1);
