@@ -3,7 +3,7 @@ import { StyledArea } from '../components/StyledArea';
 import { useWebSocket } from '../utils/hooks';
 import { sendMessage } from '../utils/misc';
 
-export function Status() {
+export function Status({ disabled }: { disabled: boolean }) {
   const [appliedSpeed, setAppliedSpeed] = useState('-');
   const [avgCPUTemp, setAvgCPUTemp] = useState('-');
   const [avgGPUTemp, setAvgGPUTemp] = useState('-');
@@ -24,8 +24,20 @@ export function Status() {
   );
 
   useEffect(() => {
-    sendMessage(ws, { kind: 'registeractivitysocket' });
-  }, [ws]);
+    if (disabled) {
+      // Blanking out values must be delayed since we'll
+      // still receive fancontrolactivity for a bit, until
+      // server has actually stopped the auto fan control.
+      setTimeout(() => {
+        setAppliedSpeed('-');
+        setAvgCPUTemp('-');
+        setAvgGPUTemp('-');
+        setTarget('-');
+      }, 500);
+    } else {
+      sendMessage(ws, { kind: 'registeractivitysocket' });
+    }
+  }, [disabled, ws]);
 
   if (!ws) {
     return null;
