@@ -1,21 +1,28 @@
 # alfc-gui
 
-## Usage
-
-### General
-
-- Uses a web interface available @ `http://localhost:5522`
+- Offers a web interface available @ `http://localhost:5522`
+- Ramping up and down doesn't happen immediately, to prevent frequent fluctuations.
+(Ramping up happens quite quickly while ramping down requires the temperature to 
+be lower for a while.)
 - Fans are controlled as if they were one (since most heat pipes are shared). And so 
 whatever is the higher target fan speed gets applied.
 - Config is stored in `alfc.config.json` (you have to tweak something for it to be 
 created). If you prefer not to use the UI, you can edit this and restart the service 
 to apply your changes.
+- Uses about `0.4%` CPU and `500 mW` package power. (Measured in Windows at idle 
+using hwinfo.)
+
+## Usage
 
 ### Windows
 
+If you want to use this to reduce noise, ensure first that "USB Selective Suspend" 
+is enabled in your power plan, since that can cause significant power consumption and 
+thus drive temperatures up.
+
 - Download the latest release and extract it to wherever you want to run it.
 - Run `install.bat`. (In case you need to allow firewall access, you might find it 
-interesting to know that the UI only responds to requests from localhost.)
+interesting to know that the UI only responds to requests from your local machine.)
 
 You can also simply run `run.bat` from an admin command prompt to run the fan 
 control temporarily or to try it out before installing it as a service.
@@ -57,6 +64,7 @@ to port 3001.
 
 Contributions welcome, as always. 🙂
 
+- Make ramping up/down times configurable.
 - Prettier status UI.
 - For some reason, `SetChargeStop` doesn't work. But there's nothing special about 
 the call in `SmartManager.dll`: `cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`
@@ -65,4 +73,6 @@ Or is `SetMaxCharge` (used in `CloudMatrixBattery.exe`) responsible for this?
 - Using RGB lighting to highlight caps/num lock. There's something [here](https://gitlab.com/wtwrp/aeroctl/-/tree/master/Samples/AeroCtl.Rgb.LockKeys) 
 for the Gigabyte Aero that could potentially be reused.
 - Refactor styles so there aren't as many inline ones.
-
+- Make it possible to supply decent service Name and Description, especially on Windows, where it 
+sticks out like a sore thumb. (Requires modifying `os-service`, since it currently uses the name one 
+can supply also as the file name for Linux services, so spaces might be problematic.)

@@ -1,2 +1,2 @@
 @node . uninstall
-pause
+@pause
