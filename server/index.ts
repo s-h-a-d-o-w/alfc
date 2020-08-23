@@ -3,6 +3,7 @@ import isElevated from 'is-elevated';
 import path from 'path';
 import { initNativeServices } from './native';
 import { wsServer } from './websocket';
+import { isDev } from './utils/consts';
 
 (async () => {
   if (!(await isElevated())) {
@@ -17,7 +18,7 @@ import { wsServer } from './websocket';
   const app = express();
   const port = 5522;
 
-  if (process.env.NODE_ENV === 'production') {
+  if (!isDev) {
     app.use(express.static(path.join(__dirname, './frontend')));
   } else {
     app.get('/', (req, res) => {

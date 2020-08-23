@@ -2,11 +2,11 @@ import fs from 'fs';
 import stringifyCompact from 'json-stringify-pretty-compact';
 import path from 'path';
 import WebSocket from 'ws';
+import { isDev } from '../utils/consts';
 
-const CONFIG_FILE =
-  process.env.NODE_ENV === 'production'
-    ? path.join(__dirname, '../alfc.config.json')
-    : path.join(__dirname, '../../alfc.config.json');
+const CONFIG_FILE = isDev
+  ? path.join(__dirname, '../../alfc.config.json')
+  : path.join(__dirname, '../alfc.config.json');
 
 export type FanTable = [number, number][];
 
@@ -29,6 +29,12 @@ export const state: State = JSON.parse(
 );
 
 export function persistState() {
+  // No persistence in dev so that we don't keep getting changes to the
+  // default alfc.config.json.
+  if (isDev) {
+    return;
+  }
+
   const stateCopy = Object.assign({}, state);
   delete stateCopy.activitySocket;
   try {
