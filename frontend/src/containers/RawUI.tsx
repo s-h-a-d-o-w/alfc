@@ -10,10 +10,12 @@ enum Kind {
 
 const StyledHeader = styled.div`
   width: 100%;
-  background-color: #73738c;
-  cursor: pointer;
-  font-weight: bold;
+  margin-top: 32px;
   padding: 8px;
+
+  background-color: #73738c;
+
+  cursor: pointer;
 `;
 
 const StyledContent = styled.div`
@@ -29,10 +31,6 @@ const StyledControls = styled.div`
 const StyledForm = styled.form`
   display: flex;
   align-items: center;
-`;
-
-const StyledOutput = styled.textarea`
-  // height: 100%;
 `;
 
 export function RawUI() {
@@ -189,7 +187,7 @@ export function RawUI() {
           <label>
             Output
             <br />
-            <StyledOutput readOnly rows={4} cols={40} value={result} />
+            <textarea readOnly rows={4} cols={40} value={result} />
           </label>
         </div>
       </StyledControls>
