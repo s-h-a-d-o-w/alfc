@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import React, { useCallback, useRef, useState } from 'react';
 import { getMethods, setMethods } from '../data/mof';
 import { useWebSocket } from '../utils/hooks';
-import styled from '@emotion/styled';
 
 enum Kind {
   Get = 'get',
@@ -35,9 +35,7 @@ const StyledOutput = styled.textarea`
   // height: 100%;
 `;
 
-export function Debug() {
-  const ws = useWebSocket();
-
+export function RawUI() {
   const refRun = useRef<HTMLButtonElement>(null);
 
   const [kind, setKind] = useState(Kind.Get);
@@ -47,18 +45,15 @@ export function Debug() {
   const [isVisible, setIsVisible] = useState(false);
   const [result, setResult] = useState('');
 
-  // Receive execution result
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (event) => {
-        const payload = JSON.parse(event.data);
-        if (payload.kind !== 'state') {
-          setResult(`${new Date().toLocaleTimeString()}: ${payload.data}`);
-          setIsRunning(false);
-        }
-      };
-    }
-  }, [ws]);
+  const ws = useWebSocket(
+    useCallback((event) => {
+      const payload = JSON.parse(event.data);
+      if (payload.kind !== 'state') {
+        setResult(`${new Date().toLocaleTimeString()}: ${payload.data}`);
+        setIsRunning(false);
+      }
+    }, [])
+  );
 
   if (!ws) {
     return null;

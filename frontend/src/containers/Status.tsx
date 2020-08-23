@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { StyledArea } from '../components/StyledArea';
 import { useWebSocket } from '../utils/hooks';
+import { sendMessage } from '../utils/misc';
 
 export function Status() {
-  const ws = useWebSocket();
-
   const [appliedSpeed, setAppliedSpeed] = useState('-');
   const [avgCPUTemp, setAvgCPUTemp] = useState('-');
   const [avgGPUTemp, setAvgGPUTemp] = useState('-');
   const [target, setTarget] = useState('-');
 
-  useEffect(() => {
-    if (ws) {
-      ws.send(JSON.stringify({ kind: 'registeractivitysocket' }));
+  const ws = useWebSocket(
+    useCallback((event) => {
+      const { kind, data } = JSON.parse(event.data);
+      if (kind === 'fancontrolactivity') {
+        setAppliedSpeed(data.appliedSpeed);
+        setAvgCPUTemp(data.avgCPUTemp);
+        setAvgGPUTemp(data.avgGPUTemp);
+        setTarget(data.target);
+      } else if (kind === 'error') {
+        console.error(data);
+      }
+    }, [])
+  );
 
-      ws.onmessage = (event) => {
-        const { kind, data } = JSON.parse(event.data);
-        if (kind === 'fancontrolactivity') {
-          setAppliedSpeed(data.appliedSpeed);
-          setAvgCPUTemp(data.avgCPUTemp);
-          setAvgGPUTemp(data.avgGPUTemp);
-          setTarget(data.target);
-        } else if (kind === 'error') {
-          console.error(data);
-        }
-      };
-    }
+  useEffect(() => {
+    sendMessage(ws, { kind: 'registeractivitysocket' });
   }, [ws]);
 
   if (!ws) {

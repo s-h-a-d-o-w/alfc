@@ -62,10 +62,16 @@ const StyledInput = styled.input`
   }
 `;
 
+const StyledLabel = styled.label`
+  display: inline-block;
+  margin-left: 8px;
+  cursor: pointer;
+`;
+
 type Props = {
   label: string;
   name: string;
-  onChange: React.ChangeEventHandler;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
   value: ToggleState;
 };
 
@@ -79,12 +85,11 @@ export function Toggle({ label, name, onChange, value }: Props) {
           id={name}
           name={name}
           checked={value === ToggleState.On}
-          // @ts-ignore No time to debug this nonsense
           onChange={onChange}
         />
         <StyledToggle />
       </StyledToggleContainer>
-      <label
+      <StyledLabel
         htmlFor={name}
         style={{
           marginLeft: 8,
@@ -93,7 +98,7 @@ export function Toggle({ label, name, onChange, value }: Props) {
         }}
       >
         <h2>{label}</h2>
-      </label>
+      </StyledLabel>
     </>
   );
 }

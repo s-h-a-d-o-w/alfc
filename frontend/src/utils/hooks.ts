@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { errorToastStyle } from './misc';
 
-export function useWebSocket() {
+export function useWebSocket(onMessage: WebSocket['onmessage']) {
   const [ws, setWs] = useState<WebSocket>();
 
   useEffect(() => {
     const _ws = new WebSocket('ws://localhost:5522');
+
+    _ws.onmessage = onMessage;
+
     _ws.onopen = () => {
       setWs(_ws);
     };
@@ -25,7 +28,7 @@ export function useWebSocket() {
     return () => {
       _ws.close();
     };
-  }, []);
+  }, [onMessage]);
 
   return ws;
 }

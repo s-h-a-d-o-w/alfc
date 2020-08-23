@@ -2,13 +2,13 @@ import '@csstools/normalize.css';
 import styled from '@emotion/styled';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from 'reactstrap';
 import './App.css';
 import { CPUTuning } from './containers/CPUTuning';
-import { Debug } from './containers/Debug';
+import { RawUI } from './containers/RawUI';
 import { FanTable } from './containers/FanTable';
 import { FixedSpeed } from './containers/FixedSpeed';
 import { Toggles } from './containers/Toggles';
@@ -44,24 +44,19 @@ const StyledChangeModeContainer = styled.div`
 `;
 
 function App() {
-  const ws = useWebSocket();
-
   const [doFixedSpeed, setDoFixedSpeed] = useState(false);
 
-  // Receive execution result
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (event) => {
-        const { kind, data } = JSON.parse(event.data);
-        if (kind === 'state') {
-          setDoFixedSpeed(data.doFixedSpeed);
-        } else if (kind === 'error') {
-          errorToast(data);
-          console.error(data);
-        }
-      };
-    }
-  }, [ws]);
+  const ws = useWebSocket(
+    useCallback((event) => {
+      const { kind, data } = JSON.parse(event.data);
+      if (kind === 'state') {
+        setDoFixedSpeed(data.doFixedSpeed);
+      } else if (kind === 'error') {
+        errorToast(data);
+        console.error(data);
+      }
+    }, [])
+  );
 
   if (!ws) {
     return null;
@@ -96,7 +91,7 @@ function App() {
             </div>
           </StyledTopRow>
         </div>
-        <Debug />
+        <RawUI />
         <ToastContainer style={{ borderRadius: 4 }} />
       </StyledApp>
     </div>

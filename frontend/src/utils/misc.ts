@@ -7,7 +7,14 @@ export function sendMessage(ws: WebSocket | undefined, payload: any) {
   if (ws && ws.readyState === ws.OPEN) {
     ws.send(JSON.stringify(payload));
   } else {
-    errorToast('No WebSocket connection. Please refresh the page.');
+    // Log failure just for possible debugging
+    console.log(
+      `Probably harmless, since it will likely be retried. Tried to send the following payload to ${ws}: ${JSON.stringify(
+        payload,
+        null,
+        2
+      )}`
+    );
   }
 }
 

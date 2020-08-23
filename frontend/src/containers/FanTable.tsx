@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { StyledApplyButton } from '../components/StyledApplyButton';
 import { StyledArea } from '../components/StyledArea';
 import { useWebSocket } from '../utils/hooks';
 import { errorToast, sendMessage, successToast } from '../utils/misc';
 import { FanTableEditor } from './FanTableEditor';
-import { disabledFormStyle, enabledFormStyle } from './styles/misc';
 import { Status } from './Status';
+import { disabledFormStyle, enabledFormStyle } from './styles/misc';
 
 export type FanTableItems = [string, string][];
 
@@ -23,27 +23,28 @@ const StyledForm = styled.form<{ disabled: boolean }>`
 
 export function FanTable({ disabled }: { disabled: boolean }) {
   const submitRef = useRef<HTMLButtonElement>(null);
-  const ws = useWebSocket();
 
   const [cpuTable, setCPUTable] = useState<FanTableItems>([]);
   const [gpuTable, setGPUTable] = useState<FanTableItems>([]);
 
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (event) => {
-        const { kind, data } = JSON.parse(event.data);
-        if (kind === 'state') {
-          setCPUTable(data.cpuFanTable);
-          setGPUTable(data.gpuFanTable);
-        } else if (kind === 'success') {
-          successToast('Successfully applied.');
-        } else if (kind === 'error') {
-          errorToast(data);
-          console.error(data);
-        }
-      };
-    }
-  }, [ws]);
+  const ws = useWebSocket(
+    useCallback((event) => {
+      const { kind, data } = JSON.parse(event.data);
+      if (kind === 'state') {
+        setCPUTable(data.cpuFanTable);
+        setGPUTable(data.gpuFanTable);
+      } else if (kind === 'success') {
+        successToast('Successfully applied.');
+      } else if (kind === 'error') {
+        errorToast(data);
+        console.error(data);
+      }
+    }, [])
+  );
+
+  if (!ws) {
+    return null;
+  }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
@@ -62,10 +63,6 @@ export function FanTable({ disabled }: { disabled: boolean }) {
       },
     });
   };
-
-  if (!ws) {
-    return null;
-  }
 
   return (
     <StyledForm disabled={disabled} onSubmit={onSubmit}>

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { StyledApplyButton } from '../components/StyledApplyButton';
 import { useWebSocket } from '../utils/hooks';
-import { errorToast, successToast, sendMessage } from '../utils/misc';
+import { errorToast, sendMessage, successToast } from '../utils/misc';
 import { disabledFormStyle, enabledFormStyle } from './styles/misc';
 
 const StyledForm = styled.form<{ disabled: boolean }>`
@@ -24,25 +24,25 @@ const StyledInput = styled.input`
 
 export function FixedSpeed({ disabled }: { disabled: boolean }) {
   const submitRef = useRef<HTMLButtonElement>(null);
-  const ws = useWebSocket();
-
   const [fixedPercentage, setFixedPercentage] = useState('0');
 
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (event) => {
-        const { kind, data } = JSON.parse(event.data);
-        if (kind === 'state') {
-          setFixedPercentage(data.fixedPercentage);
-        } else if (kind === 'success') {
-          successToast('Successfully applied.');
-        } else if (kind === 'error') {
-          errorToast(data);
-          console.error(data);
-        }
-      };
-    }
-  }, [ws]);
+  const ws = useWebSocket(
+    useCallback((event) => {
+      const { kind, data } = JSON.parse(event.data);
+      if (kind === 'state') {
+        setFixedPercentage(data.fixedPercentage);
+      } else if (kind === 'success') {
+        successToast('Successfully applied.');
+      } else if (kind === 'error') {
+        errorToast(data);
+        console.error(data);
+      }
+    }, [])
+  );
+
+  if (!ws) {
+    return null;
+  }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
@@ -52,10 +52,6 @@ export function FixedSpeed({ disabled }: { disabled: boolean }) {
       data: parseInt(fixedPercentage, 10),
     });
   };
-
-  if (!ws) {
-    return null;
-  }
 
   return (
     <StyledForm disabled={disabled} onSubmit={onSubmit}>

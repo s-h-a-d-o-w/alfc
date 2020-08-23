@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { toast } from 'react-toastify';
+import styled from '@emotion/styled';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { useWebSocket } from '../utils/hooks';
-import { sendTune, successToast, errorToast } from '../utils/misc';
+import React, { useCallback, useRef, useState } from 'react';
 import { SimpleTooltip } from '../components/SimpleTooltip';
-import styled from '@emotion/styled';
-import { StyledArea } from '../components/StyledArea';
 import { StyledApplyButton } from '../components/StyledApplyButton';
+import { StyledArea } from '../components/StyledArea';
+import { useWebSocket } from '../utils/hooks';
+import { errorToast, sendTune, successToast } from '../utils/misc';
 
 const StyledInput = styled.input`
   width: 56px;
@@ -20,29 +18,24 @@ const StyledLabel = styled.label`
 `;
 
 export function CPUTuning() {
-  const ws = useWebSocket();
-
   const tooltipRef = useRef(null);
 
   const [isApplying, setIsApplying] = useState(false);
   const [pl1, setPL1] = useState('38');
   const [pl2, setPL2] = useState('107');
 
-  // Receive execution result
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (event) => {
-        setIsApplying(false);
-        const { kind, data } = JSON.parse(event.data);
-        if (kind === 'success') {
-          successToast('Successfully applied.');
-        } else if (kind === 'error') {
-          errorToast(data);
-          console.error(data);
-        }
-      };
-    }
-  }, [ws]);
+  const ws = useWebSocket(
+    useCallback((event) => {
+      setIsApplying(false);
+      const { kind, data } = JSON.parse(event.data);
+      if (kind === 'success') {
+        successToast('Successfully applied.');
+      } else if (kind === 'error') {
+        errorToast(data);
+        console.error(data);
+      }
+    }, [])
+  );
 
   if (!ws) {
     return null;
