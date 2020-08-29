@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "install": "yarn install:frontend && yarn install:server",
+    "install": "yarn install:bootstrap && yarn install:frontend && yarn install:server",
+    "install:bootstrap": "cd bootstrap && yarn install --frozen-lockfile",
     "install:frontend": "cd frontend && yarn install --frozen-lockfile",
     "install:server": "cd server && yarn install --frozen-lockfile",
     "start": "concurrently \"cd server && npm run start\" \"cd frontend && npm run start\"",

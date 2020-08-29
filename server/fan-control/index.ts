@@ -23,7 +23,9 @@ export function setFixedFan(percent: number) {
 }
 
 async function getCallInt(methodId: string, methodName: string) {
-  return parseInt(await getCall(methodId, methodName), 16);
+  // On rare occassions, the call returns `null`.
+  const result = parseInt(await getCall(methodId, methodName), 16);
+  return isNaN(result) ? -1 : result;
 }
 
 function initFanControl() {
@@ -98,7 +100,9 @@ export function fanControl() {
         const currGPUTemp1 = await getCallInt('0xe2', 'getGpuTemp1');
         const currGPUTemp2 = await getCallInt('0xe3', 'getGpuTemp2');
         const currGPUTemp = Math.max(currGPUTemp1, currGPUTemp2);
-        // isDebug && console.log(`CPU and GPU1/GPU2 temperatures: ${currCPUTemp} ${currGPUTemp1}/${currGPUTemp2}`);
+        // console.log(
+        //   `CPU and GPU1/GPU2 temperatures: ${currCPUTemp} ${currGPUTemp1}/${currGPUTemp2}`
+        // );
 
         CPUTemps.push(currCPUTemp);
         GPUTemps.push(currGPUTemp);

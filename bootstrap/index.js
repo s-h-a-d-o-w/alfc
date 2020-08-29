@@ -5,6 +5,8 @@ const service = require('os-service');
 const path = require('path');
 const sudo = require('sudo-prompt');
 
+const isWindows = os.platform() === 'win32';
+
 const sudoOptions = {
   name: 'Aorus Laptop Fan Control',
 };
@@ -33,14 +35,15 @@ switch(process.argv[2]) {
     break;
   case 'install-as-sudo':
     service.add("alfc", {
-      programArgs: ["run"], 
+      programArgs: ["run"],
       dependencies: os.platform() === 'win32' ? ['Winmgmt'] : ['acpi_call']
     }, errorHandler(() => {
-      exec('net start alfc', errorHandler(async () => {
+      const serviceStartCommand = isWindows ? 'net start alfc' : 'service alfc start';
+      exec(serviceStartCommand, errorHandler(async () => {
         if (os.platform() === 'win32') {
           await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
         }
-      
+
         console.log('Done.');
         require('react-dev-utils/openBrowser')('http://localhost:5522');
       }));
@@ -51,7 +54,8 @@ switch(process.argv[2]) {
     sudo.exec(`node ${process.argv[1]} uninstall-as-sudo`, sudoOptions, sudoOutputHandler);
     break;
   case "uninstall-as-sudo":
-    exec(`net stop alfc`, () => {
+    const serviceStopCommand = isWindows ? 'net stop alfc' : 'service alfc stop';
+    exec(serviceStopCommand, () => {
       // exec would possibly error if the service is already stopped.
       // But we don't care about that and will simply attempt to remove the serivce.
   
