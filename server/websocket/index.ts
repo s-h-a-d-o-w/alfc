@@ -65,10 +65,10 @@ wsServer.on('connection', (socket) => {
           break;
         case MessageToServerKind.Tune:
           if (payload.data) {
-            await tune();
             state.pl1 = payload.data.pl1;
             state.pl2 = payload.data.pl2;
             persistState();
+            await tune();
             return sendSuccess(socket, payload);
           }
           break;

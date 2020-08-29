@@ -32,8 +32,15 @@ switch(process.argv[2]) {
     sudo.exec(`node ${process.argv[1]} install-as-sudo`, sudoOptions, sudoOutputHandler);
     break;
   case 'install-as-sudo':
-    service.add("alfc", {programArgs: ["run"]}, errorHandler(() => {
-      exec('net start alfc', errorHandler(() => {
+    service.add("alfc", {
+      programArgs: ["run"], 
+      dependencies: os.platform() === 'win32' ? ['Winmgmt'] : ['acpi_call']
+    }, errorHandler(() => {
+      exec('net start alfc', errorHandler(async () => {
+        if (os.platform() === 'win32') {
+          await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
+        }
+      
         console.log('Done.');
         require('react-dev-utils/openBrowser')('http://localhost:5522');
       }));

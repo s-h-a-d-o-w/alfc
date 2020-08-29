@@ -1,5 +1,6 @@
 import express from 'express';
 import isElevated from 'is-elevated';
+import os from 'os';
 import path from 'path';
 import { initNativeServices } from './native';
 import { wsServer } from './websocket';
@@ -11,6 +12,15 @@ import { isDev } from './utils/consts';
     console.log('This needs to be run with elevated privileges.');
     console.log('=======================================================');
     process.exit(1);
+  }
+
+  // Declaring WMI as a dependency is apparently not enough.
+  // So we need to wait for things to settle...
+  // TODO: Offer a method through the .NET library that makes it
+  // possible to just try and create a WMI instance and returns whether
+  // it was able to.
+  if (os.platform() === 'win32') {
+    await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
   }
 
   await initNativeServices();

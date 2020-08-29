@@ -28,7 +28,10 @@ export function CPUTuning() {
     useCallback((event) => {
       setIsApplying(false);
       const { kind, data } = JSON.parse(event.data);
-      if (kind === 'success') {
+      if (kind === 'state') {
+        setPL1(data.pl1);
+        setPL2(data.pl2);
+      } else if (kind === 'success') {
         successToast('Successfully applied.');
       } else if (kind === 'error') {
         errorToast(data);
