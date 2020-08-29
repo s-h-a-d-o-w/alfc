@@ -1,3 +1,5 @@
+import { theme } from '../../utils/consts';
+
 export const disabledFormStyle = (disabled: boolean) =>
   disabled &&
   `
@@ -11,7 +13,7 @@ export const disabledFormStyle = (disabled: boolean) =>
   width: 100%;
   height: 100%;
 
-  background-color: hsl(240 10% 40% / 0.5);
+  background-color: ${theme.secondaryHalfOpacity};
   border-radius: 16px;
 }
 `;
@@ -20,5 +22,5 @@ export const enabledFormStyle = (disabled: boolean) =>
   !disabled &&
   `
 border-radius: 16px;
-background-color: hsl(240 10% 40% / 1);
+background-color: ${theme.secondary};
 `;

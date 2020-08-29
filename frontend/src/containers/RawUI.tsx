@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React, { useCallback, useRef, useState } from 'react';
 import { getMethods, setMethods } from '../data/mof';
 import { useWebSocket } from '../utils/hooks';
+import { theme } from '../utils/consts';
 
 enum Kind {
   Get = 'get',
@@ -13,7 +14,7 @@ const StyledHeader = styled.div`
   margin-top: 32px;
   padding: 8px;
 
-  background-color: #73738c;
+  background-color: ${theme.secondary};
 
   cursor: pointer;
 `;
