@@ -1,6 +1,12 @@
-# alfc-gui
+# Aorus Laptop Fan Control (alfc)
 
-- Offers a web interface available @ `http://localhost:5522`
+Tested on an Aorus 15G but it seems like most of the things used in this are used in 
+a variety of Gigabyte's laptops, so it could work with others too. (If you try it out and it does, 
+please get in touch - email is in my profile.)
+
+![Screenshot](/assets/screenshot.png?raw=true)
+
+- Web interface available @ `http://localhost:5522`
 - Ramping up and down doesn't happen immediately, to prevent frequent fluctuations.
 (Ramping up happens quite quickly while ramping down requires the temperature to 
 be lower for a while.)
@@ -14,11 +20,15 @@ using hwinfo.)
 
 ## Usage
 
+### Linux
+
+See [HERE](./LINUX.md).
+
 ### Windows
 
-If you want to use this to reduce noise, ensure first that "USB Selective Suspend" 
-is enabled in your power plan, since that can cause significant power consumption and 
-thus drive temperatures up.
+If you want to use this to reduce noise, ensure that "USB Selective Suspend" 
+is enabled in your power plan, since that can cause significant CPU power consumption and 
+thus drives temperatures up.
 
 - Download the latest release and extract it to wherever you want to run it.
 - Run `install.bat`. (In case you need to allow firewall access, you might find it 
@@ -31,15 +41,10 @@ Once you either uninstall the tool or quit after running it using `run.bat`, it
 is recommended to reboot your machine to ensure that control is handed back to 
 either BIOS or Gigabyte's Control Center.
 
-### Linux
-```
-sudo npm run start
-```
-
 ### CPU power limits
 
 If you're already familiar with PL1/PL2, feel free to skip this section. For others - 
-at least based on my observations, there is really only two scenarios to use something 
+at least based on my observations, there are really only two scenarios to use something 
 other than the default of `38/107`:
 
 - You are rendering something and want to use more power than 38W long-term.
@@ -47,18 +52,14 @@ other than the default of `38/107`:
 
 ## Development notes
 
-Frontend has all knowledge of what the returned values are, so if anything, it 
-should be the one to parse them (little endian problem). Return hex strings in 
-an async manner on both platforms to allow for a unified API.
-
-In direction frontend -> server, arguments are not provided as hex strings, since 
+In the direction frontend -> server, arguments are not provided as hex strings, since 
 WMI uses named arguments and it is easier to strip this info and convert to a 
 hex string for Linux.
 
-Websocket went rogue once and kept sending status requests even though UI wasn't open 
-any more. Probably due to dev stuff with hot reload. Still - if users experience it, 
-can be resolved through running Resource Monitor as admin and finding what is connected 
-to port 3001.
+A websocket went rogue once and kept sending status requests even though the UI wasn't open 
+any more. Probably due to dev stuff with hot reload. Still - if a user ever experiences this, 
+it can be resolved through running Resource Monitor as admin and finding what is connected 
+to port 5522.
 
 ## Wishlist
 
