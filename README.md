@@ -57,11 +57,11 @@ to port 5522.
 
 Contributions welcome, as always. 🙂
 
-- Make charge stop work. I set it to `90` in the Control Center before I uninstalled it and 
-Windows does stop at `91%` (`91.4` according to `hwinfo`). Yet, calling `GetChargeStop` returns 
-`97`. Plus, if I call `SetChargeStop` with e.g. `0x60`, it stays at `0x61`. But there's nothing 
-special about the call in `SmartManager.dll`, so it's quite mysterious:
+- Make charge stop work. Based on `SmartManager.dll`, it's quite simple:
 `cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`  
+Yet, `GetChargeStop` shows that the value set with `SetChargeStop` doesn't stick. 
+Does that feature even work? I don't have the Control Center installed any more and don't 
+want to install it again...  
 On Linux, this might be possible [like so](https://askubuntu.com/a/1211506).
 - Make ramping up/down times configurable.
 - Prettier status UI.
