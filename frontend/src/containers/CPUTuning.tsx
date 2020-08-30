@@ -56,8 +56,8 @@ export function CPUTuning() {
         CPU power limits{' '}
         <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
         <SimpleTooltip target={tooltipRef}>
-          Gigabyte uses 38/107 for ECO and 62/107 for Boost. Without Control
-          Center installed, Windows uses 38/135.
+          The ECO profile in the Gigabyte Control Center is 38/107, Boost is
+          62/107.
         </SimpleTooltip>
       </h2>
       <form onSubmit={onSubmit}>

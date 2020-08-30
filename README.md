@@ -31,8 +31,9 @@ is enabled in your power plan, since that can cause significant CPU power consum
 thus drives temperatures up.
 
 - Download the latest release and extract it to wherever you want to run it.
-- Run `install.bat`. (In case you need to allow firewall access, you might find it 
-interesting to know that the UI only responds to requests from your local machine.)
+- Run `install.bat`. It takes about 20 seconds, the installer is not frozen. 😉 
+(In case you need to allow firewall access, you might find it interesting to know that 
+the UI only responds to requests from your local machine.)
 
 You can also simply run `run.bat` from an admin command prompt to run the fan 
 control temporarily or to try it out before installing it as a service.
@@ -40,15 +41,6 @@ control temporarily or to try it out before installing it as a service.
 Once you either uninstall the tool or quit after running it using `run.bat`, it 
 is recommended to reboot your machine to ensure that control is handed back to 
 either BIOS or Gigabyte's Control Center.
-
-### CPU power limits
-
-If you're already familiar with PL1/PL2, feel free to skip this section. For others - 
-at least based on my observations, there are really only two scenarios to use something 
-other than the default of `38/107`:
-
-- You are rendering something and want to use more power than 38W long-term.
-- Trying to optimize gaming performance also by increasing PL1.
 
 ## Development notes
 
@@ -65,12 +57,14 @@ to port 5522.
 
 Contributions welcome, as always. 🙂
 
+- Make charge stop work. I set it to `90` in the Control Center before I uninstalled it and 
+Windows does stop at `91%` (`91.4` according to `hwinfo`). Yet, calling `GetChargeStop` returns 
+`97`. Plus, if I call `SetChargeStop` with e.g. `0x60`, it stays at `0x61`. But there's nothing 
+special about the call in `SmartManager.dll`, so it's quite mysterious:
+`cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`  
+On Linux, this might be possible [like so](https://askubuntu.com/a/1211506).
 - Make ramping up/down times configurable.
 - Prettier status UI.
-- For some reason, `SetChargeStop` doesn't work. But there's nothing special about 
-the call in `SmartManager.dll`: `cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`
-Does the charge stop functionality maybe simply not work?
-Or is `SetMaxCharge` (used in `CloudMatrixBattery.exe`) responsible for this?
 - Using RGB lighting to highlight caps/num lock. There's something [here](https://gitlab.com/wtwrp/aeroctl/-/tree/master/Samples/AeroCtl.Rgb.LockKeys) 
 for the Gigabyte Aero that could potentially be reused.
 - Refactor styles so there aren't as many inline ones.
