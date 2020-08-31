@@ -4,8 +4,10 @@ Based on the [CLI version](https://github.com/s-h-a-d-o-w/alfc-cli). (Which is o
 but there is some more "how it all came about" info there.)
 
 Tested on an Aorus 15G but it seems like most of the things used in this are used in 
-a variety of Gigabyte's laptops, so it could work with others too. (If you try it out and it does, 
-please get in touch - email is in my profile.)
+a variety of Gigabyte's laptops, so it could work with others too. (At least on Windows. 
+I wouldn't recommend just trying it on Linux, since things are... lower level and more 
+specific there. If you do try it out e.g. on an Aero and it does work, please let me 
+know - email is in my profile.)
 
 ![Screenshot](/assets/screenshot.png?raw=true)
 
@@ -49,10 +51,9 @@ either BIOS or Gigabyte's Control Center.
 
 If that is something you're interested in, you need to do this:
 
-- Make Gigabyte's WMI classes (which are required for this tool) available without 
-installing the Control Center (they are also removed when uninstalling): Extract 
-the Control Center installer and copy `acpimof.dll` to `C:\Windows\SysWOW64`, create a 
-string value in the Registy at 
+- Install Intel XTU
+- Extract the Control Center installer and copy `acpimof.dll` to `C:\Windows\SysWOW64`, 
+create a string value in the Registy at 
 `Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WmiAcpi` called `MofImagePath` 
 that contains `C:\Windows\SysWOW64\acpimof.dll` and reboot. (For more on this, see here)
 
