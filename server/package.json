@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && ncc build index.ts",
-    "build:cpuoc": "csc /reference:windows\\IntelOverclockingSDK.dll /t:library /out:windows\\CPUOC.dll windows\\CPUOC.cs",
-    "build:wmiapi": "csc /t:library /out:windows\\WmiAPI.dll windows\\WmiAPI.cs",
+    "build:cpuoc": "csc /reference:native\\windows\\IntelOverclockingSDK.dll /t:library /out:native\\windows\\CPUOC.dll native\\windows\\CPUOC.cs",
+    "build:wmiapi": "csc /t:library /out:native\\windows\\WmiAPI.dll native\\windows\\WmiAPI.cs",
     "lint": "eslint --ignore-path .gitignore --ext=.ts,.tsx .",
     "start": "nodemon",
     "start:prod": "cross-env NODE_ENV=production node dist/index.js",

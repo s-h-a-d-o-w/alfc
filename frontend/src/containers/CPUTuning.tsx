@@ -21,8 +21,8 @@ export function CPUTuning() {
   const tooltipRef = useRef(null);
 
   const [isApplying, setIsApplying] = useState(false);
-  const [pl1, setPL1] = useState('38');
-  const [pl2, setPL2] = useState('107');
+  const [pl1, setPL1] = useState('37');
+  const [pl2, setPL2] = useState('106');
 
   const ws = useWebSocket(
     useCallback((event) => {
@@ -58,6 +58,9 @@ export function CPUTuning() {
         <SimpleTooltip target={tooltipRef}>
           The ECO profile in the Gigabyte Control Center is 38/107, Boost is
           62/107.
+          <br />
+          NOTE: Don't use <strong>exactly</strong> those numbers, otherwise they
+          might not get applied at startup.
         </SimpleTooltip>
       </h2>
       <form onSubmit={onSubmit}>
