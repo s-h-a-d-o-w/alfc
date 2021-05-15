@@ -14,20 +14,17 @@
     "start": "concurrently \"cd server && npm run start\" \"cd frontend && npm run start\"",
     "start:prod": "cross-env NODE_ENV=production node server/build"
   },
-  "dependencies": {
-    "cross-env": "7.0.2",
-    "serve": "11.3.2",
-    "typescript": "3.9.7"
-  },
   "devDependencies": {
     "@types/lodash": "4.14.159",
     "@typescript-eslint/eslint-plugin": "2.10.0",
     "@typescript-eslint/parser": "2.10.0",
+    "concurrently": "5.2.0",
+    "cross-env": "7.0.2",
     "eslint": "7.6.0",
     "eslint-config-prettier": "6.7.0",
     "eslint-plugin-prettier": "3.1.1",
-    "concurrently": "5.2.0",
     "kill-port": "1.6.1",
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "typescript": "3.9.7"
   }
 }
