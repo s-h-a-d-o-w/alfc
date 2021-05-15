@@ -56,12 +56,12 @@ If that is something you're interested in, you need to do this:
 - Extract the Control Center installer and copy `acpimof.dll` to `C:\Windows\SysWOW64`, 
 create a string value in the Registy at 
 `Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WmiAcpi` called `MofImagePath` 
-that contains `C:\Windows\SysWOW64\acpimof.dll` and reboot. (For more on this, see here)
+that contains `C:\Windows\SysWOW64\acpimof.dll` and reboot. (For more on this, [see here](https://docs.microsoft.com/en-us/samples/microsoft/windows-driver-samples/wmi-acpi-sample/))
 
 If you want to keep using the color profiles:
 
 - Extract the Control Center installer and install the ICM file for the color temperature you 
-want (from `color\P75\SHP14C5` when you extract the installer) yourself.
+want yourself. Unfortunately, I don't remember how I figured out the model name of the panel in the Aorus 15G (`color\P75\SHP14C5`).
 
 ## Development notes
 
