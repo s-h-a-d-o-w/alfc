@@ -1,6 +1,6 @@
 # Aorus Laptop Fan Control (alfc)
 
-## Tested on...
+## Confirmed to work with...
 
 | Model        | Fan control | CPU limits tweaking | GPU boost |
 |--------------|-------------|---------------------|-----------|
