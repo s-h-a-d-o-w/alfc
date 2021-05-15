@@ -20,6 +20,7 @@ export function wmiInit() {
 // Otherwise, it's simply not used.
 // @return Multiple values are returned in a single number, little endian!
 export function getCall(methodId: string, methodName: string, args?: Args) {
+  // TODO: Convert to a number instead of returning a hex string. For Windows as well, obviously
   return Promise.resolve(
     execSync(
       `echo '\\_SB_.PCI0.AMW0.WMBC 0 ${methodId} ${argstoHexString(

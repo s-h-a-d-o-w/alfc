@@ -47,6 +47,7 @@ export async function getCall(
   methodName: string,
   args?: Args
 ) {
+  // TODO: Convert to a number instead of returning a hex string. For Linux as well, obviously
   const result = (
     await wmiGetEdgeFunc({
       methodName,

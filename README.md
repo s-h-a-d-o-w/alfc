@@ -1,13 +1,15 @@
 # Aorus Laptop Fan Control (alfc)
 
-Based on the [CLI version](https://github.com/s-h-a-d-o-w/alfc-cli). (Which is outdated 
-but there is some more "how it all came about" info there.)
+## Tested on...
 
-Tested on an Aorus 15G but it seems like most of the things used in this are used in 
-a variety of Gigabyte's laptops, so it could work with others too. (At least on Windows. 
-I wouldn't recommend just trying it on Linux, since things are... lower level and more 
-specific there. If you do try it out e.g. on an Aero and it does work, please let me 
-know - email is in my profile.)
+| Model        | Fan control | CPU limits tweaking | GPU boost |
+|--------------|-------------|---------------------|-----------|
+| Aorus 15G    | W10, Linux  | W10, Linux          | W10, Linux |
+| Aorus 15G XC | W10           | W10               |           |
+
+Please submit an issue or send me an e-mail if you can confirm that it works or doesn't work on other models.
+
+## Features
 
 ![Screenshot](/assets/screenshot.png?raw=true)
 

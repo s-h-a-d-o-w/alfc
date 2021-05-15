@@ -1,5 +1,13 @@
 # Aorus Laptop Fan Control (alfc) - Linux Guide
 
+## IMPORTANT
+
+**Only use this on Linux if your machine is listed in the compatibility table in the main readme or if you know what you're doing.**
+
+Because on Linux, this tool writes directly to hardware addresses where data persists after rebooting. If something goes wrong, you might need to do something [like this](https://github.com/hirschmann/nbfc/wiki/FAQ#is-there-a-way-to-reset-my-notebook-if-something-went-wrong).
+
+As for how to figure out whether the addresses are the same on your machine – not that simple, I might do a talk or write an article at some point. Let me know if you actually need this.
+
 ## Prerequisites
 
 - Node.js (if you don't use it yourself, a global install via the NodeSource repo is probably best 
