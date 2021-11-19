@@ -11,7 +11,7 @@
     "install:frontend": "cd frontend && yarn install --frozen-lockfile",
     "install:server": "cd server && yarn install --frozen-lockfile",
     "lint": "eslint --ignore-path .gitignore .",
-    "start": "concurrently \"cd server && npm run start\" \"cd frontend && npm run start\"",
+    "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
     "start:prod": "cross-env NODE_ENV=production node server/build"
   },
   "devDependencies": {
