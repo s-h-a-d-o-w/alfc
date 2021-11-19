@@ -10,9 +10,7 @@ As for how to figure out whether the addresses are the same on your machine – 
 
 ## Prerequisites
 
-- Node.js (if you don't use it yourself, a global install via the NodeSource repo is probably best 
-(people who regularly work with it tend to use `nvm`), especially considering that that is needed 
-to set up a systemd unit anyway.)
+- Node.js (Needs to be available to root - see e.g. https://github.com/nodesource/distributions#installation-instructions )
 - Installation of the kernel module [acpi_call](https://github.com/nix-community/acpi_call). (Enables issuing of fan control commands.)
 
 ### Installing `acpi_call`
