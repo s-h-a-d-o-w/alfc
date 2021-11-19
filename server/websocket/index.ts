@@ -72,13 +72,14 @@ wsServer.on('connection', (socket) => {
             return sendSuccess(socket, payload);
           }
           break;
-        case MessageToServerKind.Get:
+        case MessageToServerKind.Get: {
           const result = await getCall(
             payload.methodId,
             payload.methodName,
             payload.data
           );
           return sendSuccess(socket, payload, result);
+        }
         case MessageToServerKind.Set:
           if (payload.data) {
             await setCall(payload.methodId, payload.methodName, payload.data);

@@ -1,5 +1,5 @@
 import { getMethods, setMethods } from '../data/mof';
-import { toast } from 'react-toastify';
+import { toast, ToastContent } from 'react-toastify';
 import { css } from 'emotion';
 import { theme } from './consts';
 
@@ -58,14 +58,14 @@ const successToastStyle = css`
   border-radius: 4px;
 `;
 
-export function successToast(content: any) {
+export function successToast(content: ToastContent) {
   toast.success(content, {
     className: successToastStyle,
     position: 'bottom-right',
   });
 }
 
-export function errorToast(content: any) {
+export function errorToast(content: ToastContent) {
   toast.error(content, {
     className: errorToastStyle,
     position: 'bottom-right',

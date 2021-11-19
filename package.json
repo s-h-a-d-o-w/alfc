@@ -12,7 +12,8 @@
     "install:server": "cd server && yarn install --frozen-lockfile",
     "lint": "eslint --ignore-path .gitignore .",
     "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
-    "start:prod": "cross-env NODE_ENV=production node server/build"
+    "start:prod": "cross-env NODE_ENV=production node server/build",
+    "typecheck": "concurrently \"tsc -P ./frontend/tsconfig.json\" \"tsc --noEmit -P ./server/tsconfig.json\""
   },
   "devDependencies": {
     "@types/lodash": "4.14.159",

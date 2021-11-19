@@ -23,7 +23,7 @@ export function getCall(methodId: string, methodName: string, args?: Args) {
   // TODO: Convert to a number instead of returning a hex string. For Windows as well, obviously
   return Promise.resolve(
     execSync(
-      `echo '\\_SB_.PCI0.AMW0.WMBC 0 ${methodId} ${argstoHexString(
+      `echo '\\_SB.PCI0.AMW0.WMBC 0 ${methodId} ${argstoHexString(
         args
       )}' | tee /proc/acpi/call > /dev/null && cat /proc/acpi/call`,
       { encoding: 'utf8' }
@@ -33,7 +33,7 @@ export function getCall(methodId: string, methodName: string, args?: Args) {
 
 export function setCall(methodId: string, methodName: string, args: Args) {
   execSync(
-    `echo '\\_SB_.PCI0.AMW0.WMBD 0 ${methodId} ${argstoHexString(
+    `echo '\\_SB.PCI0.AMW0.WMBD 0 ${methodId} ${argstoHexString(
       args
     )}' | tee /proc/acpi/call`
   );

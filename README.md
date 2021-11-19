@@ -65,6 +65,8 @@ want yourself. Unfortunately, I don't remember how I figured out the model name 
 
 ## Development notes
 
+`sudo yarn start` - Frontend is available at port 3000.
+
 In the direction frontend -> server, arguments are not provided as hex strings, since 
 WMI uses named arguments and it is easier to strip this info and convert to a 
 hex string for Linux.

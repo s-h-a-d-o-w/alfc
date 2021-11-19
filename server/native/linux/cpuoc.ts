@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export async function tuneInit() {}
 
 // Only async to make the API consistent with Windows.
