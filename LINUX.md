@@ -31,7 +31,7 @@ sudo make dkms-install
 sudo modprobe acpi_call
 ```
 
-### Installation
+## Installation
 
 - Simply grab the latest release, extract it to wherever you want alfc to live and run 
 `install.sh`
