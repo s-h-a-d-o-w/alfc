@@ -70,7 +70,7 @@ switch (process.argv[2]) {
       sudoOutputHandler
     );
     break;
-  case 'uninstall-as-sudo':
+  case 'uninstall-as-sudo': {
     const serviceStopCommand = isWindows
       ? 'net stop alfc'
       : 'service alfc stop';
@@ -86,6 +86,7 @@ switch (process.argv[2]) {
       );
     });
     break;
+  }
   case 'run':
     service.run(function() {
       service.stop(0);
