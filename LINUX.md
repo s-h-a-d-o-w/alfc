@@ -21,7 +21,7 @@ Linux pros - feel free to contribute either to the following guide or automating
 workflow! 🙂 (See notes in the Wishlist section though.)
 
 If you've never installed a kernel module, one way is like the following (If you have secure boot 
-enabled, you need to do [this](https://gist.github.com/dop3j0e/2a9e2dddca982c4f679552fc1ebb18df) first. 
+enabled, you need to do [this](https://gist.github.com/s-h-a-d-o-w/53c2215e955c3326c6ec8f812a0d2f27) first. 
 Plus, `make` might complain if you're missing compilers but it worked out of the box on Mint for me.):
 
 ```
