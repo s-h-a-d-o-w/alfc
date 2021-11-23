@@ -20,8 +20,8 @@ cp -r server/dist dist/fancontrol
 
 cp -r frontend/build dist/fancontrol/frontend
 
-# default config
 cp alfc.config.json dist
+cp package.json dist
 
 cd dist
 mkdir alfc

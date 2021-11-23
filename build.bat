@@ -17,8 +17,9 @@ xcopy /I /E server\node_modules\edge-js\lib\native dist\fancontrol\native
 
 xcopy /I /E frontend\build dist\fancontrol\frontend
 
-@REM default config
+@REM Adding default config and package.json
 copy alfc.config.json dist
+copy package.json dist
 
 @REM Remove native dependencies that don't match the node version we use
 cd dist\fancontrol\native\win32
