@@ -7,7 +7,7 @@ const StyledTooltip = styled.div`
   border-radius: 4px;
   padding: 16px;
   margin: 16px;
-  max-width: 200px;
+  width: 400px;
 `;
 
 export const SimpleTooltip: React.FC<TooltipProps> = ({
