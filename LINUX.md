@@ -11,7 +11,7 @@ As for how to figure out whether the addresses are the same on your machine – 
 ## Prerequisites
 
 - Node.js (Needs to be available to root - see e.g. https://github.com/nodesource/distributions#installation-instructions )
-- Installation of the kernel module [acpi_call](https://github.com/nix-community/acpi_call). (Enables issuing of fan control commands.)
+- Installing the kernel module [acpi_call](https://github.com/nix-community/acpi_call) and running it on startup. (Enables issuing of fan control commands.)
 
 ### Installing `acpi_call`
 
@@ -29,20 +29,21 @@ sudo make dkms-install
 sudo modprobe acpi_call
 ```
 
+### Running `acpi_call` on startup
+
+If your distro uses systemd, you can use [this really simple method](https://wiki.archlinux.org/title/Kernel_module#Automatic_module_loading_with_systemd). Installing makes `acpi_call` available to be loaded just like described there.
+
+If it doesn't, I'm afraid you'll have to do research yourself.
+
 ## Installation
 
-- Simply grab the latest release, extract it to wherever you want alfc to live and run 
+- Grab the latest release, extract it to wherever you want alfc to live and run 
 `install.sh`
 
-Services for both starting the kernel module mentioned as well as alfc will be created and 
-started.
+A service for alfc will be created and started.
 
 ## Wishlist
 
-- Somehow including `acpi_call` in the installation process. But there are two problems: 
-1.) People who have secure boot enabled need that whole separate step of signing the module 
-2.) I would like to keep using `os-service` to manage services across platforms. But on Linux, 
-it may use either systemd or init.d and I don't know what its selection criteria are because 
-on e.g. latest Linux Mint, it still uses init.d. And so to have `alfc` be able to depend on 
-`acpi_call`, I guess one would have to use `os-service` to run that module on startup too.
-
+- Somehow including `acpi_call` in the installation process. But there are two problems:
+    1. People who have secure boot enabled need that whole separate step of signing the module.
+    2. How the module can be loaded on startup might vary from distro to distro.
