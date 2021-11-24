@@ -71,10 +71,14 @@ In the direction frontend -> server, arguments are not provided as hex strings, 
 WMI uses named arguments and it is easier to strip this info and convert to a 
 hex string for Linux.
 
+## Troubleshooting
+
+On Windows, there is a `service.log` file in the alfc root directory that might contain useful information.
+
 A websocket went rogue once and kept sending status requests even though the UI wasn't open 
 any more. Probably due to dev stuff with hot reload. Still - if a user ever experiences this, 
-it can be resolved through running Resource Monitor as admin and finding what is connected 
-to port 5522.
+it can be resolved through running Resource Monitor as admin, finding what is connected 
+to port 5522 and killing it.
 
 ## Wishlist
 
