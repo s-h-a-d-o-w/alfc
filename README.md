@@ -33,8 +33,8 @@ See [HERE](./LINUX.md).
 ### Windows
 
 If you want to use this to reduce noise, ensure that "USB Selective Suspend" 
-is enabled in your power plan, since that can cause significant CPU power consumption and 
-thus drives temperatures up.
+is always enabled in your power plan! Having it disabled can cause significant CPU 
+power consumption and thus drive temperatures up.
 
 - Download the latest release and extract it to wherever you want to run it.
 - Run `install.bat`. It takes about 20 seconds, the installer is not frozen. 😉 
