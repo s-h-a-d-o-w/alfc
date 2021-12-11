@@ -29,7 +29,7 @@ copy package.json dist
 cd dist
 powershell Compress-Archive * alfc-without-node.zip
 move alfc-without-node.zip ..\alfc-without-node.zip
-curl --output node.exe https://nodejs.org/dist/latest-v12.x/win-x64/node.exe
+curl --output node.exe https://nodejs.org/dist/latest-v14.x/win-x64/node.exe
 powershell Compress-Archive * alfc.zip
 move ..\alfc-without-node.zip alfc-without-node.zip
 
