@@ -26,7 +26,13 @@ async function initNativeServices() {
   }
 
   fanControl();
-  await tune();
+  try {
+    await tune();
+    state.isCpuTuningAvailable = true;
+  } catch (e) {
+    console.log('!! CPU tuning is not available !!');
+    state.isCpuTuningAvailable = false;
+  }
   setCall('129', 'SetAIBoostStatus', { Data: state.gpuBoost ? 1 : 0 });
 
   console.log('Fan control is up and running, current config was applied.');

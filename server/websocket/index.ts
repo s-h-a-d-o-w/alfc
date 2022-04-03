@@ -8,15 +8,22 @@ import {
 import { getCall, setCall, tune } from '../native';
 import { persistState, state } from '../state';
 import { setFixedFan, fanControl as autoFanControl } from '../fan-control';
+import { cloneDeep } from 'lodash';
 
 function sendState(socket: WebSocket) {
-  const stateCopy = Object.assign({}, state);
+  const stateCopy = cloneDeep(state);
   delete stateCopy.activitySocket;
   socket.send(
     JSON.stringify({ kind: MessageToClientKind.State, data: stateCopy })
   );
 }
 
+/**
+ *
+ * @param socket
+ * @param payload A copy of the request payload
+ * @param data Additional data in case of raw operations
+ */
 function sendSuccess(socket: WebSocket, payload: any, data?: any) {
   socket.send(
     JSON.stringify({

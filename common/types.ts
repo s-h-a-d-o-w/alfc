@@ -2,6 +2,26 @@
 // Maybe there's a workaround. Since TS takes care of things, it
 // shouldn't matter anyway.
 
+import WebSocket from 'ws';
+
+export type FanTable = [number, number][];
+
+export type State = {
+  cpuFanTable: FanTable;
+  gpuFanTable: FanTable;
+
+  doFixedSpeed: boolean;
+  fixedPercentage: number;
+
+  gpuBoost: boolean;
+  pl1: number;
+  pl2: number;
+
+  // Exclude from persistence below.
+  activitySocket?: WebSocket;
+  isCpuTuningAvailable?: boolean;
+};
+
 export type Args = {
   [key: string]: number;
 };
@@ -23,12 +43,15 @@ export enum MessageToServerKind {
   RegisterActivitySocket = 'registeractivitysocket',
 }
 
-export type MessageToClient = {
-  kind: MessageToClientKind;
-  methodId: string;
-  methodName: string;
-  data?: string;
-};
+export type MessageToClient =
+  | {
+      kind: MessageToClientKind.State;
+      data?: string;
+    }
+  | {
+      kind: MessageToClientKind.Success;
+      data?: unknown;
+    };
 
 export type MessageToServer = {
   kind: MessageToServerKind;

@@ -7,6 +7,7 @@ import { StyledApplyButton } from '../components/StyledApplyButton';
 import { StyledArea } from '../components/StyledArea';
 import { useWebSocket } from '../utils/hooks';
 import { errorToast, sendTune, successToast } from '../utils/misc';
+import xtuIncompatibility from '../images/xtu_incompatibility.png';
 
 const StyledInput = styled.input`
   width: 56px;
@@ -20,6 +21,7 @@ const StyledLabel = styled.label`
 export function CPUTuning() {
   const tooltipRef = useRef(null);
 
+  const [isCpuTuningAvailable, setIsCpuTuningAvailable] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [pl1, setPL1] = useState('37');
   const [pl2, setPL2] = useState('106');
@@ -29,8 +31,11 @@ export function CPUTuning() {
       setIsApplying(false);
       const { kind, data } = JSON.parse(event.data);
       if (kind === 'state') {
-        setPL1(data.pl1);
-        setPL2(data.pl2);
+        if (data.isCpuTuningAvailable) {
+          setPL1(data.pl1);
+          setPL2(data.pl2);
+        }
+        setIsCpuTuningAvailable(data.isCpuTuningAvailable);
       } else if (kind === 'success') {
         successToast('Successfully applied.');
       } else if (kind === 'error') {
@@ -50,8 +55,23 @@ export function CPUTuning() {
     sendTune(ws, parseInt(pl1, 10), parseInt(pl2, 10));
   };
 
-  return (
-    <StyledArea style={{ marginTop: 32 }}>
+  const content = !isCpuTuningAvailable ? (
+    <>
+      <h2>
+        CPU Tuning is not available.{' '}
+        <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
+        <SimpleTooltip target={tooltipRef} unlimitedWidth>
+          The likely culprit:
+          <br />
+          <img
+            src={xtuIncompatibility}
+            alt="Intel xtu incompatibility message"
+          />
+        </SimpleTooltip>
+      </h2>
+    </>
+  ) : (
+    <>
       <h2 style={{ marginBottom: 16 }}>
         CPU power limits{' '}
         <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
@@ -92,6 +112,8 @@ export function CPUTuning() {
           Apply
         </StyledApplyButton>
       </form>
-    </StyledArea>
+    </>
   );
+
+  return <StyledArea style={{ marginTop: 32 }}>{content}</StyledArea>;
 }

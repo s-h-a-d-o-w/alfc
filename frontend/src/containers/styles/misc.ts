@@ -1,13 +1,12 @@
 import { theme } from '../../utils/consts';
 
-export const disabledFormStyle = (disabled: boolean) =>
+export const disabledFormStyle = (disabled?: boolean) =>
   disabled &&
   `
 &::after {
   content: '';
 
   position: absolute;
-  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
@@ -18,7 +17,7 @@ export const disabledFormStyle = (disabled: boolean) =>
 }
 `;
 
-export const enabledFormStyle = (disabled: boolean) =>
+export const enabledFormStyle = (disabled?: boolean) =>
   !disabled &&
   `
 border-radius: 16px;

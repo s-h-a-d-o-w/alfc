@@ -1,6 +1,6 @@
-import { MessageToClientKind } from '../../common/types';
+import { MessageToClientKind, FanTable } from '../../common/types';
 import { getCall, setCall } from '../native';
-import { FanTable, state } from '../state';
+import { state } from '../state';
 
 const WAIT_RAMP_DOWN_CYCLES = 10;
 const WAIT_RAMP_UP_CYCLES = 2;

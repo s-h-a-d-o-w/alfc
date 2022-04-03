@@ -27,10 +27,19 @@ namespace CPUOC
       // Not sure that sleeping is necessary but Gigabyte does it and 
       // with something like this, it probably makes sense to prevent accidental
       // hammering of the API.
-      tuning.Tune(pl1id, (decimal)input.pl1, false);
-      Thread.Sleep(500);
-      tuning.Tune(pl2id, (decimal)input.pl2, false);
-      Thread.Sleep(500);
+      try
+      {
+        tuning.Tune(pl1id, (decimal)input.pl1, false);
+        Thread.Sleep(500);
+        tuning.Tune(pl2id, (decimal)input.pl2, false);
+        Thread.Sleep(500);
+      }
+      catch (Exception ex)
+      {
+        // Console.WriteLine(ex);
+        throw ex;
+      }
+      
       return null;
     }
   }

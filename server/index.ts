@@ -37,7 +37,9 @@ import { isDev } from './utils/consts';
   }
 
   const server = app.listen(port, 'localhost', () => {
-    console.log(`Server running @ ${port}`);
+    console.log(
+      `Server running @ ${port}` + (isDev ? ' - dev frontend @ 3000' : '')
+    );
   });
 
   server.on('upgrade', (request, socket, head) => {

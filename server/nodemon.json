@@ -2,8 +2,7 @@
   "watch": [
     "./**/*"
   ],
-  "ext": "ts",
-  "exec": "ts-node .",
+  "exec": "ts-node --transpileOnly .",
   "events": {
     "restart": "kill-port 5522",
     "crash": "kill-port 5522"

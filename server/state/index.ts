@@ -1,28 +1,13 @@
 import fs from 'fs';
 import stringifyCompact from 'json-stringify-pretty-compact';
+import { cloneDeep } from 'lodash';
 import path from 'path';
-import WebSocket from 'ws';
 import { isDev } from '../utils/consts';
+import { State } from '../../common/types';
 
 const CONFIG_FILE = isDev
   ? path.join(__dirname, '../../alfc.config.json')
   : path.join(__dirname, '../alfc.config.json');
-
-export type FanTable = [number, number][];
-
-export type State = {
-  cpuFanTable: FanTable;
-  gpuFanTable: FanTable;
-
-  doFixedSpeed: boolean;
-  fixedPercentage: number;
-
-  gpuBoost: boolean;
-  pl1: number;
-  pl2: number;
-
-  activitySocket?: WebSocket;
-};
 
 export const state: State = JSON.parse(
   fs.readFileSync(CONFIG_FILE, { encoding: 'utf8' })
@@ -35,8 +20,10 @@ export function persistState() {
     return;
   }
 
-  const stateCopy = Object.assign({}, state);
+  const stateCopy = cloneDeep(state);
   delete stateCopy.activitySocket;
+  delete stateCopy.isCpuTuningAvailable;
+
   try {
     // Why JSON:
     // Bad readability when it comes to 2D int arrays with yml
