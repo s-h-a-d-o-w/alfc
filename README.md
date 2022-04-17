@@ -2,13 +2,15 @@
 
 ## Confirmed to work with...
 
-| Model        | Fan control      | CPU limits tweaking | GPU boost     |
-|--------------|------------------|---------------------|---------------|
-| Aorus 15G    | W10, W11, Linux  | W10, Linux          | W10, Linux    |
-| Aorus 15G XC | W10              | W10                 |               |
-| Aorus 15P XD | W10              | W10                 |               |
+| Model        | Fan control      | CPU limits tweaking | GPU boost        |
+|--------------|------------------|---------------------|------------------|
+| Aorus 15G    | W10, W11, Linux  | W10, Linux          | W10, W11, Linux  |
+| Aorus 15G XC | W10              | W10                 |                  |
+| Aorus 15P XD | W10              | W10                 |                  |
 
 Please submit a PR, an issue or send me an e-mail if you can confirm that it works or doesn't work on other models.
+
+GPU boost is likely to not work on models other than the 15G though because the way that is controlled is highly model-dependent.
 
 ## Features
 
