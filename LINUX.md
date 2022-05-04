@@ -45,7 +45,7 @@ At least on Mint, I never needed the following but...
 
 ### Run `acpi_call` on startup
 
-If your distro uses systemd, you can use [this really simple method](https://wiki.archlinux.org/title/Kernel_module#Automatic_module_loading_with_systemd). Installing makes `acpi_call` available to be loaded just like described there.
+If your distro uses systemd, you can use [this really simple method](https://wiki.archlinux.org/title/Kernel_module#Automatic_module_loading_with_systemd). Just put `acpi_call` into `/etc/modules-load.d/acpi_call.conf`.
 
 If it doesn't, I'm afraid you'll have to do research yourself.
 
