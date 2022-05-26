@@ -26,7 +26,7 @@ This enables issuing fan control commands.
 
 If you have secure boot enabled, you need to do [this](https://gist.github.com/s-h-a-d-o-w/53c2215e955c3326c6ec8f812a0d2f27) first. 
 
-Download or clone https://github.com/nix-community/acpi_call (the `acpi_callback` version in your package manager might not be compatible!) and run:
+Download or clone https://github.com/nix-community/acpi_call (the `acpi_callback` version in your package manager might not be compatible or break [as it gets updates](https://github.com/s-h-a-d-o-w/alfc/issues/1)!) and run:
 
 ```
 sudo make dkms-add
