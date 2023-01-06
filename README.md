@@ -7,8 +7,9 @@
 | Aorus 15G    | W10, W11, Linux  | W10, Linux          | W10, W11, Linux  |
 | Aorus 15G XC | W10, Linux       | W10, Linux          |                  |
 | Aorus 15P XD | W10              | W10                 |                  |
+| Aorus 5 SE4  | W11              |                     |                  |
 
-Please submit a PR, an issue or send me an e-mail if you can confirm that it works or doesn't work on other models.
+Please submit a PR, an issue or send me an e-mail if you can confirm something that's not yet in the table.
 
 GPU boost is likely to not work on models other than the 15G though because the way that is controlled is highly model-dependent.
 
