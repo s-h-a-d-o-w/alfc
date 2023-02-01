@@ -8,6 +8,8 @@
 | Aorus 15G XC | W10, Linux       | W10, Linux          |                  |
 | Aorus 15P XD | W10              | W10                 |                  |
 | Aorus 5 SE4  | W11              |                     |                  |
+| Aero 15 SA   | W10, W11, Linux  |                     |                  |
+
 
 Please submit a PR, an issue or send me an e-mail if you can confirm something that's not yet in the table.
 
