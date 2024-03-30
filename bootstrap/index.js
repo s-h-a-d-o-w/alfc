@@ -32,7 +32,9 @@ switch (process.argv[2]) {
   case 'install':
     console.log('Installing...');
     sudo.exec(
-      `node ${process.argv[1]} install-as-sudo`,
+      `node ${
+        isWindows ? `"${process.argv[1]}"` : process.argv[1]
+      } install-as-sudo`,
       sudoOptions,
       sudoOutputHandler
     );
@@ -42,7 +44,7 @@ switch (process.argv[2]) {
       'alfc',
       {
         programArgs: ['run'],
-        dependencies: os.platform() === 'win32' ? ['Winmgmt'] : ['acpi_call'],
+        dependencies: isWindows ? ['Winmgmt'] : ['acpi_call'],
       },
       errorHandler(() => {
         const serviceStartCommand = isWindows
@@ -51,7 +53,7 @@ switch (process.argv[2]) {
         exec(
           serviceStartCommand,
           errorHandler(async () => {
-            if (os.platform() === 'win32') {
+            if (isWindows) {
               await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
             }
 
@@ -65,7 +67,9 @@ switch (process.argv[2]) {
   case 'uninstall':
     console.log('Uninstalling...');
     sudo.exec(
-      `node ${process.argv[1]} uninstall-as-sudo`,
+      `node ${
+        isWindows ? `"${process.argv[1]}"` : process.argv[1]
+      } uninstall-as-sudo`,
       sudoOptions,
       sudoOutputHandler
     );
@@ -94,7 +98,7 @@ switch (process.argv[2]) {
 
     // Need to redirect all output to a log file on Windows.
     // On Linux, it'll go to the systemd logs.
-    if (os.platform() === 'win32') {
+    if (isWindows) {
       const access = fs.createWriteStream(path.join(__dirname, 'service.log'));
       process.stdout.write = process.stderr.write = access.write.bind(access);
       process.on('uncaughtException', function(err) {
