@@ -13,7 +13,7 @@ As for how to figure out whether the addresses are the same on your machine – 
 
 ## Prerequisites
 
-### Install Node.js
+### Install Node.js 18
 
 Needs to be runnable by root.
 

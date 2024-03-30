@@ -26,6 +26,6 @@ cp package.json dist
 cd dist
 mkdir alfc
 mv * ./alfc
-tar -czf alfc.tar.gz ./alfc
+tar -czf alfc.tar.gz alfc
 
 cd ..
