@@ -460,13 +460,13 @@ edge-cs@1.2.1:
   resolved "https://registry.yarnpkg.com/edge-cs/-/edge-cs-1.2.1.tgz#bd1a9ecdb94ef0ed40c894582046749e57045e5a"
   integrity sha1-vRqezblO8O1AyJRYIEZ0nlcEXlo=
 
-edge-js@14.3.1:
-  version "14.3.1"
-  resolved "https://registry.yarnpkg.com/edge-js/-/edge-js-14.3.1.tgz#24f239e95f79168d38957c99673a7d92a96df1bf"
-  integrity sha512-SXedx+AMiqfjBeBOzl8mm5y60RF/cSRj4lSExO6HPxqbOxAQhiIL7MmVlXg9t6xfk7ovOaujfZXFsgupfcjuAQ==
+edge-js@18.4.3:
+  version "18.4.3"
+  resolved "https://registry.yarnpkg.com/edge-js/-/edge-js-18.4.3.tgz#9ea5963dc8d87d4e6a04df4a941478cd1aad551f"
+  integrity sha512-iPbzXicq4Ein5OM5erxLo2K6fV6yBOcD+2H9jjACcvhx/mZNEdkAwhL2X0aHAGgIyOfmT8Ds4Vjs9Gz+uU3tYw==
   dependencies:
     edge-cs "1.2.1"
-    nan "^2.14.0"
+    nan "^2.16.0"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -985,10 +985,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-nan@^2.14.0:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
-  integrity sha512-isWHgVjnFjh2x2yuJ/tj3JbwoHu3UC2dX5G/88Cm24yB6YopVgxvBObDY7n5xW6ExmFhJpSEQqFPvq9zaXc8Jw==
+nan@^2.16.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.19.0.tgz#bb58122ad55a6c5bc973303908d5b16cfdd5a8c0"
+  integrity sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==
 
 negotiator@0.6.2:
   version "0.6.2"
