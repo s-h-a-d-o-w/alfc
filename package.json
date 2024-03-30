@@ -1,7 +1,6 @@
 {
   "name": "alfc",
   "version": "1.1.1",
-  "main": "index.ts",
   "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
   "license": "MIT",
   "engines": {
