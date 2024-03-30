@@ -54,7 +54,7 @@ switch (process.argv[2]) {
           serviceStartCommand,
           errorHandler(async () => {
             if (isWindows) {
-              await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
+              await new Promise((resolve) => setTimeout(resolve, 1000 * 25));
             }
 
             console.log('Done.');
