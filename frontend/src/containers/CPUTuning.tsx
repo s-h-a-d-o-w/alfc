@@ -76,8 +76,8 @@ export function CPUTuning() {
         CPU power limits{' '}
         <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
         <SimpleTooltip target={tooltipRef}>
-          The ECO profile in the Gigabyte Control Center is 38/107, Boost is
-          62/107.
+          The ECO profile for the i7-10875H in the Gigabyte Control Center is
+          38/107, Boost is 62/107.
           <br />
           NOTE: Don't use <strong>exactly</strong> those numbers, otherwise they
           might not get applied at startup.
