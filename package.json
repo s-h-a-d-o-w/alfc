@@ -4,6 +4,9 @@
   "main": "index.ts",
   "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "^18"
+  },
   "private": true,
   "scripts": {
     "install": "yarn install:bootstrap && yarn install:frontend && yarn install:server",
