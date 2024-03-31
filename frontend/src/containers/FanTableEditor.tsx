@@ -87,6 +87,15 @@ export function FanTableEditor({ onChange, value }: Props) {
         <td>
           <StyledButton
             type="button"
+            disabled={value.length === 1}
+            style={
+              value.length === 1
+                ? {
+                    cursor: 'default',
+                    opacity: '0.4',
+                  }
+                : {}
+            }
             onClick={() => {
               const nextValue = cloneDeep(value);
               nextValue.splice(idx, 1);
