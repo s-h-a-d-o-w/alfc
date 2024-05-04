@@ -9,6 +9,7 @@
 | Aorus 15G    | W10, W11, Linux  | W10, Linux          | W10, W11, Linux  |
 | Aorus 15G XC | W10, Linux       | W10, Linux          |                  |
 | Aorus 15P XD | W10              | W10                 |                  |
+| Aorus 15 FSB | W11              |                     |                  |
 | Aorus 5 SE4  | W11              |                     |                  |
 | Aero 15 SA   | W10, W11, Linux  |                     |                  |
 
