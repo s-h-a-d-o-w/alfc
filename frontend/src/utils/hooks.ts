@@ -2,20 +2,17 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { errorToastStyle } from './misc';
 
-export function useWebSocket(onMessage: WebSocket['onmessage'])
-{
+export function useWebSocket(onMessage: WebSocket['onmessage']) {
   const [ws, setWs] = useState<WebSocket>();
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     var retryCount = 0;
     const maxRetryCount = 50;
     const reconnectTimeout = 5;
     var isReconnecting = false;
     var _ws: WebSocket;
 
-    function onOpen()
-    {
+    function onOpen() {
       toast.success('WS is OPEN', {
         closeButton: false,
         hideProgressBar: false,
@@ -27,11 +24,9 @@ export function useWebSocket(onMessage: WebSocket['onmessage'])
       setWs(_ws);
     }
 
-    function onErrorOrOnClose()
-    {
+    function onErrorOrOnClose() {
       var message = 'WebSocket connection was not established or lost.';
-      if(retryCount < maxRetryCount)
-      {
+      if(retryCount < maxRetryCount) {
         message += ' Reconnect retry #' + retryCount + ' of ' + maxRetryCount;
       }
       toast.error(message, {
@@ -43,11 +38,9 @@ export function useWebSocket(onMessage: WebSocket['onmessage'])
         closeOnClick: false
       });
 
-      if(!isReconnecting && retryCount < maxRetryCount)
-      {
+      if(!isReconnecting && retryCount < maxRetryCount) {
         isReconnecting = true;
-        setTimeout(() =>
-        {
+        setTimeout(() => {
           retryCount++;
           openWebsocket();
           isReconnecting = false;
@@ -55,8 +48,7 @@ export function useWebSocket(onMessage: WebSocket['onmessage'])
       }
     }
 
-    function openWebsocket()
-    {
+    function openWebsocket() {
       _ws = new WebSocket('ws://localhost:5522');
       _ws.onmessage = onMessage;
       _ws.onopen = onOpen;
@@ -66,10 +58,9 @@ export function useWebSocket(onMessage: WebSocket['onmessage'])
 
     openWebsocket();
 
-    return () =>
-    {
+    return () => {
       _ws.close();
-    }
+    };
   }, [onMessage]);
 
   return ws;

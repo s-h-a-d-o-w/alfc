@@ -163,24 +163,18 @@ export function fanControl() {
       prevGPUFanTable = state.gpuFanTable;
       currRampDownCycle = 0;
       currRampUpCycle = 0;
-    }
-    else if (appliedSpeed < target)
-    {
-      if (currRampUpCycle === WAIT_RAMP_UP_CYCLES)
-      {
+    } else if (appliedSpeed < target) {
+      if (currRampUpCycle === WAIT_RAMP_UP_CYCLES) {
         gradientTarget = getGradientTarget(appliedSpeed, target);
         setFixedFan(gradientTarget);
 
         currRampDownCycle = 0;
         currRampUpCycle = 0;
         appliedSpeed = gradientTarget;
-      }
-      else
-      {
+      } else {
         currRampUpCycle++;
       }
-    }
-    else if (target < appliedSpeed) {
+    } else if (target < appliedSpeed) {
       // Make fan behavior less erratic by waiting a few cycles until we
       // ramp down.
       if (currRampDownCycle === WAIT_RAMP_DOWN_CYCLES) {
@@ -190,14 +184,10 @@ export function fanControl() {
         currRampDownCycle = 0;
         currRampUpCycle = 0;
         appliedSpeed = gradientTarget;
-      }
-      else
-      {
+      } else {
         currRampDownCycle++;
       }
-    }
-    else
-    {
+    } else {
       // Need to reset if e.g. ramp down phase is
       // interrupted by CPU getting hot again or getting cold again.
       currRampDownCycle = 0;
