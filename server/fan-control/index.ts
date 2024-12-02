@@ -78,6 +78,22 @@ export function fanControl() {
     return highestMatch;
   }
 
+  function getGradientTarget(lastAppliedSpeed, targetSpeed) {
+    var gradientTarget = targetSpeed;
+    if(targetSpeed > lastAppliedSpeed)
+    {
+      gradientTarget = lastAppliedSpeed + Math.round((targetSpeed - lastAppliedSpeed) / 2);
+    } else if(targetSpeed < lastAppliedSpeed) {
+      gradientTarget = lastAppliedSpeed - Math.round((lastAppliedSpeed - targetSpeed) / 2);
+    }
+
+    if(Math.abs(targetSpeed - gradientTarget) < 5) {
+      gradientTarget = targetSpeed;
+    }
+
+    return gradientTarget;
+  }
+
   let appliedSpeed = -1;
   let currRampDownCycle = 0;
   let currRampUpCycle = 0;
@@ -119,7 +135,7 @@ export function fanControl() {
             avgCPUTemp:
               CPUTemps.reduce((sum, temp) => sum + temp) / CPUTemps.length,
             avgGPUTemp:
-              GPUTemps.reduce((sum, temp) => sum + temp) / GPUTemps.length,
+              GPUTemps.reduce((sum, temp) => sum + temp) / GPUTemps.length
           });
         } else {
           setTimeout(pushTemps, TEMP_POLL_INTERVAL);
@@ -134,6 +150,7 @@ export function fanControl() {
     // Target speed is whichever one of the two is higher because
     // of the mostly shared heat pipes.
     const target = Math.max(highestMatchCPU[1], highestMatchGPU[1]);
+    var gradientTarget;
 
     if (
       prevCPUFanTable !== state.cpuFanTable ||
@@ -146,31 +163,43 @@ export function fanControl() {
       prevGPUFanTable = state.gpuFanTable;
       currRampDownCycle = 0;
       currRampUpCycle = 0;
-    } else if (appliedSpeed < target) {
-      if (currRampUpCycle === WAIT_RAMP_UP_CYCLES) {
-        setFixedFan(target);
+    }
+    else if (appliedSpeed < target)
+    {
+      if (currRampUpCycle === WAIT_RAMP_UP_CYCLES)
+      {
+        gradientTarget = getGradientTarget(appliedSpeed, target);
+        setFixedFan(gradientTarget);
 
         currRampDownCycle = 0;
         currRampUpCycle = 0;
-        appliedSpeed = target;
-      } else {
+        appliedSpeed = gradientTarget;
+      }
+      else
+      {
         currRampUpCycle++;
       }
-    } else if (target < appliedSpeed) {
+    }
+    else if (target < appliedSpeed) {
       // Make fan behavior less erratic by waiting a few cycles until we
       // ramp down.
       if (currRampDownCycle === WAIT_RAMP_DOWN_CYCLES) {
-        setFixedFan(target);
+        gradientTarget = getGradientTarget(appliedSpeed, target);
+        setFixedFan(gradientTarget);
 
         currRampDownCycle = 0;
         currRampUpCycle = 0;
-        appliedSpeed = target;
-      } else {
+        appliedSpeed = gradientTarget;
+      }
+      else
+      {
         currRampDownCycle++;
       }
-    } else {
+    }
+    else
+    {
       // Need to reset if e.g. ramp down phase is
-      // interrupted by CPU getting hot again.
+      // interrupted by CPU getting hot again or getting cold again.
       currRampDownCycle = 0;
       currRampUpCycle = 0;
     }
@@ -179,7 +208,7 @@ export function fanControl() {
       appliedSpeed: appliedSpeed === -1 ? null : appliedSpeed,
       avgCPUTemp,
       avgGPUTemp,
-      target,
+      target
     });
   }, CYCLE_DURATION);
 }
