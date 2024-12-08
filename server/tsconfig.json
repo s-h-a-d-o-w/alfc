@@ -12,12 +12,5 @@
     ],
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-  },
-  "include": [
-    "**.ts",
-    "server/index.ts"
-  ],
-  "exclude": [
-    "./frontend"
-  ]
+  }
 }

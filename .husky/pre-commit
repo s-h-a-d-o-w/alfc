@@ -1,0 +1,1 @@
+yarn concurrently "yarn type-check" "lint-staged"

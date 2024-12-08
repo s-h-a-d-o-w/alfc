@@ -13,6 +13,7 @@
     "install:frontend": "cd frontend && yarn install --frozen-lockfile",
     "install:server": "cd server && yarn install --frozen-lockfile",
     "lint": "eslint --ignore-path .gitignore .",
+    "prepare": "husky",
     "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
     "start:prod": "cross-env NODE_ENV=production node server/build",
     "type-check": "concurrently \"tsc -P ./frontend/tsconfig.json\" \"tsc --noEmit -P ./server/tsconfig.json\""
@@ -27,7 +28,9 @@
     "eslint": "7.6.0",
     "eslint-config-prettier": "6.7.0",
     "eslint-plugin-prettier": "3.1.1",
+    "husky": "^9.1.6",
     "kill-port": "1.6.1",
+    "lint-staged": "^15.2.10",
     "prettier": "1.19.1",
     "typescript": "3.9.7"
   }
