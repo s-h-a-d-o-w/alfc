@@ -93,21 +93,21 @@ any more. Probably due to dev stuff with hot reload. Still - if a user ever expe
 it can be resolved through running Resource Monitor as admin, finding what is connected
 to port 5522 and killing it.
 
-## Wishlist
+## Todo/Wishlist
 
 Contributions welcome, as always. 🙂
 
-- Make charge stop work. Based on `SmartManager.dll`, it's quite simple:
+- To support more recent node versions, the `nan` dependency in `os-version` would have to be upgraded.
+- Refactor styles so there aren't as many inline ones.
+- Make ramping up/down times configurable.
+- Prettier status UI.
+- Using RGB lighting to highlight caps/num lock. There's something [here](https://gitlab.com/wtwrp/aeroctl/-/tree/master/Samples/AeroCtl.Rgb.LockKeys) for the Gigabyte Aero that could potentially be reused. (This should actually probably be a seperate little tool, like the Gigabyte-Aorus-Battery-Manager)
+- Make it possible to supply decent service Name and Description, especially on Windows, where it
+sticks out like a sore thumb. (Requires modifying `os-service`, since it currently uses the name one
+can supply also as the file name for Linux services, so spaces might be problematic.)
+- ~~Make charge stop work. Based on `SmartManager.dll`, it's quite simple:
 `cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`
 Yet, `GetChargeStop` shows that the value set with `SetChargeStop` doesn't stick.
 Does that feature even work? I don't have the Control Center installed any more and don't
 want to install it again...
-On Linux, this might be possible [like so](https://askubuntu.com/a/1211506).
-- Make ramping up/down times configurable.
-- Prettier status UI.
-- Using RGB lighting to highlight caps/num lock. There's something [here](https://gitlab.com/wtwrp/aeroctl/-/tree/master/Samples/AeroCtl.Rgb.LockKeys)
-for the Gigabyte Aero that could potentially be reused.
-- Refactor styles so there aren't as many inline ones.
-- Make it possible to supply decent service Name and Description, especially on Windows, where it
-sticks out like a sore thumb. (Requires modifying `os-service`, since it currently uses the name one
-can supply also as the file name for Linux services, so spaces might be problematic.)
+On Linux, this might be possible [like so](https://askubuntu.com/a/1211506).~~ (See [Gigabyte-Aorus-Battery-Manager](https://github.com/lxmoonlily/Gigabyte-Aorus-Battery-Manager). Leaving this for docs regarding how to do it on Linux.)
