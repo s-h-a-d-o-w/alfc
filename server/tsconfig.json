@@ -7,17 +7,11 @@
     "target": "es6",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "lib": [
       "es6"
     ],
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-  },
-  "include": [
-    "**.ts",
-    "server/index.ts"
-  ],
-  "exclude": [
-    "./frontend"
-  ]
+  }
 }

@@ -3,11 +3,11 @@ import { getCall, setCall } from '../native';
 import { state } from '../state';
 
 const WAIT_RAMP_DOWN_CYCLES = 10;
-const WAIT_RAMP_UP_CYCLES = 2;
-const CYCLE_DURATION = 1000;
+export const WAIT_RAMP_UP_CYCLES = 2;
+export const CYCLE_DURATION = 1000;
 const TEMP_POLL_INTERVAL = 200;
 
-function fanPercentToSpeed(percent: number) {
+export function fanPercentToSpeed(percent: number) {
   return Math.ceil((percent / 100.0) * 229);
 }
 
@@ -25,7 +25,7 @@ export function setFixedFan(percent: number) {
 async function getCallInt(methodId: string, methodName: string) {
   // On rare occassions, the call returns `null`.
   const result = parseInt(await getCall(methodId, methodName), 16);
-  return isNaN(result) ? -1 : result;
+  return isNaN(result) ? 200 : result; // Force highest speed when temperature reading fails
 }
 
 function initFanControl() {
@@ -60,7 +60,7 @@ export function fanControl() {
   // might cause it.
   // So - enforcing every ~5 minutes that our fixed fan settings
   // are used should prevent that.
-  setInterval(initFanControl, 1000 * 60 * 5);
+  const reinitInterval = setInterval(initFanControl, 1000 * 60 * 5);
 
   // Find highest entry that isn't larger than provided temp,
   // assuming that fan table entries in profiles are ascending.
@@ -87,12 +87,16 @@ export function fanControl() {
     // Interrupt if switching to fixed fan speed
     if (state.doFixedSpeed) {
       clearInterval(autoFanInterval);
+      clearInterval(reinitInterval);
       setFixedFan(state.fixedPercentage);
       return;
     }
 
     // Collect average temperature throughout CYCLE_DURATION
-    const { avgCPUTemp, avgGPUTemp } = await new Promise((resolve) => {
+    const { avgCPUTemp, avgGPUTemp } = await new Promise<{
+      avgCPUTemp: number;
+      avgGPUTemp: number;
+    }>((resolve) => {
       const CPUTemps: number[] = [];
       const GPUTemps: number[] = [];
       const pushTemps = async () => {
