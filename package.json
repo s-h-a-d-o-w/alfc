@@ -13,9 +13,11 @@
     "install:frontend": "cd frontend && yarn install --frozen-lockfile",
     "install:server": "cd server && yarn install --frozen-lockfile",
     "lint": "eslint --ignore-path .gitignore .",
+    "precommit":"concurrently \"yarn type-check\" \"lint-staged\"",
     "prepare": "husky",
     "start": "concurrently \"cd server && yarn start\" \"cd frontend && yarn start\"",
     "start:prod": "cross-env NODE_ENV=production node server/build",
+    "test": "vitest",
     "type-check": "concurrently \"tsc -P ./frontend/tsconfig.json\" \"tsc --noEmit -P ./server/tsconfig.json\""
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "kill-port": "1.6.1",
     "lint-staged": "^15.2.10",
     "prettier": "1.19.1",
-    "typescript": "3.9.7"
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
   }
 }

@@ -107,13 +107,15 @@ wsServer.on('connection', (socket) => {
         })
       );
     } catch (error) {
-      return socket.send(
-        JSON.stringify({
-          ...payload,
-          kind: MessageToClientKind.Error,
-          data: error.stack,
-        })
-      );
+      if (error instanceof Error) {
+        socket.send(
+          JSON.stringify({
+            ...payload,
+            kind: MessageToClientKind.Error,
+            data: error.stack,
+          })
+        );
+      }
     }
   });
 });
