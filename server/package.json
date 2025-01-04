@@ -10,7 +10,7 @@
     "start": "nodemon --ext ts,dll",
     "start:prod": "cross-env NODE_ENV=production node dist/index.js",
     "debug:acpi": "ts-node --transpileOnly native\\windows\\acpi.ts",
-    "debug:oc": "yarn build:cpuoc && ts-node --transpileOnly native\\windows\\cpuoc.ts"
+    "debug:oc": "pnpm build:cpuoc && ts-node --transpileOnly native\\windows\\cpuoc.ts"
   },
   "dependencies": {
     "edge-js": "18.4.3",

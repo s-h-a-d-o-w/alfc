@@ -78,16 +78,17 @@ export function fanControl() {
     return highestMatch;
   }
 
-  function getGradientTarget(lastAppliedSpeed, targetSpeed) {
-    var gradientTarget = targetSpeed;
-    if(targetSpeed > lastAppliedSpeed)
-    {
-      gradientTarget = lastAppliedSpeed + Math.round((targetSpeed - lastAppliedSpeed) / 2);
-    } else if(targetSpeed < lastAppliedSpeed) {
-      gradientTarget = lastAppliedSpeed - Math.round((lastAppliedSpeed - targetSpeed) / 2);
+  function getGradientTarget(lastAppliedSpeed: number, targetSpeed: number) {
+    let gradientTarget = targetSpeed;
+    if (targetSpeed > lastAppliedSpeed) {
+      gradientTarget =
+        lastAppliedSpeed + Math.round((targetSpeed - lastAppliedSpeed) / 2);
+    } else if (targetSpeed < lastAppliedSpeed) {
+      gradientTarget =
+        lastAppliedSpeed - Math.round((lastAppliedSpeed - targetSpeed) / 2);
     }
 
-    if(Math.abs(targetSpeed - gradientTarget) < 5) {
+    if (Math.abs(targetSpeed - gradientTarget) < 5) {
       gradientTarget = targetSpeed;
     }
 
@@ -135,7 +136,7 @@ export function fanControl() {
             avgCPUTemp:
               CPUTemps.reduce((sum, temp) => sum + temp) / CPUTemps.length,
             avgGPUTemp:
-              GPUTemps.reduce((sum, temp) => sum + temp) / GPUTemps.length
+              GPUTemps.reduce((sum, temp) => sum + temp) / GPUTemps.length,
           });
         } else {
           setTimeout(pushTemps, TEMP_POLL_INTERVAL);
@@ -150,7 +151,7 @@ export function fanControl() {
     // Target speed is whichever one of the two is higher because
     // of the mostly shared heat pipes.
     const target = Math.max(highestMatchCPU[1], highestMatchGPU[1]);
-    var gradientTarget;
+    let gradientTarget;
 
     if (
       prevCPUFanTable !== state.cpuFanTable ||
@@ -198,7 +199,7 @@ export function fanControl() {
       appliedSpeed: appliedSpeed === -1 ? null : appliedSpeed,
       avgCPUTemp,
       avgGPUTemp,
-      target
+      target,
     });
   }, CYCLE_DURATION);
 }
