@@ -12,10 +12,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 18
     - run: |
-        yarn install --frozen-lockfile
-        yarn precommit
+        pnpm install
+        pnpm precommit

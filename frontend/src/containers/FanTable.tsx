@@ -1,12 +1,12 @@
-import styled from '@emotion/styled';
-import React, { useCallback, useRef, useState } from 'react';
-import { StyledApplyButton } from '../components/StyledApplyButton';
-import { StyledArea } from '../components/StyledArea';
-import { useWebSocket } from '../utils/hooks';
-import { errorToast, sendMessage, successToast } from '../utils/misc';
-import { FanTableEditor } from './FanTableEditor';
-import { Status } from './Status';
-import { disabledFormStyle, enabledFormStyle } from './styles/misc';
+import styled from "@emotion/styled";
+import React, { useCallback, useRef, useState } from "react";
+import { StyledApplyButton } from "../components/StyledApplyButton";
+import { StyledArea } from "../components/StyledArea";
+import { useWebSocket } from "../utils/hooks";
+import { errorToast, sendMessage, successToast } from "../utils/misc";
+import { FanTableEditor } from "./FanTableEditor";
+import { Status } from "./Status";
+import { disabledFormStyle, enabledFormStyle } from "./styles/misc";
 
 export type FanTableItems = [string, string][];
 
@@ -28,18 +28,18 @@ export function FanTable({ disabled }: { disabled: boolean }) {
   const [gpuTable, setGPUTable] = useState<FanTableItems>([]);
 
   const ws = useWebSocket(
-    useCallback((event) => {
+    useCallback((event: MessageEvent<string>) => {
       const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
+      if (kind === "state") {
         setCPUTable(data.cpuFanTable);
         setGPUTable(data.gpuFanTable);
-      } else if (kind === 'success') {
-        successToast('Successfully applied.');
-      } else if (kind === 'error') {
+      } else if (kind === "success") {
+        successToast("Successfully applied.");
+      } else if (kind === "error") {
         errorToast(data);
         console.error(data);
       }
-    }, [])
+    }, []),
   );
 
   if (!ws) {
@@ -50,7 +50,7 @@ export function FanTable({ disabled }: { disabled: boolean }) {
     event.preventDefault();
     submitRef.current?.focus();
     sendMessage(ws, {
-      kind: 'fantable',
+      kind: "fantable",
       data: {
         cpu: cpuTable.map((entry) => [
           parseInt(entry[0], 10),
@@ -66,7 +66,7 @@ export function FanTable({ disabled }: { disabled: boolean }) {
 
   return (
     <StyledForm disabled={disabled} onSubmit={onSubmit}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <StyledArea>
           <h2 style={{ marginTop: 0 }}>CPU</h2>
           <FanTableEditor

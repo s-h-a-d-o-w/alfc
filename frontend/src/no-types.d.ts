@@ -1,1 +1,1 @@
-declare module '@cypress/react-tooltip';
+declare module "@cypress/react-tooltip";

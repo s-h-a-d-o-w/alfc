@@ -1,6 +1,10 @@
-import { MessageToClientKind, FanTable } from '../../common/types';
-import { getCall, setCall } from '../native';
-import { state } from '../state';
+import {
+  MessageToClientKind,
+  FanTable,
+  FanControlActivity,
+} from "../../common/types";
+import { getCall, setCall } from "../native";
+import { state } from "../state";
 
 const WAIT_RAMP_DOWN_CYCLES = 10;
 export const WAIT_RAMP_UP_CYCLES = 2;
@@ -17,9 +21,9 @@ export function setFixedFan(percent: number) {
   const speed = fanPercentToSpeed(percent);
 
   // SetFixedFanSpeed
-  setCall('0x6b', 'SetFixedFanSpeed', { Data: speed });
+  setCall("0x6b", "SetFixedFanSpeed", { Data: speed });
   // SetGPUFanDuty
-  setCall('0x47', 'SetGPUFanDuty', { Data: speed });
+  setCall("0x47", "SetGPUFanDuty", { Data: speed });
 }
 
 async function getCallInt(methodId: string, methodName: string) {
@@ -29,10 +33,10 @@ async function getCallInt(methodId: string, methodName: string) {
 }
 
 function initFanControl() {
-  setCall('0x58', 'SetSuperQuiet', { Data: 0 });
-  setCall('0x71', 'SetAutoFanStatus', { Data: 0 });
-  setCall('0x67', 'SetStepFanStatus', { Data: 0 });
-  setCall('0x6a', 'SetFixedFanStatus', { Data: 1 });
+  setCall("0x58", "SetSuperQuiet", { Data: 0 });
+  setCall("0x71", "SetAutoFanStatus", { Data: 0 });
+  setCall("0x67", "SetStepFanStatus", { Data: 0 });
+  setCall("0x6a", "SetFixedFanStatus", { Data: 1 });
 }
 
 function resetFanSpeed() {
@@ -40,13 +44,13 @@ function resetFanSpeed() {
   return state.cpuFanTable[0][1];
 }
 
-function sendActivity(data: any) {
+function sendActivity(data: FanControlActivity) {
   if (
     state.activitySocket &&
     state.activitySocket.readyState === state.activitySocket.OPEN
   ) {
     state.activitySocket.send(
-      JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data })
+      JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data }),
     );
   }
 }
@@ -117,9 +121,9 @@ export function fanControl() {
       const CPUTemps: number[] = [];
       const GPUTemps: number[] = [];
       const pushTemps = async () => {
-        const currCPUTemp = await getCallInt('0xe1', 'getCpuTemp');
-        const currGPUTemp1 = await getCallInt('0xe2', 'getGpuTemp1');
-        const currGPUTemp2 = await getCallInt('0xe3', 'getGpuTemp2');
+        const currCPUTemp = await getCallInt("0xe1", "getCpuTemp");
+        const currGPUTemp1 = await getCallInt("0xe2", "getGpuTemp1");
+        const currGPUTemp2 = await getCallInt("0xe3", "getGpuTemp2");
         const currGPUTemp = Math.max(currGPUTemp1, currGPUTemp2);
         // console.log(
         //   `CPU and GPU1/GPU2 temperatures: ${currCPUTemp} ${currGPUTemp1}/${currGPUTemp2}`

@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import React from 'react';
-import { theme } from '../utils/consts';
+import styled from "@emotion/styled";
+import React from "react";
+import { theme } from "../utils/consts";
 
 export enum ToggleState {
   On,
@@ -33,7 +33,7 @@ const StyledToggle = styled.span`
 
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     height: ${TOGGLE_DIAMETER}px;
     width: ${TOGGLE_DIAMETER}px;
     left: ${CONTAINER_PADDING}px;
@@ -93,8 +93,8 @@ export function Toggle({ label, name, onChange, value }: Props) {
         htmlFor={name}
         style={{
           marginLeft: 8,
-          whiteSpace: 'nowrap',
-          display: 'inline-block',
+          whiteSpace: "nowrap",
+          display: "inline-block",
         }}
       >
         <h2>{label}</h2>

@@ -1,29 +1,25 @@
-import { promisify } from 'util';
-import { Args } from '../../../common/types';
-import { createEdgeFunc } from './edge';
+import { promisify } from "util";
+import { Args } from "../../../common/types";
+import { createEdgeFunc } from "./edge";
 
 type DotNetArg = {
   methodName: string;
   args: { [key: string]: number } | null;
 };
 
-const initEdgeFunc = promisify(createEdgeFunc('WmiAPI.dll', 'InitWmi'));
+const initEdgeFunc = promisify(createEdgeFunc("WmiAPI.dll", "InitWmi"));
 const wmiGetEdgeFunc = promisify(
-  createEdgeFunc<DotNetArg, number[]>('WmiAPI.dll', 'WmiGet')
+  createEdgeFunc<DotNetArg, number[]>("WmiAPI.dll", "WmiGet"),
 );
 const wmiSetEdgeFunc = promisify(
-  createEdgeFunc<DotNetArg, null>('WmiAPI.dll', 'WmiSet')
+  createEdgeFunc<DotNetArg, null>("WmiAPI.dll", "WmiSet"),
 );
 
 export async function wmiInit() {
   await initEdgeFunc(null);
 }
 
-export async function setCall(
-  methodId: string,
-  methodName: string,
-  args: Args
-) {
+export async function setCall(_: string, methodName: string, args: Args) {
   await wmiSetEdgeFunc({
     methodName,
     args,
@@ -42,11 +38,7 @@ function splitWords(numbers: number[]) {
   }
 }
 
-export async function getCall(
-  methodId: string,
-  methodName: string,
-  args?: Args
-) {
+export async function getCall(_: string, methodName: string, args?: Args) {
   // TODO: Convert to a number instead of returning a hex string. For Linux as well, obviously
   const result = (
     await wmiGetEdgeFunc({
@@ -57,13 +49,13 @@ export async function getCall(
   splitWords(result);
 
   // Leading 0 has to be stripped to make output consistent with Linux
-  const hexString = Buffer.from(result).toString('hex');
-  return '0x' + (hexString[0] === '0' ? hexString.substr(1) : hexString);
+  const hexString = Buffer.from(result).toString("hex");
+  return "0x" + (hexString[0] === "0" ? hexString.substr(1) : hexString);
 }
 
 if (require.main === module) {
   (async () => {
     await wmiInit();
-    console.log('RPM1', await getCall('doesntmatter', 'getRpm1'));
+    console.log("RPM1", await getCall("doesntmatter", "getRpm1"));
   })();
 }

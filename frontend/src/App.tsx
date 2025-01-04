@@ -1,19 +1,19 @@
-import '@csstools/normalize.css';
-import styled from '@emotion/styled';
-import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Button } from 'reactstrap';
-import './App.css';
-import { CPUTuning } from './containers/CPUTuning';
-import { FanTable } from './containers/FanTable';
-import { FixedSpeed } from './containers/FixedSpeed';
-import { RawUI } from './containers/RawUI';
-import { Toggles } from './containers/Toggles';
-import { useWebSocket } from './utils/hooks';
-import { errorToast, sendMessage } from './utils/misc';
+import "@csstools/normalize.css";
+import styled from "@emotion/styled";
+import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "reactstrap";
+import "./App.css";
+import { CPUTuning } from "./containers/CPUTuning";
+import { FanTable } from "./containers/FanTable";
+import { FixedSpeed } from "./containers/FixedSpeed";
+import { RawUI } from "./containers/RawUI";
+import { Toggles } from "./containers/Toggles";
+import { useWebSocket } from "./utils/hooks";
+import { errorToast, sendMessage } from "./utils/misc";
 
 const StyledApp = styled.div`
   display: flex;
@@ -47,15 +47,15 @@ function App() {
   const [doFixedSpeed, setDoFixedSpeed] = useState(false);
 
   const ws = useWebSocket(
-    useCallback((event) => {
+    useCallback((event: MessageEvent<string>) => {
       const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
+      if (kind === "state") {
         setDoFixedSpeed(data.doFixedSpeed);
-      } else if (kind === 'error') {
+      } else if (kind === "error") {
         errorToast(data);
         console.error(data);
       }
-    }, [])
+    }, []),
   );
 
   if (!ws) {
@@ -63,7 +63,7 @@ function App() {
   }
 
   const onChangeMode: React.MouseEventHandler = () => {
-    sendMessage(ws, { kind: 'dofixedspeed', data: !doFixedSpeed });
+    sendMessage(ws, { kind: "dofixedspeed", data: !doFixedSpeed });
     setDoFixedSpeed(!doFixedSpeed);
   };
 

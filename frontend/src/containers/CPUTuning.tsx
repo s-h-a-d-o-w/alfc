@@ -1,13 +1,14 @@
-import styled from '@emotion/styled';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useRef, useState } from 'react';
-import { SimpleTooltip } from '../components/SimpleTooltip';
-import { StyledApplyButton } from '../components/StyledApplyButton';
-import { StyledArea } from '../components/StyledArea';
-import { useWebSocket } from '../utils/hooks';
-import { errorToast, sendTune, successToast } from '../utils/misc';
-import xtuIncompatibility from '../images/xtu_incompatibility.png';
+import styled from "@emotion/styled";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useRef, useState } from "react";
+import { SimpleTooltip } from "../components/SimpleTooltip";
+import { StyledApplyButton } from "../components/StyledApplyButton";
+import { StyledArea } from "../components/StyledArea";
+import { useWebSocket } from "../utils/hooks";
+import { errorToast, sendTune, successToast } from "../utils/misc";
+import xtuIncompatibility from "../images/xtu_incompatibility.png";
+import { MessageToClient } from "../../../common/types";
 
 const StyledInput = styled.input`
   width: 56px;
@@ -21,28 +22,30 @@ const StyledLabel = styled.label`
 export function CPUTuning() {
   const tooltipRef = useRef(null);
 
-  const [isCpuTuningAvailable, setIsCpuTuningAvailable] = useState(false);
+  const [isCpuTuningAvailable, setIsCpuTuningAvailable] = useState<
+    boolean | undefined
+  >(false);
   const [isApplying, setIsApplying] = useState(false);
-  const [pl1, setPL1] = useState('37');
-  const [pl2, setPL2] = useState('106');
+  const [pl1, setPL1] = useState<string>("37");
+  const [pl2, setPL2] = useState<string>("106");
 
   const ws = useWebSocket(
-    useCallback((event) => {
+    useCallback((event: MessageEvent<string>) => {
       setIsApplying(false);
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
+      const { kind, data } = JSON.parse(event.data) as MessageToClient;
+      if (kind === "state") {
         if (data.isCpuTuningAvailable) {
-          setPL1(data.pl1);
-          setPL2(data.pl2);
+          setPL1(data.pl1.toString());
+          setPL2(data.pl2.toString());
         }
         setIsCpuTuningAvailable(data.isCpuTuningAvailable);
-      } else if (kind === 'success') {
-        successToast('Successfully applied.');
-      } else if (kind === 'error') {
+      } else if (kind === "success") {
+        successToast("Successfully applied.");
+      } else if (kind === "error") {
         errorToast(data);
         console.error(data);
       }
-    }, [])
+    }, []),
   );
 
   if (!ws) {
@@ -58,8 +61,8 @@ export function CPUTuning() {
   const content = !isCpuTuningAvailable ? (
     <>
       <h2>
-        CPU Tuning is not available.{' '}
-        <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
+        CPU Tuning is not available.{" "}
+        <FontAwesomeIcon icon={faInfoCircle} ref={tooltipRef} />
         <SimpleTooltip target={tooltipRef} unlimitedWidth>
           The likely culprit:
           <br />
@@ -73,14 +76,14 @@ export function CPUTuning() {
   ) : (
     <>
       <h2 style={{ marginBottom: 16 }}>
-        CPU power limits{' '}
-        <FontAwesomeIcon icon={faInfoCircle} forwardedRef={tooltipRef} />
+        CPU power limits{" "}
+        <FontAwesomeIcon icon={faInfoCircle} ref={tooltipRef} />
         <SimpleTooltip target={tooltipRef}>
           The ECO profile for the i7-10875H in the Gigabyte Control Center is
           38/107, Boost is 62/107.
           <br />
-          NOTE: Don't use <strong>exactly</strong> those numbers, otherwise they
-          might not get applied at startup.
+          NOTE: Don&apos;t use <strong>exactly</strong> those numbers, otherwise
+          they might not get applied at startup.
         </SimpleTooltip>
       </h2>
       <form onSubmit={onSubmit}>

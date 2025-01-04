@@ -1,11 +1,11 @@
 rmdir /S /Q dist
 
 cd bootstrap
-call yarn build
+call pnpm build
 cd ..\server
-call yarn build
+call pnpm build
 cd ..\frontend
-call yarn build
+call pnpm build
 cd ..
 
 xcopy /I /E bootstrap\dist dist
@@ -29,7 +29,7 @@ copy package.json dist
 cd dist
 powershell Compress-Archive * alfc-without-node.zip
 move alfc-without-node.zip ..\alfc-without-node.zip
-curl --output node.exe https://nodejs.org/dist/latest-v18.x/win-x64/node.exe
+curl -L --output node.exe https://nodejs.org/dist/latest-v22.x/win-x64/node.exe
 powershell Compress-Archive * alfc.zip
 move ..\alfc-without-node.zip alfc-without-node.zip
 

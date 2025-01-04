@@ -4,7 +4,7 @@
   "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "^18"
+    "node": "^22"
   },
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "install:frontend": "cd frontend && pnpm install",
     "install:server": "cd server && pnpm install",
     "lint": "eslint .",
-    "precommit":"concurrently \"pnpm type-check\" \"lint-staged\"",
+    "precommit": "concurrently \"pnpm type-check\" \"lint-staged\"",
     "prepare": "husky",
     "start": "concurrently \"cd server && pnpm start\" \"cd frontend && pnpm start\"",
     "start:prod": "cross-env NODE_ENV=production node server/build",
@@ -24,12 +24,11 @@
     "@eslint/compat": "^1.2.4",
     "@eslint/js": "^9.17.0",
     "@types/eslint__js": "^8.42.3",
-    "@types/lodash": "4.14.159",
-    "@types/ws": "7.2.6",
+    "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "8.19.0",
     "@typescript-eslint/parser": "8.19.0",
-    "concurrently": "5.2.0",
-    "cross-env": "7.0.2",
+    "concurrently": "9.1.2",
+    "cross-env": "7.0.3",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
@@ -37,7 +36,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
     "husky": "^9.1.6",
-    "kill-port": "1.6.1",
+    "kill-port": "2.0.1",
     "lint-staged": "^15.3.0",
     "prettier": "3.4.2",
     "typescript": "5.7.2",

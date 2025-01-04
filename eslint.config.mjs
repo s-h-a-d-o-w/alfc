@@ -32,7 +32,14 @@ export default tseslint.config(
         ...globals.node,
       },
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: [
+            "*.mjs",
+            "*.js",
+            "bootstrap/index.js",
+            "frontend/config-overrides.js",
+          ],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -44,6 +51,7 @@ export default tseslint.config(
   },
 
   eslint.configs.recommended,
+  tseslint.configs.recommended,
 
   {
     plugins: {
@@ -58,6 +66,19 @@ export default tseslint.config(
 
   {
     rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
+      ],
+
       "no-unreachable": "off",
       "require-await": "error",
     },

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { errorToastStyle } from './misc';
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { errorToastStyle } from "./misc";
 
-export function useWebSocket(onMessage: WebSocket['onmessage']) {
+export function useWebSocket(onMessage: WebSocket["onmessage"]) {
   const [ws, setWs] = useState<WebSocket>();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export function useWebSocket(onMessage: WebSocket['onmessage']) {
     let _ws: WebSocket;
 
     function onOpen() {
-      toast.success('WS is OPEN', {
+      toast.success("WS is OPEN", {
         closeButton: false,
         hideProgressBar: false,
         draggable: false,
@@ -25,9 +25,9 @@ export function useWebSocket(onMessage: WebSocket['onmessage']) {
     }
 
     function onErrorOrOnClose() {
-      let message = 'WebSocket connection was not established or lost.';
+      let message = "WebSocket connection was not established or lost.";
       if (retryCount < maxRetryCount) {
-        message += ' Reconnect retry #' + retryCount + ' of ' + maxRetryCount;
+        message += " Reconnect retry #" + retryCount + " of " + maxRetryCount;
       }
       toast.error(message, {
         className: errorToastStyle,
@@ -49,7 +49,7 @@ export function useWebSocket(onMessage: WebSocket['onmessage']) {
     }
 
     function openWebsocket() {
-      _ws = new WebSocket('ws://localhost:5522');
+      _ws = new WebSocket("ws://localhost:5522");
       _ws.onmessage = onMessage;
       _ws.onopen = onOpen;
       _ws.onclose = onErrorOrOnClose;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Tooltip, TooltipProps } from 'reactstrap';
-import styled from '@emotion/styled';
+import { ReactNode, useState } from "react";
+import { Tooltip, TooltipProps } from "reactstrap";
+import styled from "@emotion/styled";
 
 const StyledTooltip = styled.div<{
   unlimitedWidth?: boolean;
@@ -9,12 +9,17 @@ const StyledTooltip = styled.div<{
   border-radius: 4px;
   padding: 16px;
   margin: 16px;
-  ${({ unlimitedWidth }) => (unlimitedWidth ? '' : 'width: 400px;')}
+  ${({ unlimitedWidth }) => (unlimitedWidth ? "" : "width: 400px;")}
 `;
 
-export const SimpleTooltip: React.FC<TooltipProps & {
+export const SimpleTooltip = ({
+  children,
+  unlimitedWidth = false,
+  ...props
+}: TooltipProps & {
+  children: ReactNode;
   unlimitedWidth?: boolean;
-}> = ({ children, unlimitedWidth = false, ...props }) => {
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

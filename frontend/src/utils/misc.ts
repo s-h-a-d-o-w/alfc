@@ -1,7 +1,7 @@
-import { getMethods, setMethods } from '../data/mof';
-import { toast, ToastContent } from 'react-toastify';
-import { css } from 'emotion';
-import { theme } from './consts';
+import { getMethods, setMethods } from "../data/mof";
+import { toast, ToastContent } from "react-toastify";
+import { css } from "emotion";
+import { theme } from "./consts";
 
 export function sendMessage(ws: WebSocket | undefined, payload: any) {
   if (ws && ws.readyState === ws.OPEN) {
@@ -12,8 +12,8 @@ export function sendMessage(ws: WebSocket | undefined, payload: any) {
       `Probably harmless, since it will likely be retried. Tried to send the following payload to ${ws}: ${JSON.stringify(
         payload,
         null,
-        2
-      )}`
+        2,
+      )}`,
     );
   }
 }
@@ -21,11 +21,11 @@ export function sendMessage(ws: WebSocket | undefined, payload: any) {
 export function sendGet(
   ws: WebSocket | undefined,
   methodName: string,
-  data?: { [arg: string]: number }
+  data?: { [arg: string]: number },
 ) {
   sendMessage(ws, {
     ...getMethods[methodName],
-    kind: 'get',
+    kind: "get",
     data,
   });
 }
@@ -33,18 +33,18 @@ export function sendGet(
 export function sendSet(
   ws: WebSocket | undefined,
   methodName: string,
-  data: { [arg: string]: number }
+  data: { [arg: string]: number },
 ) {
   sendMessage(ws, {
     ...setMethods[methodName],
-    kind: 'set',
+    kind: "set",
     data,
   });
 }
 
 export function sendTune(ws: WebSocket | undefined, pl1: number, pl2: number) {
   sendMessage(ws, {
-    kind: 'tune',
+    kind: "tune",
     data: { pl1, pl2 },
   });
 }
@@ -61,14 +61,14 @@ const successToastStyle = css`
 export function successToast(content: ToastContent) {
   toast.success(content, {
     className: successToastStyle,
-    position: 'bottom-right',
+    position: "bottom-right",
   });
 }
 
 export function errorToast(content: ToastContent) {
   toast.error(content, {
     className: errorToastStyle,
-    position: 'bottom-right',
+    position: "bottom-right",
     autoClose: false,
   });
 }

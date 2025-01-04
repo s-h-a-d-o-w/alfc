@@ -1,14 +1,13 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 import {
   faFan,
   faMinusCircle,
   faPlusCircle,
   faThermometerHalf,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cloneDeep from 'lodash/cloneDeep';
-import React from 'react';
-import { FanTableItems } from './FanTable';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import cloneDeep from "lodash/cloneDeep";
+import { FanTableItems } from "./FanTable";
 
 type Props = {
   onChange: (nextCurvePoints: FanTableItems) => void;
@@ -91,8 +90,8 @@ export function FanTableEditor({ onChange, value }: Props) {
             style={
               value.length === 1
                 ? {
-                    cursor: 'default',
-                    opacity: '0.4',
+                    cursor: "default",
+                    opacity: "0.4",
                   }
                 : {}
             }

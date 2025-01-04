@@ -3,11 +3,11 @@
 rm -rf dist
 
 cd bootstrap
-yarn build
+pnpm build
 cd ../server
-yarn build
+pnpm build
 cd ../frontend
-yarn build
+pnpm build
 cd ..
 
 cp -r bootstrap/dist .

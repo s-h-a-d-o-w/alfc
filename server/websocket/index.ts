@@ -1,20 +1,20 @@
-import WebSocket from 'ws';
-import ws from 'ws';
+import type WebSocket from "ws";
+import ws from "ws";
 import {
   MessageToClientKind,
   MessageToServer,
   MessageToServerKind,
-} from '../../common/types';
-import { getCall, setCall, tune } from '../native';
-import { persistState, state } from '../state';
-import { setFixedFan, fanControl as autoFanControl } from '../fan-control';
-import { cloneDeep } from 'lodash';
+} from "../../common/types";
+import { getCall, setCall, tune } from "../native";
+import { persistState, state } from "../state";
+import { setFixedFan, fanControl as autoFanControl } from "../fan-control";
+import { cloneDeep } from "lodash";
 
 function sendState(socket: WebSocket) {
   const stateCopy = cloneDeep(state);
   delete stateCopy.activitySocket;
   socket.send(
-    JSON.stringify({ kind: MessageToClientKind.State, data: stateCopy })
+    JSON.stringify({ kind: MessageToClientKind.State, data: stateCopy }),
   );
 }
 
@@ -30,17 +30,17 @@ function sendSuccess(socket: WebSocket, payload: any, data?: any) {
       ...payload,
       kind: MessageToClientKind.Success,
       ...(data && { data }),
-    })
+    }),
   );
 }
 
 const wsServer = new ws.Server({ noServer: true });
-wsServer.on('connection', (socket) => {
+wsServer.on("connection", (socket) => {
   sendState(socket);
 
-  socket.on('message', async (message) => {
+  socket.on("message", async (message) => {
     // console.log(message);
-    if (typeof message !== 'string') {
+    if (typeof message !== "string") {
       return;
     }
 
@@ -83,18 +83,18 @@ wsServer.on('connection', (socket) => {
           const result = await getCall(
             payload.methodId,
             payload.methodName,
-            payload.data
+            payload.data,
           );
           return sendSuccess(socket, payload, result);
         }
         case MessageToServerKind.Set:
           if (payload.data) {
             await setCall(payload.methodId, payload.methodName, payload.data);
-            if (payload.methodName === 'SetAIBoostStatus') {
+            if (payload.methodName === "SetAIBoostStatus") {
               state.gpuBoost = payload.data.Data === 1;
               persistState();
             }
-            return sendSuccess(socket, payload, 'SUCCESS');
+            return sendSuccess(socket, payload, "SUCCESS");
           }
           break;
       }
@@ -103,8 +103,8 @@ wsServer.on('connection', (socket) => {
         JSON.stringify({
           ...payload,
           kind: MessageToClientKind.Error,
-          data: 'Either unknown message kind or missing payload data.',
-        })
+          data: "Either unknown message kind or missing payload data.",
+        }),
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -113,7 +113,7 @@ wsServer.on('connection', (socket) => {
             ...payload,
             kind: MessageToClientKind.Error,
             data: error.stack,
-          })
+          }),
         );
       }
     }

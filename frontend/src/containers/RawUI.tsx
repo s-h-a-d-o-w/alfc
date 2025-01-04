@@ -1,12 +1,13 @@
-import styled from '@emotion/styled';
-import React, { useCallback, useRef, useState } from 'react';
-import { getMethods, setMethods } from '../data/mof';
-import { useWebSocket } from '../utils/hooks';
-import { theme } from '../utils/consts';
+import styled from "@emotion/styled";
+import React, { useCallback, useRef, useState } from "react";
+import { getMethods, setMethods } from "../data/mof";
+import { useWebSocket } from "../utils/hooks";
+import { theme } from "../utils/consts";
+import type { MessageToClient } from "../../../common/types.ts";
 
 enum Kind {
-  Get = 'get',
-  Set = 'set',
+  Get = "get",
+  Set = "set",
 }
 
 const StyledHeader = styled.div`
@@ -38,20 +39,20 @@ export function RawUI() {
   const refRun = useRef<HTMLButtonElement>(null);
 
   const [kind, setKind] = useState(Kind.Get);
-  const [methodName, setMethodName] = useState('');
+  const [methodName, setMethodName] = useState("");
   const [args, setArgs] = useState<{ [key: string]: number }>({});
   const [isRunning, setIsRunning] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState("");
 
   const ws = useWebSocket(
-    useCallback((event) => {
-      const payload = JSON.parse(event.data);
-      if (payload.kind !== 'state') {
+    useCallback((event: MessageEvent<string>) => {
+      const payload = JSON.parse(event.data) as MessageToClient;
+      if (payload.kind !== "state") {
         setResult(`${new Date().toLocaleTimeString()}: ${payload.data}`);
         setIsRunning(false);
       }
-    }, [])
+    }, []),
   );
 
   if (!ws) {
@@ -60,7 +61,7 @@ export function RawUI() {
 
   const onKindChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setKind(event.target.value as Kind);
-    setMethodName('');
+    setMethodName("");
     setArgs({});
   };
 
@@ -77,7 +78,7 @@ export function RawUI() {
             : setMethods[methodName].methodId,
         methodName,
         data: Object.keys(args).length > 0 ? args : undefined,
-      })
+      }),
     );
   };
 
@@ -88,11 +89,11 @@ export function RawUI() {
     </option>
   ));
   const argumentsComponent =
-    methodName === '' ? null : methods[methodName].inArgs.length ===
+    methodName === "" ? null : methods[methodName].inArgs.length ===
       0 ? null : (
       <div>
         Arguments:
-        {methods[methodName].inArgs.map((arg, idx) => (
+        {methods[methodName].inArgs.map((arg) => (
           <div key={arg.name}>
             <label>
               <em>{arg.type}</em> {arg.name} ({arg.description})
@@ -109,7 +110,7 @@ export function RawUI() {
                     };
                   });
                 }}
-                value={args[arg.name] ?? ''}
+                value={args[arg.name] ?? ""}
               />
             </label>
           </div>
@@ -118,18 +119,18 @@ export function RawUI() {
     );
 
   const isRunnable =
-    methodName !== '' &&
+    methodName !== "" &&
     Object.keys(args).length === methods[methodName].inArgs.length;
 
   const content = isVisible && (
     <StyledContent>
       <div style={{ margin: 8 }}>
-        ⚠️ It goes without saying that you should know what you're doing when
-        using this.
+        ⚠️ It goes without saying that you should know what you&apos;re doing
+        when using this.
         <br />
-        Some of these simply won't work probably because these commands are used
-        on many different laptops and the Aorus 15G doesn't have implementations
-        for all of them.
+        Some of these simply won&apos;t work probably because these commands are
+        used on many different laptops and the Aorus 15G doesn&apos;t have
+        implementations for all of them.
       </div>
       <StyledControls onSubmit={onSubmit}>
         <StyledForm>
@@ -168,9 +169,9 @@ export function RawUI() {
           </select>
           {argumentsComponent}
           <div>
-            {methodName !== '' &&
+            {methodName !== "" &&
               methods[methodName].outArgs.length > 0 &&
-              methods[methodName].outArgs[0].type === 'uint16' && (
+              methods[methodName].outArgs[0].type === "uint16" && (
                 <div style={{ marginLeft: 4 }}>
                   uint16 output =&gt; little endian!
                 </div>

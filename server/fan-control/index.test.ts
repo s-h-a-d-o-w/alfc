@@ -1,15 +1,15 @@
 // TODO: upgrade packages so that eslint recognizes vitest globals out of the box
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { getCall, setCall } from '../native';
-import { state } from '../state';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { getCall, setCall } from "../native";
+import { state } from "../state";
 import {
   fanControl,
   fanPercentToSpeed,
   CYCLE_DURATION,
   WAIT_RAMP_UP_CYCLES,
-} from './index';
+} from "./index";
 
-vi.mock('../native', () => ({
+vi.mock("../native", () => ({
   getCall: vi.fn(),
   setCall: vi.fn(),
 }));
@@ -19,14 +19,14 @@ const mockedSetCall = vi.mocked(setCall);
 function mockTemperatures(cpu: number, gpu: number) {
   mockedGetCall.mockImplementation((methodId) => {
     switch (methodId) {
-      case '0xe1':
+      case "0xe1":
         return Promise.resolve(cpu.toString(16));
-      case '0xe2':
+      case "0xe2":
         return Promise.resolve(gpu.toString(16));
-      case '0xe3':
+      case "0xe3":
         return Promise.resolve(gpu.toString(16));
       default:
-        return Promise.resolve('0x0');
+        return Promise.resolve("0x0");
     }
   });
 }
@@ -46,11 +46,11 @@ async function waitUntilFanPercent(fanPercent: number) {
   }
 
   if (elapsed >= timeout) {
-    throw new Error('Timeout - function never returned true.');
+    throw new Error("Timeout - function never returned true.");
   }
 }
 
-describe('fan-control', () => {
+describe("fan-control", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
@@ -77,7 +77,7 @@ describe('fan-control', () => {
     vi.useRealTimers();
   });
 
-  it('should change fan speed as temperatures change', async () => {
+  it("should change fan speed as temperatures change", async () => {
     fanControl();
     expect(mockedSetCall.mock.calls).toMatchInlineSnapshot(`
       [
@@ -129,7 +129,7 @@ describe('fan-control', () => {
     // High CPU temperature
     mockTemperatures(90, 30);
     await waitUntilFanPercent(
-      state.cpuFanTable[state.cpuFanTable.length - 1][1]
+      state.cpuFanTable[state.cpuFanTable.length - 1][1],
     );
 
     // Cool CPU
@@ -139,11 +139,11 @@ describe('fan-control', () => {
     // High GPU temperature
     mockTemperatures(30, 90);
     await waitUntilFanPercent(
-      state.gpuFanTable[state.gpuFanTable.length - 1][1]
+      state.gpuFanTable[state.gpuFanTable.length - 1][1],
     );
   });
 
-  it('should switch to fixed speed when doFixedSpeed becomes true', async () => {
+  it("should switch to fixed speed when doFixedSpeed becomes true", async () => {
     fanControl();
 
     state.doFixedSpeed = true;
@@ -152,7 +152,7 @@ describe('fan-control', () => {
     await waitUntilFanPercent(state.fixedPercentage);
   });
 
-  it('fan speed adjusts after X cycles', async () => {
+  it("fan speed adjusts after X cycles", async () => {
     fanControl();
     // Make sure steady state is reached
     await vi.advanceTimersByTimeAsync(CYCLE_DURATION * 10);
@@ -163,15 +163,15 @@ describe('fan-control', () => {
     // Cycle 2: Temp has become stable => target will be changed
     // Cycles 3+: WAIT_RAMP_UP_CYCLES until target will actually be applied
     await vi.advanceTimersByTimeAsync(
-      CYCLE_DURATION * (WAIT_RAMP_UP_CYCLES + 2)
+      CYCLE_DURATION * (WAIT_RAMP_UP_CYCLES + 2),
     );
 
     expect(mockedSetCall.mock.calls[0][2].Data).toEqual(
-      fanPercentToSpeed(state.cpuFanTable[state.cpuFanTable.length - 1][1])
+      fanPercentToSpeed(state.cpuFanTable[state.cpuFanTable.length - 1][1]),
     );
   });
 
-  it('should handle fan table changes', async () => {
+  it("should handle fan table changes", async () => {
     fanControl();
 
     // Change fan tables
@@ -185,12 +185,12 @@ describe('fan-control', () => {
     await waitUntilFanPercent(state.cpuFanTable[0][1]);
   });
 
-  it('should use highest fan speed when readings are invalid', async () => {
+  it("should use highest fan speed when readings are invalid", async () => {
     fanControl();
 
-    mockedGetCall.mockResolvedValue('null');
+    mockedGetCall.mockResolvedValue("null");
     await waitUntilFanPercent(
-      state.gpuFanTable[state.gpuFanTable.length - 1][1]
+      state.gpuFanTable[state.gpuFanTable.length - 1][1],
     );
   });
 });
