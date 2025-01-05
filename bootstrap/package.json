@@ -1,18 +1,18 @@
 {
   "name": "service",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && ncc build index.js"
+    "build": "rimraf dist && ncc build index.ts"
   },
   "dependencies": {
-    "os-service": "2.2.0",
-    "react-dev-utils": "10.2.1",
+    "@neuralegion/os-service": "^1.2.6",
+    "react-dev-utils": "12.0.1",
     "sudo-prompt": "9.2.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.38.1",
-    "rimraf": "3.0.2"
+    "@vercel/ncc": "0.38.3",
+    "rimraf": "6.0.1"
   }
 }

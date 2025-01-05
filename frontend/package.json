@@ -6,9 +6,6 @@
     "start": "vite",
     "build": "vite build"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

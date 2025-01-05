@@ -1,9 +1,9 @@
-const { exec } = require("child_process");
-const fs = require("fs");
-const os = require("os");
-const service = require("os-service");
-const path = require("path");
-const sudo = require("sudo-prompt");
+import service from "@neuralegion/os-service";
+import { exec } from "child_process";
+import fs from "fs";
+import os from "os";
+import path from "path";
+import sudo from "sudo-prompt";
 
 const isWindows = os.platform() === "win32";
 
@@ -11,22 +11,17 @@ const sudoOptions = {
   name: "Aorus Laptop Fan Control",
 };
 
-const errorHandler = (onSuccess) => (error) => {
-  if (error) {
-    throw error;
-  }
-
-  onSuccess();
-};
-
-function sudoOutputHandler(error, stdout) {
+const sudoOutputHandler: Parameters<(typeof sudo)["exec"]>[2] = (
+  error,
+  stdout,
+) => {
   if (error) {
     console.error(error);
     return;
   }
 
   console.log(stdout);
-}
+};
 
 switch (process.argv[2]) {
   case "install":
@@ -43,25 +38,30 @@ switch (process.argv[2]) {
     service.add(
       "alfc",
       {
-        programArgs: ["run"],
+        args: ["run"],
         dependencies: isWindows ? ["Winmgmt"] : ["acpi_call"],
       },
-      errorHandler(() => {
+      (error) => {
+        if (error) {
+          throw error;
+        }
+
         const serviceStartCommand = isWindows
           ? "net start alfc"
           : "service alfc start";
-        exec(
-          serviceStartCommand,
-          errorHandler(async () => {
-            if (isWindows) {
-              await new Promise((resolve) => setTimeout(resolve, 1000 * 25));
-            }
+        exec(serviceStartCommand, async (error) => {
+          if (error) {
+            throw error;
+          }
 
-            console.log("Done.");
-            require("react-dev-utils/openBrowser")("http://localhost:5522");
-          }),
-        );
-      }),
+          if (isWindows) {
+            await new Promise((resolve) => setTimeout(resolve, 1000 * 25));
+          }
+
+          console.log("Done.");
+          require("react-dev-utils/openBrowser")("http://localhost:5522");
+        });
+      },
     );
     break;
   case "uninstall":
@@ -82,12 +82,13 @@ switch (process.argv[2]) {
       // exec would possibly error if the service is already stopped.
       // But we don't care about that and will simply attempt to remove the serivce.
 
-      service.remove(
-        "alfc",
-        errorHandler(() => {
-          console.log("Done.");
-        }),
-      );
+      service.remove("alfc", (error) => {
+        if (error) {
+          throw error;
+        }
+
+        console.log("Done.");
+      });
     });
     break;
   }
@@ -100,6 +101,7 @@ switch (process.argv[2]) {
     // On Linux, it'll go to the systemd logs.
     if (isWindows) {
       const access = fs.createWriteStream(path.join(__dirname, "service.log"));
+      // @ts-expect-error Undefined/null type mismatch: Type 'Error | null | undefined' is not assignable to type 'Error | undefined'.
       process.stdout.write = process.stderr.write = access.write.bind(access);
       process.on("uncaughtException", function (err) {
         console.error(err && err.stack ? err.stack : err);

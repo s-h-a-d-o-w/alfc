@@ -1,0 +1,4 @@
+{
+  // ncc boundary
+  "extends": "../tsconfig.json"
+}
