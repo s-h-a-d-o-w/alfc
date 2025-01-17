@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "strict": true,
     "baseUrl": "./",
     "outDir": "build",
-    "target": "es6",
+    "target": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": [
-      "es6"
+      "ESNext"
     ],
     "allowJs": true,
     "forceConsistentCasingInFileNames": true

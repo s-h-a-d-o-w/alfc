@@ -1,9 +1,9 @@
 import fs from "fs";
 import stringifyCompact from "json-stringify-pretty-compact";
-import { cloneDeep } from "lodash";
 import path from "path";
 import { isDev } from "../utils/consts";
 import { State } from "../../common/types";
+import cloneDeep from "lodash/cloneDeep";
 
 const CONFIG_FILE = isDev
   ? path.join(__dirname, "../../alfc.config.json")

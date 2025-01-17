@@ -1,67 +1,17 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { errorToastStyle } from "./misc";
+import useReactWebSocket, { ReadyState } from "react-use-websocket";
+import { MessageToClient } from "../../../common/types";
 
-export function useWebSocket(onMessage: WebSocket["onmessage"]) {
-  const [ws, setWs] = useState<WebSocket>();
+const emptyObject = {};
 
-  useEffect(() => {
-    let retryCount = 0;
-    const maxRetryCount = 50;
-    const reconnectTimeout = 5;
-    let isReconnecting = false;
-    let _ws: WebSocket;
+export function useWebSocket() {
+  const { lastJsonMessage, sendJsonMessage, readyState } =
+    useReactWebSocket<MessageToClient | null>("ws://localhost:5523");
 
-    function onOpen() {
-      toast.success("WS is OPEN", {
-        closeButton: false,
-        hideProgressBar: false,
-        draggable: false,
-        closeOnClick: true,
-        autoClose: 5000,
-      });
-      retryCount = 0;
-      setWs(_ws);
-    }
-
-    function onErrorOrOnClose() {
-      let message = "WebSocket connection was not established or lost.";
-      if (retryCount < maxRetryCount) {
-        message += " Reconnect retry #" + retryCount + " of " + maxRetryCount;
-      }
-      toast.error(message, {
-        className: errorToastStyle,
-        autoClose: 5000,
-        closeButton: false,
-        hideProgressBar: false,
-        draggable: false,
-        closeOnClick: false,
-      });
-
-      if (!isReconnecting && retryCount < maxRetryCount) {
-        isReconnecting = true;
-        setTimeout(() => {
-          retryCount++;
-          openWebsocket();
-          isReconnecting = false;
-        }, reconnectTimeout * 1000);
-      }
-    }
-
-    function openWebsocket() {
-      _ws = new WebSocket("ws://localhost:5522");
-      _ws.onmessage = onMessage;
-      _ws.onopen = onOpen;
-      _ws.onclose = onErrorOrOnClose;
-      _ws.onerror = onErrorOrOnClose;
-    }
-
-    openWebsocket();
-
-    return () => {
-      _ws.close();
-    };
-  }, [onMessage]);
-
-  return ws;
+  return {
+    lastJsonMessage:
+      // Empty object is forced like this in order to avoid having to check for null in each component that uses this.
+      lastJsonMessage || (emptyObject as unknown as MessageToClient),
+    sendJsonMessage,
+    isConnected: readyState === ReadyState.OPEN,
+  };
 }

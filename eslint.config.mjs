@@ -3,6 +3,7 @@ import tseslint from "typescript-eslint";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import reactPlugin from "eslint-plugin-react";
 import hooksPlugin from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
 import { includeIgnoreFile } from "@eslint/compat";
 import path from "node:path";
@@ -56,6 +57,7 @@ export default tseslint.config(
   {
     plugins: {
       "react-hooks": hooksPlugin,
+      "react-refresh": reactRefresh,
     },
     rules: hooksPlugin.configs.recommended.rules,
   },

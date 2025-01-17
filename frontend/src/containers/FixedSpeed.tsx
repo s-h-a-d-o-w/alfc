@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyledApplyButton } from "../components/StyledApplyButton";
 import { useWebSocket } from "../utils/hooks";
-import { errorToast, sendMessage, successToast } from "../utils/misc";
+import { errorToast, successToast } from "../utils/misc";
 import { disabledFormStyle, enabledFormStyle } from "./styles/misc";
 
 const StyledForm = styled.form<{ disabled: boolean }>`
@@ -26,28 +26,28 @@ export function FixedSpeed({ disabled }: { disabled: boolean }) {
   const submitRef = useRef<HTMLButtonElement>(null);
   const [fixedPercentage, setFixedPercentage] = useState("0");
 
-  const ws = useWebSocket(
-    useCallback((event: MessageEvent<string>) => {
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === "state") {
-        setFixedPercentage(data.fixedPercentage);
-      } else if (kind === "success") {
-        successToast("Successfully applied.");
-      } else if (kind === "error") {
-        errorToast(data);
-        console.error(data);
-      }
-    }, []),
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      setFixedPercentage(data.fixedPercentage.toString());
+    } else if (kind === "success") {
+      successToast("Successfully applied.");
+    } else if (kind === "error") {
+      errorToast(data);
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     submitRef.current?.focus();
-    sendMessage(ws, {
+    sendJsonMessage({
       kind: "fixedpercentage",
       data: parseInt(fixedPercentage, 10),
     });

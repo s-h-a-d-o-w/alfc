@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getMethods, setMethods } from "../data/mof";
-import { useWebSocket } from "../utils/hooks";
 import { theme } from "../utils/consts";
-import type { MessageToClient } from "../../../common/types.ts";
+import { useWebSocket } from "../utils/hooks";
 
 enum Kind {
   Get = "get",
@@ -45,17 +44,17 @@ export function RawUI() {
   const [isVisible, setIsVisible] = useState(false);
   const [result, setResult] = useState("");
 
-  const ws = useWebSocket(
-    useCallback((event: MessageEvent<string>) => {
-      const payload = JSON.parse(event.data) as MessageToClient;
-      if (payload.kind !== "state") {
-        setResult(`${new Date().toLocaleTimeString()}: ${payload.data}`);
-        setIsRunning(false);
-      }
-    }, []),
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind !== "state" && data) {
+      setResult(`${new Date().toLocaleTimeString()}: ${data}`);
+      setIsRunning(false);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
@@ -69,17 +68,15 @@ export function RawUI() {
     event.preventDefault();
     refRun.current?.focus();
     setIsRunning(true);
-    ws.send(
-      JSON.stringify({
-        kind,
-        methodId:
-          kind === Kind.Get
-            ? getMethods[methodName].methodId
-            : setMethods[methodName].methodId,
-        methodName,
-        data: Object.keys(args).length > 0 ? args : undefined,
-      }),
-    );
+    sendJsonMessage({
+      kind,
+      methodId:
+        kind === Kind.Get
+          ? getMethods[methodName].methodId
+          : setMethods[methodName].methodId,
+      methodName,
+      data: Object.keys(args).length > 0 ? args : undefined,
+    });
   };
 
   const methods = kind === Kind.Get ? getMethods : setMethods;

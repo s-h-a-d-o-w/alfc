@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SimpleTooltip } from "../components/SimpleTooltip";
 import { StyledApplyButton } from "../components/StyledApplyButton";
 import { StyledArea } from "../components/StyledArea";
-import { useWebSocket } from "../utils/hooks";
-import { errorToast, sendTune, successToast } from "../utils/misc";
 import xtuIncompatibility from "../images/xtu_incompatibility.png";
-import { MessageToClient } from "../../../common/types";
+import { useWebSocket } from "../utils/hooks";
+import { errorToast, successToast } from "../utils/misc";
 
 const StyledInput = styled.input`
   width: 56px;
@@ -29,33 +28,35 @@ export function CPUTuning() {
   const [pl1, setPL1] = useState<string>("37");
   const [pl2, setPL2] = useState<string>("106");
 
-  const ws = useWebSocket(
-    useCallback((event: MessageEvent<string>) => {
-      setIsApplying(false);
-      const { kind, data } = JSON.parse(event.data) as MessageToClient;
-      if (kind === "state") {
-        if (data.isCpuTuningAvailable) {
-          setPL1(data.pl1.toString());
-          setPL2(data.pl2.toString());
-        }
-        setIsCpuTuningAvailable(data.isCpuTuningAvailable);
-      } else if (kind === "success") {
-        successToast("Successfully applied.");
-      } else if (kind === "error") {
-        errorToast(data);
-        console.error(data);
-      }
-    }, []),
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      if (data.isCpuTuningAvailable) {
+        setPL1(data.pl1.toString());
+        setPL2(data.pl2.toString());
+      }
+      setIsCpuTuningAvailable(data.isCpuTuningAvailable);
+    } else if (kind === "success") {
+      successToast("Successfully applied.");
+    } else if (kind === "error") {
+      errorToast(data);
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     setIsApplying(true);
-    sendTune(ws, parseInt(pl1, 10), parseInt(pl2, 10));
+    sendJsonMessage({
+      kind: "tune",
+      data: { pl1: parseInt(pl1, 10), pl2: parseInt(pl2, 10) },
+    });
   };
 
   const content = !isCpuTuningAvailable ? (

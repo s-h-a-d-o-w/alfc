@@ -50,23 +50,25 @@ export type FanControlActivity = {
   target: number;
 };
 
-export type MessageToClient =
-  | {
-      kind: MessageToClientKind.State;
-      data: State;
-    }
-  | {
-      kind: MessageToClientKind.Success;
-      data?: unknown;
-    }
-  | {
-      kind: MessageToClientKind.Error;
-      data: string;
-    }
-  | {
-      kind: MessageToClientKind.FanControlActivity;
-      data: FanControlActivity;
-    };
+export type MessageToClient = Pick<MessageToServer, "methodName" | "methodId"> &
+  (
+    | {
+        kind: MessageToClientKind.State;
+        data: State;
+      }
+    | {
+        kind: MessageToClientKind.Success;
+        data?: unknown;
+      }
+    | {
+        kind: MessageToClientKind.Error;
+        data: string;
+      }
+    | {
+        kind: MessageToClientKind.FanControlActivity;
+        data: FanControlActivity;
+      }
+  );
 
 export type MessageToServer = {
   kind: MessageToServerKind;

@@ -1,12 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import { theme } from "../utils/consts";
-
-export enum ToggleState {
-  On,
-  Off,
-  Unknown,
-}
+import { ToggleState } from "../utils/enums";
 
 const CONTAINER_HEIGHT = 24;
 const CONTAINER_PADDING = 2;
@@ -20,14 +15,16 @@ const StyledToggleContainer = styled.label`
   height: ${CONTAINER_HEIGHT}px;
 `;
 
-const StyledToggle = styled.span`
+const StyledToggle = styled.span<{
+  isChecked: boolean;
+}>`
   position: absolute;
   cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: ${({ isChecked }) => (isChecked ? theme.primary : "#ccc")};
   transition: 0.2s;
   border-radius: ${CONTAINER_HEIGHT}px;
 
@@ -41,24 +38,8 @@ const StyledToggle = styled.span`
     background-color: white;
     transition: 0.2s;
     border-radius: 50%;
-  }
-`;
-
-const StyledInput = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-
-  &:checked + ${StyledToggle} {
-    background-color: ${theme.primary};
-  }
-
-  &:focus + ${StyledToggle} {
-    box-shadow: 0 0 1px ${theme.primary};
-  }
-
-  &:checked + ${StyledToggle}:before {
-    transform: translateX(${TOGGLE_DIAMETER}px);
+    ${({ isChecked }) =>
+      isChecked ? `transform: translateX(${TOGGLE_DIAMETER}px);` : ""}
   }
 `;
 
@@ -79,7 +60,7 @@ export function Toggle({ label, name, onChange, value }: Props) {
   return (
     <>
       <StyledToggleContainer>
-        <StyledInput
+        <input
           disabled={value === ToggleState.Unknown}
           type="checkbox"
           id={name}
@@ -87,7 +68,7 @@ export function Toggle({ label, name, onChange, value }: Props) {
           checked={value === ToggleState.On}
           onChange={onChange}
         />
-        <StyledToggle />
+        <StyledToggle isChecked={value === ToggleState.On} />
       </StyledToggleContainer>
       <StyledLabel
         htmlFor={name}

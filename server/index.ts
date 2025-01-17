@@ -3,8 +3,8 @@ import isElevated from "is-elevated";
 import os from "os";
 import path from "path";
 import { initNativeServices } from "./native";
-import { wsServer } from "./websocket";
 import { isDev } from "./utils/consts";
+import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket";
 
 (async () => {
   if (!(await isElevated())) {
@@ -24,6 +24,7 @@ import { isDev } from "./utils/consts";
   }
 
   await initNativeServices();
+  await startWebSocketServer();
 
   const app = express();
   const port = 5522;
@@ -36,15 +37,7 @@ import { isDev } from "./utils/consts";
     });
   }
 
-  const server = app.listen(port, "localhost", () => {
-    console.log(
-      `Server running @ ${port}` + (isDev ? " - dev frontend @ 3000" : ""),
-    );
-  });
-
-  server.on("upgrade", (request, socket, head) => {
-    wsServer.handleUpgrade(request, socket, head, (socket) => {
-      wsServer.emit("connection", socket, request);
-    });
+  app.listen(port, "localhost", () => {
+    console.log(`Server running @ ${port} (Websocket ${WEBSOCKET_PORT})`);
   });
 })();

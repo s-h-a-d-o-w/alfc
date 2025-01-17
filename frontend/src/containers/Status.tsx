@@ -1,14 +1,10 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import { MessageToClientKind } from "../../../common/types";
+import { SimpleTooltip } from "../components/SimpleTooltip";
 import { StyledArea } from "../components/StyledArea";
 import { useWebSocket } from "../utils/hooks";
-import { sendMessage } from "../utils/misc";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { SimpleTooltip } from "../components/SimpleTooltip";
-import {
-  MessageToClientKind,
-  type MessageToClient,
-} from "../../../common/types";
 
 export function Status({ disabled }: { disabled: boolean }) {
   const tooltipRef = useRef<SVGSVGElement>(null);
@@ -18,19 +14,19 @@ export function Status({ disabled }: { disabled: boolean }) {
   const [avgGPUTemp, setAvgGPUTemp] = useState<string | number>("-");
   const [target, setTarget] = useState<string | number>("-");
 
-  const ws = useWebSocket(
-    useCallback((event: MessageEvent<string>) => {
-      const { kind, data } = JSON.parse(event.data) as MessageToClient;
-      if (kind === MessageToClientKind.FanControlActivity) {
-        setAppliedSpeed(data.appliedSpeed);
-        setAvgCPUTemp(data.avgCPUTemp);
-        setAvgGPUTemp(data.avgGPUTemp);
-        setTarget(data.target);
-      } else if (kind === "error") {
-        console.error(data);
-      }
-    }, []),
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
+
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === MessageToClientKind.FanControlActivity) {
+      setAppliedSpeed(data.appliedSpeed);
+      setAvgCPUTemp(data.avgCPUTemp);
+      setAvgGPUTemp(data.avgGPUTemp);
+      setTarget(data.target);
+    } else if (kind === "error") {
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
 
   useEffect(() => {
     if (disabled) {
@@ -44,11 +40,11 @@ export function Status({ disabled }: { disabled: boolean }) {
         setTarget("-");
       }, 500);
     } else {
-      sendMessage(ws, { kind: "registeractivitysocket" });
+      sendJsonMessage({ kind: "registeractivitysocket" });
     }
-  }, [disabled, ws]);
+  }, [disabled, sendJsonMessage]);
 
-  if (!ws) {
+  if (!isConnected) {
     return null;
   }
 

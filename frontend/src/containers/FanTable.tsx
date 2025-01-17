@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyledApplyButton } from "../components/StyledApplyButton";
 import { StyledArea } from "../components/StyledArea";
 import { useWebSocket } from "../utils/hooks";
-import { errorToast, sendMessage, successToast } from "../utils/misc";
+import { errorToast, successToast } from "../utils/misc";
 import { FanTableEditor } from "./FanTableEditor";
 import { Status } from "./Status";
 import { disabledFormStyle, enabledFormStyle } from "./styles/misc";
 
-export type FanTableItems = [string, string][];
+export type FanTableItems = [temperature: string, speed: string][];
 
 const StyledForm = styled.form<{ disabled: boolean }>`
   position: relative;
@@ -27,29 +27,39 @@ export function FanTable({ disabled }: { disabled: boolean }) {
   const [cpuTable, setCPUTable] = useState<FanTableItems>([]);
   const [gpuTable, setGPUTable] = useState<FanTableItems>([]);
 
-  const ws = useWebSocket(
-    useCallback((event: MessageEvent<string>) => {
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === "state") {
-        setCPUTable(data.cpuFanTable);
-        setGPUTable(data.gpuFanTable);
-      } else if (kind === "success") {
-        successToast("Successfully applied.");
-      } else if (kind === "error") {
-        errorToast(data);
-        console.error(data);
-      }
-    }, []),
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      setCPUTable(
+        data.cpuFanTable.map(([temperature, speed]) => [
+          temperature.toString(),
+          speed.toString(),
+        ]),
+      );
+      setGPUTable(
+        data.gpuFanTable.map(([temperature, speed]) => [
+          temperature.toString(),
+          speed.toString(),
+        ]),
+      );
+    } else if (kind === "success") {
+      successToast("Successfully applied.");
+    } else if (kind === "error") {
+      errorToast(data);
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     submitRef.current?.focus();
-    sendMessage(ws, {
+    sendJsonMessage({
       kind: "fantable",
       data: {
         cpu: cpuTable.map((entry) => [

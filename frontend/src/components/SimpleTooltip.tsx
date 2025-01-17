@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react";
 import { Tooltip, TooltipProps } from "reactstrap";
 import styled from "@emotion/styled";
 
-const StyledTooltip = styled.div<{
+const StyledContent = styled.div<{
   unlimitedWidth?: boolean;
 }>`
   background-color: white;
@@ -23,12 +23,14 @@ export const SimpleTooltip = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
+    // Warning in console can be ignored:
+    // https://github.com/reactstrap/reactstrap/issues/2819
     <Tooltip
       isOpen={isOpen}
       toggle={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
       {...props}
     >
-      <StyledTooltip unlimitedWidth={unlimitedWidth}>{children}</StyledTooltip>
+      <StyledContent unlimitedWidth={unlimitedWidth}>{children}</StyledContent>
     </Tooltip>
   );
 };
