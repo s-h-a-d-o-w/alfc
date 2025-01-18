@@ -20,8 +20,8 @@ export function Status({ disabled }: { disabled: boolean }) {
     const { kind, data } = lastJsonMessage;
     if (kind === MessageToClientKind.FanControlActivity) {
       setAppliedSpeed(data.appliedSpeed ? data.appliedSpeed.toString() : "-");
-      setAvgCPUTemp(data.avgCPUTemp.toString());
-      setAvgGPUTemp(data.avgGPUTemp.toString());
+      setAvgCPUTemp(Math.round(data.avgCPUTemp).toString());
+      setAvgGPUTemp(Math.round(data.avgGPUTemp).toString());
       setTarget(data.target.toString());
     } else if (kind === "error") {
       console.error(data);
