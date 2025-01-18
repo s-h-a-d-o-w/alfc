@@ -4,15 +4,22 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && ncc build index.ts"
+    "build": "rimraf dist && ncc build index.ts",
+    "start": "tsx ."
   },
   "dependencies": {
     "@neuralegion/os-service": "^1.2.6",
-    "react-dev-utils": "12.0.1",
-    "sudo-prompt": "9.2.1"
+    "@vscode/sudo-prompt": "^9.3.1",
+    "open": "^10.1.0"
   },
   "devDependencies": {
     "@vercel/ncc": "0.38.3",
-    "rimraf": "6.0.1"
+    "rimraf": "6.0.1",
+    "tsx": "^4.19.2"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@vscode/sudo-prompt": "patches/@vscode__sudo-prompt.patch"
+    }
   }
 }

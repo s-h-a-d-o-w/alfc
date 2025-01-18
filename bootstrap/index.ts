@@ -3,9 +3,10 @@ import { exec } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import sudo from "sudo-prompt";
+import sudo from "@vscode/sudo-prompt";
 
 const isWindows = os.platform() === "win32";
+const serviceName = "atest1";
 
 const sudoOptions = {
   name: "Aorus Laptop Fan Control",
@@ -16,7 +17,15 @@ const sudoOutputHandler: Parameters<(typeof sudo)["exec"]>[2] = (
   stdout,
 ) => {
   if (error) {
-    console.error(error);
+    if (error.message.includes("already exists")) {
+      console.log("Service already exists.");
+    } else if (error.message.includes("grant permission")) {
+      console.log("Please re-run and give permission to run.");
+    } else if (error.message.includes("does not exist")) {
+      console.log("Service doesn't exist.");
+    } else {
+      console.error(error);
+    }
     return;
   }
 
@@ -35,10 +44,11 @@ switch (process.argv[2]) {
     );
     break;
   case "install-as-sudo":
+    console.log("Registering the service...");
     service.add(
-      "alfc",
+      serviceName,
       {
-        args: ["run"],
+        args: [process.argv[1], "run"],
         dependencies: isWindows ? ["Winmgmt"] : ["acpi_call"],
       },
       (error) => {
@@ -46,9 +56,10 @@ switch (process.argv[2]) {
           throw error;
         }
 
+        console.log("Starting service...");
         const serviceStartCommand = isWindows
-          ? "net start alfc"
-          : "service alfc start";
+          ? "net start " + serviceName
+          : `service ${serviceName} start`;
         exec(serviceStartCommand, async (error) => {
           if (error) {
             throw error;
@@ -59,7 +70,9 @@ switch (process.argv[2]) {
           }
 
           console.log("Done.");
-          require("react-dev-utils/openBrowser")("http://localhost:5522");
+          import("open").then(({ default: open }) => {
+            open("http://localhost:5522");
+          });
         });
       },
     );
@@ -75,14 +88,16 @@ switch (process.argv[2]) {
     );
     break;
   case "uninstall-as-sudo": {
+    console.log("Stopping service...");
     const serviceStopCommand = isWindows
-      ? "net stop alfc"
-      : "service alfc stop";
+      ? "net stop " + serviceName
+      : `service ${serviceName} stop`;
     exec(serviceStopCommand, () => {
       // exec would possibly error if the service is already stopped.
       // But we don't care about that and will simply attempt to remove the serivce.
 
-      service.remove("alfc", (error) => {
+      console.log("Removing service...");
+      service.remove(serviceName, (error) => {
         if (error) {
           throw error;
         }
@@ -93,6 +108,7 @@ switch (process.argv[2]) {
     break;
   }
   case "run":
+    // Stop the service when the OS requests it.
     service.run(function () {
       service.stop(0);
     });
@@ -110,7 +126,11 @@ switch (process.argv[2]) {
 
     process.chdir(__dirname);
     process.env.NODE_ENV = "production";
-    require("./fancontrol");
+
+    new Promise((resolve) => {
+      setTimeout(resolve, Number.MAX_SAFE_INTEGER);
+    });
+    // require("./fancontrol");
     break;
   default:
     console.error("If you can read this, either you or I did something wrong.");
