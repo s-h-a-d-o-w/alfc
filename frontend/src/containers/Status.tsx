@@ -9,20 +9,20 @@ import { useWebSocket } from "../utils/hooks";
 export function Status({ disabled }: { disabled: boolean }) {
   const tooltipRef = useRef<SVGSVGElement>(null);
 
-  const [appliedSpeed, setAppliedSpeed] = useState<string | number | null>("-");
-  const [avgCPUTemp, setAvgCPUTemp] = useState<string | number>("-");
-  const [avgGPUTemp, setAvgGPUTemp] = useState<string | number>("-");
-  const [target, setTarget] = useState<string | number>("-");
+  const [appliedSpeed, setAppliedSpeed] = useState<string>("-");
+  const [avgCPUTemp, setAvgCPUTemp] = useState<string>("-");
+  const [avgGPUTemp, setAvgGPUTemp] = useState<string>("-");
+  const [target, setTarget] = useState<string>("-");
 
   const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
   useEffect(() => {
     const { kind, data } = lastJsonMessage;
     if (kind === MessageToClientKind.FanControlActivity) {
-      setAppliedSpeed(data.appliedSpeed);
-      setAvgCPUTemp(data.avgCPUTemp);
-      setAvgGPUTemp(data.avgGPUTemp);
-      setTarget(data.target);
+      setAppliedSpeed(data.appliedSpeed ? data.appliedSpeed.toString() : "-");
+      setAvgCPUTemp(data.avgCPUTemp.toString());
+      setAvgGPUTemp(data.avgGPUTemp.toString());
+      setTarget(data.target.toString());
     } else if (kind === "error") {
       console.error(data);
     }

@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import "@csstools/normalize.css";
 import "./index.css";
 import { AppWrapper } from "./AppWrapper";
 

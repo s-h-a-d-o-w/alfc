@@ -1,11 +1,9 @@
-import "@csstools/normalize.css";
 import styled from "@emotion/styled";
 import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "reactstrap";
-import "./App.css";
 import { CPUTuning } from "./containers/CPUTuning";
 import { FanTable } from "./containers/FanTable";
 import { FixedSpeed } from "./containers/FixedSpeed";

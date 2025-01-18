@@ -3,7 +3,7 @@ import { useWebSocket } from "./utils/hooks";
 import styled from "@emotion/styled";
 import { ErrorBoundary } from "react-error-boundary";
 
-const StyledApp = styled.div`
+const StyledAppWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -17,13 +17,12 @@ const StyledApp = styled.div`
 `;
 
 const StyledCenteredMessage = styled.h3`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  padding: 32px;
+
   font-weight: normal;
 `;
 
@@ -31,7 +30,7 @@ export function AppWrapper() {
   const { isConnected } = useWebSocket();
 
   return (
-    <StyledApp>
+    <StyledAppWrapper>
       <ErrorBoundary
         fallbackRender={({ error }) => {
           console.error(error);
@@ -53,6 +52,6 @@ export function AppWrapper() {
           </>
         )}
       </ErrorBoundary>
-    </StyledApp>
+    </StyledAppWrapper>
   );
 }

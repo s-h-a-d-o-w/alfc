@@ -36,6 +36,7 @@
     "reactstrap": "9.2.3"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.13.5",
     "@types/lodash": "4.17.14",
     "@types/node": "^18",
     "@types/react": "^18",
