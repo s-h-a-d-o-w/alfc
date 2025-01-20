@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "rimraf dist && ncc build index.ts",
+    "build": "rimraf dist && pnpm tsx esbuild.ts",
+    "build:esfirsttry": "esbuild index.ts --bundle --platform=node --target=node22 --external:*.node --outfile=dist/index.cjs",
+    "build:old": "rimraf dist && ncc build index.ts",
     "start": "tsx ."
   },
   "dependencies": {
@@ -13,7 +16,11 @@
     "open": "^10.1.0"
   },
   "devDependencies": {
+    "@types/node-abi": "^3.0.3",
     "@vercel/ncc": "0.38.3",
+    "esbuild": "^0.24.2",
+    "glob": "^11.0.1",
+    "node-abi": "^3.73.0",
     "rimraf": "6.0.1",
     "tsx": "^4.19.2"
   },
