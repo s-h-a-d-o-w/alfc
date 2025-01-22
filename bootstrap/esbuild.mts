@@ -2,7 +2,7 @@ import esbuild, { Plugin } from "esbuild";
 import { getAbi } from "node-abi";
 import fs from "fs/promises";
 import path from "path";
-import { glob } from "glob";
+import fg from "fast-glob";
 
 interface PrebuildifyOptions {
   // CSV list of prebuildify targets. Combination of os.platform() and os.arch(), e.g. `win32-x64`.
@@ -34,7 +34,7 @@ const prebuildifyPlugin = ({
       const outPrebuilds = path.join(outdir, "prebuilds");
       await fs.mkdir(outPrebuilds, { recursive: true });
 
-      const prebuilds = await glob("node_modules/**/prebuilds/**/*.node");
+      const prebuilds = await fg(["node_modules/**/prebuilds/**/*.node"]);
 
       // Get target ABI version if specified
       const targets =
@@ -55,7 +55,8 @@ const prebuildifyPlugin = ({
       const parsedPlatforms = prebuildifyTargets?.split(",");
       for (const prebuild of prebuilds) {
         const filename = path.basename(prebuild);
-        const platform = path.dirname(prebuild).split(path.sep).pop();
+        // Seems like unlike glob, fast-glob always uses / instead of a OS specific path separator.
+        const platform = path.dirname(prebuild).split("/").pop();
 
         if (
           platform &&
@@ -85,7 +86,10 @@ await esbuild.build({
   bundle: true,
   platform: "node",
   target: "node22.11.0",
+  format: "cjs",
   outfile: "dist/index.js",
+  packages: "bundle",
+  external: ["./fancontrol"],
   plugins: [
     prebuildifyPlugin({
       prebuildifyTargets: "win32-x64",

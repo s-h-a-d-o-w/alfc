@@ -98,6 +98,7 @@ to port 5522 and killing it.
 Contributions welcome, as always. 🙂
 
 - To support more recent node versions, the `nan` dependency in `os-version` would have to be upgraded.
+- It would be nice to be able to move to ESM at some point. Unfortunately, dependencies with native aspects don't play well. At least not out of the box and it's not worthwhile to invest a lot of time into workarounds.
 - Refactor styles so there aren't as many inline ones.
 - Make ramping up/down times configurable.
 - Prettier status UI.

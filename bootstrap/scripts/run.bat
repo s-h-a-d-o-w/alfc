@@ -1,1 +1,1 @@
-@node . run
+@node index.js run

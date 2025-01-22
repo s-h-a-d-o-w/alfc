@@ -1,5 +1,5 @@
 import type WebSocket from "ws";
-import ws from "ws";
+import { WebSocketServer } from "ws";
 import {
   MessageToClientKind,
   MessageToServer,
@@ -38,7 +38,7 @@ function sendSuccess(socket: WebSocket, payload: any, data?: any) {
 
 export function startWebSocketServer() {
   return new Promise<void>((resolve) => {
-    const wss = new ws.Server({ port: WEBSOCKET_PORT });
+    const wss = new WebSocketServer({ port: WEBSOCKET_PORT });
     wss.on("connection", (socket) => {
       sendState(socket);
 

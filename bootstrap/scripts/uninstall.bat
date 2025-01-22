@@ -1,5 +1,3 @@
-@node . uninstall
-
-@echo You can delete Aorus Fan Control now.	
+@node index.js uninstall
 
 @pause

@@ -1,1 +1,1 @@
-@node . install
+@node index.js install

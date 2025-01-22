@@ -12,6 +12,11 @@ const sudoOptions = {
   name: "Aorus Laptop Fan Control",
 };
 
+const openBrowser = () => {
+  const start = process.platform === "win32" ? "start" : "open";
+  require("child_process").exec(`${start} http://localhost:5522`);
+};
+
 const sudoOutputHandler: Parameters<(typeof sudo)["exec"]>[2] = (
   error,
   stdout,
@@ -70,9 +75,7 @@ switch (process.argv[2]) {
           }
 
           console.log("Done.");
-          import("open").then(({ default: open }) => {
-            open("http://localhost:5522");
-          });
+          openBrowser();
         });
       },
     );
@@ -102,7 +105,7 @@ switch (process.argv[2]) {
           throw error;
         }
 
-        console.log("Done.");
+        console.log("You can delete alfc now.");
       });
     });
     break;
@@ -116,9 +119,13 @@ switch (process.argv[2]) {
     // Need to redirect all output to a log file on Windows.
     // On Linux, it'll go to the systemd logs.
     if (isWindows) {
-      const access = fs.createWriteStream(path.join(__dirname, "service.log"));
+      const logStream = fs.createWriteStream(
+        path.join(__dirname, "service.log"),
+        { flags: "a" },
+      );
       // @ts-expect-error Undefined/null type mismatch: Type 'Error | null | undefined' is not assignable to type 'Error | undefined'.
-      process.stdout.write = process.stderr.write = access.write.bind(access);
+      process.stdout.write = process.stderr.write =
+        logStream.write.bind(logStream);
       process.on("uncaughtException", function (err) {
         console.error(err && err.stack ? err.stack : err);
       });
@@ -127,10 +134,7 @@ switch (process.argv[2]) {
     process.chdir(__dirname);
     process.env.NODE_ENV = "production";
 
-    new Promise((resolve) => {
-      setTimeout(resolve, Number.MAX_SAFE_INTEGER);
-    });
-    // require("./fancontrol");
+    require("./fancontrol");
     break;
   default:
     console.error("If you can read this, either you or I did something wrong.");

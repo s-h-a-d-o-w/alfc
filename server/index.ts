@@ -6,12 +6,31 @@ import { initNativeServices } from "./native";
 import { isDev } from "./utils/consts";
 import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket";
 
+// This is necessary because with just logging to the console before exiting, not everything actually ended up in the log file.
+const exitWithError = () => {
+  try {
+    const message =
+      "======================= NOTE ==========================\n" +
+      "This needs to be run with elevated privileges.\n" +
+      "=======================================================\n";
+
+    process.stdout.write(message);
+
+    // Check if we need to drain
+    if (process.stdout.writableNeedDrain) {
+      process.stdout.once("drain", () => process.exit(1));
+    } else {
+      process.exit(1);
+    }
+  } catch (_) {
+    // Ensure we exit even if write fails
+    process.exit(1);
+  }
+};
+
 (async () => {
   if (!(await isElevated())) {
-    console.log("======================= NOTE ==========================");
-    console.log("This needs to be run with elevated privileges.");
-    console.log("=======================================================");
-    process.exit(1);
+    exitWithError();
   }
 
   // Declaring WMI as a dependency is apparently not enough.
