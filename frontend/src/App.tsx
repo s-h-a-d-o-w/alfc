@@ -37,7 +37,7 @@ function App() {
     if (kind === "state") {
       setDoFixedSpeed(data.doFixedSpeed);
     } else if (kind === "error") {
-      errorToast(data);
+      errorToast("Unknown error");
       console.error(data);
     }
   }, [lastJsonMessage]);

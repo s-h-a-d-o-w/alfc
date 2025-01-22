@@ -26,7 +26,7 @@ export function Toggles() {
         });
       }
     } else if (kind === "error") {
-      errorToast(data);
+      errorToast("Couldn't apply change.");
       console.error(data);
     }
   }, [lastJsonMessage, sendJsonMessage]);
