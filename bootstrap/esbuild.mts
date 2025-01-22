@@ -36,7 +36,6 @@ const prebuildifyPlugin = ({
 
       const prebuilds = await fg(["node_modules/**/prebuilds/**/*.node"]);
 
-      // Get target ABI version if specified
       const targets =
         typeof options.target === "string"
           ? [options.target]
@@ -51,7 +50,6 @@ const prebuildifyPlugin = ({
             .map((target) => getAbi(target, "node")),
         );
 
-      // Copy relevant prebuilds
       const parsedPlatforms = prebuildifyTargets?.split(",");
       for (const prebuild of prebuilds) {
         const filename = path.basename(prebuild);

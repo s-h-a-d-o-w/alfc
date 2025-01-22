@@ -1,9 +1,9 @@
 import service from "@neuralegion/os-service";
 import { exec } from "child_process";
-import fs from "fs";
 import os from "os";
 import path from "path";
 import sudo from "@vscode/sudo-prompt";
+import { createLogger, format, transports } from "winston";
 
 const isWindows = os.platform() === "win32";
 const serviceName = "atest1";
@@ -119,15 +119,29 @@ switch (process.argv[2]) {
     // Need to redirect all output to a log file on Windows.
     // On Linux, it'll go to the systemd logs.
     if (isWindows) {
-      const logStream = fs.createWriteStream(
-        path.join(__dirname, "service.log"),
-        { flags: "a" },
-      );
-      // @ts-expect-error Undefined/null type mismatch: Type 'Error | null | undefined' is not assignable to type 'Error | undefined'.
-      process.stdout.write = process.stderr.write =
-        logStream.write.bind(logStream);
-      process.on("uncaughtException", function (err) {
-        console.error(err && err.stack ? err.stack : err);
+      const logger = createLogger({
+        format: format.combine(
+          format.timestamp({
+            format: "YYYY-MM-DD HH:mm:ss",
+          }),
+          format.printf(
+            (info) => `${info.timestamp} ${info.level}: ${info.message}`,
+          ),
+        ),
+        transports: [
+          new transports.File({
+            filename: path.join(__dirname, "service.log"),
+          }),
+        ],
+      });
+
+      console.log = (message: any) => logger.info(message);
+      console.info = (message: any) => logger.info(message);
+      console.warn = (message: any) => logger.warn(message);
+      console.error = (message: any) => logger.error(message);
+
+      process.on("uncaughtException", (err) => {
+        logger.error(err.stack || err.toString());
       });
     }
 
