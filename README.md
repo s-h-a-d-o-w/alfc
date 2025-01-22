@@ -61,6 +61,10 @@ Once you either uninstall the tool or quit after running it using `run.bat`, it
 is recommended to reboot your machine to ensure that control is handed back to
 either BIOS or Gigabyte's Control Center.
 
+## Troubleshooting
+
+On Windows, there is a `service.log` file in the alfc root directory that might contain useful information.
+
 ### Getting rid of Gigabyte Control Center
 
 If that is something you're interested in, you need to do this:
@@ -84,28 +88,16 @@ In the direction frontend -> server, arguments are not provided as hex strings, 
 WMI uses named arguments and it is easier to strip this info and convert to a
 hex string for Linux.
 
-## Troubleshooting
-
-On Windows, there is a `service.log` file in the alfc root directory that might contain useful information.
-
-A websocket went rogue once and kept sending status requests even though the UI wasn't open
-any more. Probably due to dev stuff with hot reload. Still - if a user ever experiences this,
-it can be resolved through running Resource Monitor as admin, finding what is connected
-to port 5522 and killing it.
-
 ## Todo/Wishlist
 
 Contributions welcome, as always. 🙂
 
-- To support more recent node versions, the `nan` dependency in `os-version` would have to be upgraded.
 - It would be nice to be able to move to ESM at some point. Unfortunately, dependencies with native aspects don't play well. At least not out of the box and it's not worthwhile to invest a lot of time into workarounds.
 - Refactor styles so there aren't as many inline ones.
-- Make ramping up/down times configurable.
 - Prettier status UI.
 - Using RGB lighting to highlight caps/num lock. There's something [here](https://gitlab.com/wtwrp/aeroctl/-/tree/master/Samples/AeroCtl.Rgb.LockKeys) for the Gigabyte Aero that could potentially be reused. (This should actually probably be a seperate little tool, like the Gigabyte-Aorus-Battery-Manager)
 - Make it possible to supply decent service Name and Description, especially on Windows, where it
-sticks out like a sore thumb. (Requires modifying `os-service`, since it currently uses the name one
-can supply also as the file name for Linux services, so spaces might be problematic.)
+sticks out like a sore thumb. (Requires modifying `os-service`, since it currently uses the name one can supply also as the file name for Linux services, so spaces might be problematic.)
 - ~~Make charge stop work. Based on `SmartManager.dll`, it's quite simple:
 `cwmi.CallMethod("ROOT\\WMI", "GB_WMIACPI_Set", "SetChargeStop", array);`
 Yet, `GetChargeStop` shows that the value set with `SetChargeStop` doesn't stick.
