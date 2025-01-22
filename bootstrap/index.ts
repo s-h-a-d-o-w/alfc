@@ -6,7 +6,7 @@ import sudo from "@vscode/sudo-prompt";
 import { createLogger, format, transports } from "winston";
 
 const isWindows = os.platform() === "win32";
-const serviceName = "atest1";
+const serviceName = "alfc";
 
 const sudoOptions = {
   name: "Aorus Laptop Fan Control",
