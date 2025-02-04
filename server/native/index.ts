@@ -1,10 +1,10 @@
 import os from "os";
 // Reference elision makes this work on Linux too. Awesome stuff:
 // http://ideasintosoftware.com/typescript-conditional-imports/
-import * as ACPI from "./windows/acpi";
-import * as CPUOC from "./windows/cpuoc";
-import { fanControl } from "../fan-control";
-import { state } from "../state";
+import * as ACPI from "./windows/acpi.js";
+import * as CPUOC from "./windows/cpuoc.js";
+import { fanControl } from "../fan-control/index.js";
+import { state } from "../state/index.js";
 
 const isLinux = os.platform() === "linux";
 

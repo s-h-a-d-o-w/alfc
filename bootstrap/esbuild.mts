@@ -87,7 +87,7 @@ await esbuild.build({
   format: "cjs",
   outfile: "dist/index.js",
   packages: "bundle",
-  external: ["./fancontrol"],
+  external: ["./fancontrol/index.js"],
   plugins: [
     prebuildifyPlugin({
       prebuildifyTargets: "win32-x64",

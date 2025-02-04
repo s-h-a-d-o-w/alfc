@@ -1,5 +1,5 @@
 import useReactWebSocket, { ReadyState } from "react-use-websocket";
-import { MessageToClient } from "../../../common/types";
+import { MessageToClient } from "../../../common/types.js";
 
 const emptyObject = {};
 const shouldReconnect = (_: CloseEvent) => true;

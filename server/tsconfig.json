@@ -1,17 +1,3 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "strict": true,
-    "baseUrl": "./",
-    "outDir": "build",
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "lib": [
-      "ESNext"
-    ],
-    "allowJs": true,
-    "forceConsistentCasingInFileNames": true
-  }
+  "extends": "../tsconfig.base.json"
 }

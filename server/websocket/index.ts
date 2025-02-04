@@ -4,11 +4,14 @@ import {
   MessageToClientKind,
   MessageToServer,
   MessageToServerKind,
-} from "../../common/types";
-import { getCall, setCall, tune } from "../native";
-import { persistState, state } from "../state";
-import { setFixedFan, fanControl as autoFanControl } from "../fan-control";
-import cloneDeep from "lodash/cloneDeep";
+} from "../../common/types.js";
+import { getCall, setCall, tune } from "../native/index.js";
+import { persistState, state } from "../state/index.js";
+import {
+  setFixedFan,
+  fanControl as autoFanControl,
+} from "../fan-control/index.js";
+import { cloneDeep } from "lodash";
 
 export const WEBSOCKET_PORT = 5523;
 

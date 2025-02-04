@@ -1,0 +1,4 @@
+packages:
+  - "bootstrap"
+  - "frontend"
+  - "server"

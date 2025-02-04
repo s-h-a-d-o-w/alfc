@@ -1,5 +1,5 @@
-import { mofGet } from "./mofGet";
-import { mofSet } from "./mofSet";
+import { mofGet } from "./mofGet.js";
+import { mofSet } from "./mofSet.js";
 
 type Args = {
   description: string;

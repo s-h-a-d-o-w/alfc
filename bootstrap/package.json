@@ -4,10 +4,11 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && pnpm tsx esbuild.mts",
+    "build": "tsc --noEmit && rimraf dist && pnpm tsx esbuild.mts",
     "build:esfirsttry": "esbuild index.ts --bundle --platform=node --target=node22 --external:*.node --outfile=dist/index.cjs",
     "build:old": "rimraf dist && ncc build index.ts",
-    "start": "tsx ."
+    "start": "tsx .",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@neuralegion/os-service": "^1.2.6",

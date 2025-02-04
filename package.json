@@ -8,17 +8,13 @@
   },
   "private": true,
   "scripts": {
-    "install": "pnpm install:bootstrap && pnpm install:frontend && pnpm install:server",
-    "install:bootstrap": "cd bootstrap && pnpm install",
-    "install:frontend": "cd frontend && pnpm install",
-    "install:server": "cd server && pnpm install",
+    "build": "pnpm -r --parallel build",
+    "start": "pnpm --filter=!bootstrap --parallel start",
     "lint": "eslint .",
-    "precommit": "concurrently \"pnpm type-check\" \"lint-staged\"",
     "prepare": "husky",
-    "start": "concurrently \"cd server && pnpm start\" \"cd frontend && pnpm start\"",
-    "start:prod": "cross-env NODE_ENV=production node server/build",
     "test": "vitest",
-    "type-check": "concurrently \"tsc -P ./frontend/tsconfig.json\" \"tsc --noEmit -P ./server/tsconfig.json\""
+    "type-check": "pnpm -r --parallel type-check",
+    "del:tscache": "del-cli \"**/*.tsbuildinfo\" \"!**/node_modules/**\""
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.4",
@@ -27,8 +23,8 @@
     "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "8.19.0",
     "@typescript-eslint/parser": "8.19.0",
-    "concurrently": "9.1.2",
     "cross-env": "7.0.3",
+    "del-cli": "^6.0.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",

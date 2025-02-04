@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { Args } from "../../../common/types";
+import { Args } from "../../../common/types.js";
 
 // Precondition: There are no uint16 arguments.
 function argstoHexString(args?: Args) {

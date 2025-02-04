@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
-import { StyledApplyButton } from "../components/StyledApplyButton";
-import { useWebSocket } from "../utils/hooks";
-import { errorToast, successToast } from "../utils/misc";
-import { disabledFormStyle, enabledFormStyle } from "./styles/misc";
+import { StyledApplyButton } from "../components/StyledApplyButton.js";
+import { useWebSocket } from "../utils/hooks.js";
+import { errorToast, successToast } from "../utils/misc.js";
+import { disabledFormStyle, enabledFormStyle } from "./styles/misc.js";
 
 const StyledForm = styled.form<{ disabled: boolean }>`
   position: relative;

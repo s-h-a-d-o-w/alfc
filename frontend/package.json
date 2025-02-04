@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "type-check": "tsc --noEmit"
   },
   "browserslist": {
     "production": [

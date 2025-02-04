@@ -6,8 +6,8 @@ import {
   faThermometerHalf,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import cloneDeep from "lodash/cloneDeep";
-import { FanTableItems } from "./FanTable";
+import { cloneDeep } from "lodash";
+import { FanTableItems } from "./FanTable.js";
 
 type Props = {
   onChange: (nextCurvePoints: FanTableItems) => void;

@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "reactstrap";
-import { CPUTuning } from "./containers/CPUTuning";
-import { FanTable } from "./containers/FanTable";
-import { FixedSpeed } from "./containers/FixedSpeed";
-import { RawUI } from "./containers/RawUI";
-import { Toggles } from "./containers/Toggles";
-import { useWebSocket } from "./utils/hooks";
-import { errorToast } from "./utils/misc";
+import { CPUTuning } from "./containers/CPUTuning.js";
+import { FanTable } from "./containers/FanTable.js";
+import { FixedSpeed } from "./containers/FixedSpeed.js";
+import { RawUI } from "./containers/RawUI.js";
+import { Toggles } from "./containers/Toggles.js";
+import { useWebSocket } from "./utils/hooks.js";
+import { errorToast } from "./utils/misc.js";
 
 const StyledTopRow = styled.div`
   display: flex;

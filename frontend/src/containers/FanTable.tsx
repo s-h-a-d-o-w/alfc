@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
-import { StyledApplyButton } from "../components/StyledApplyButton";
-import { StyledArea } from "../components/StyledArea";
-import { useWebSocket } from "../utils/hooks";
-import { errorToast, successToast } from "../utils/misc";
-import { FanTableEditor } from "./FanTableEditor";
-import { Status } from "./Status";
-import { disabledFormStyle, enabledFormStyle } from "./styles/misc";
+import { StyledApplyButton } from "../components/StyledApplyButton.js";
+import { StyledArea } from "../components/StyledArea.js";
+import { useWebSocket } from "../utils/hooks.js";
+import { errorToast, successToast } from "../utils/misc.js";
+import { FanTableEditor } from "./FanTableEditor.js";
+import { Status } from "./Status.js";
+import { disabledFormStyle, enabledFormStyle } from "./styles/misc.js";
 
 export type FanTableItems = [temperature: string, speed: string][];
 

@@ -14,7 +14,7 @@ const sudoOptions = {
 
 const openBrowser = () => {
   const start = process.platform === "win32" ? "start" : "open";
-  require("child_process").exec(`${start} http://localhost:5522`);
+  exec(`${start} http://localhost:5522`);
 };
 
 const sudoOutputHandler: Parameters<(typeof sudo)["exec"]>[2] = (
@@ -148,7 +148,8 @@ switch (process.argv[2]) {
     process.chdir(__dirname);
     process.env.NODE_ENV = "production";
 
-    require("./fancontrol");
+    // @ts-expect-error This is only available after bundling
+    import("./fancontrol/index.js");
     break;
   default:
     console.error("If you can read this, either you or I did something wrong.");

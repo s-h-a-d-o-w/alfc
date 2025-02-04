@@ -1,7 +1,3 @@
-// Can't be imported in CRA App... -_-
-// Maybe there's a workaround. Since TS takes care of things, it
-// shouldn't matter anyway.
-
 import type WebSocket from "ws";
 
 export type FanTable = [number, number][];

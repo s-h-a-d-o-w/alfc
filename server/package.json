@@ -9,7 +9,8 @@
     "start": "nodemon --ext ts,dll",
     "start:prod": "cross-env NODE_ENV=production node dist/index.js",
     "debug:acpi": "tsx native\\windows\\acpi.ts",
-    "debug:oc": "pnpm build:cpuoc && tsx native\\windows\\cpuoc.ts"
+    "debug:oc": "pnpm build:cpuoc && tsx native\\windows\\cpuoc.ts",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "edge-js": "23.1.4",

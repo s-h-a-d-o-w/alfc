@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
-import { getMethods, setMethods } from "../data/mof";
-import { theme } from "../utils/consts";
-import { useWebSocket } from "../utils/hooks";
+import { getMethods, setMethods } from "../data/mof.js";
+import { theme } from "../utils/consts.js";
+import { useWebSocket } from "../utils/hooks.js";
 
 enum Kind {
   Get = "get",

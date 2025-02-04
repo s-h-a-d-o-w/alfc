@@ -1,10 +1,9 @@
 import express from "express";
-import isElevated from "is-elevated";
 import os from "os";
 import path from "path";
-import { initNativeServices } from "./native";
-import { isDev } from "./utils/consts";
-import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket";
+import { initNativeServices } from "./native/index.js";
+import { isDev } from "./utils/consts.js";
+import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket/index.js";
 
 // This is necessary because with just logging to the console before exiting, not everything actually ended up in the log file.
 const exitWithError = () => {
@@ -29,6 +28,7 @@ const exitWithError = () => {
 };
 
 (async () => {
+  const { default: isElevated } = await import("is-elevated");
   if (!(await isElevated())) {
     exitWithError();
   }

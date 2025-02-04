@@ -2,12 +2,12 @@ import styled from "@emotion/styled";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { SimpleTooltip } from "../components/SimpleTooltip";
-import { StyledApplyButton } from "../components/StyledApplyButton";
-import { StyledArea } from "../components/StyledArea";
+import { SimpleTooltip } from "../components/SimpleTooltip.js";
+import { StyledApplyButton } from "../components/StyledApplyButton.js";
+import { StyledArea } from "../components/StyledArea.js";
 import xtuIncompatibility from "../images/xtu_incompatibility.png";
-import { useWebSocket } from "../utils/hooks";
-import { errorToast, successToast } from "../utils/misc";
+import { useWebSocket } from "../utils/hooks.js";
+import { errorToast, successToast } from "../utils/misc.js";
 
 const StyledInput = styled.input`
   width: 56px;

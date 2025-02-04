@@ -1,6 +1,6 @@
 import { promisify } from "util";
-import { Args } from "../../../common/types";
-import { createEdgeFunc } from "./edge";
+import { Args } from "../../../common/types.js";
+import { createEdgeFunc } from "./edge.js";
 
 type DotNetArg = {
   methodName: string;

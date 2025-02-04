@@ -1,5 +1,5 @@
 import { promisify } from "util";
-import { createEdgeFunc } from "./edge";
+import { createEdgeFunc } from "./edge.js";
 
 type DotNetArg = {
   pl1: number;

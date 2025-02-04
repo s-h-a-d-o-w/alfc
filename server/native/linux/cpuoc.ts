@@ -2,9 +2,9 @@ import { execSync } from "child_process";
 
 export async function tuneInit() {}
 
-// Only async to make the API consistent with Windows.
-// In both cases, we wait for the execution to be done anyway.
-export function tune(pl1: number, pl2: number) {
+// Has to be async to make the type consistent with Windows.
+// eslint-disable-next-line require-await
+export async function tune(pl1: number, pl2: number) {
   execSync(
     `echo ${
       pl1 * 1000 * 1000

@@ -2,9 +2,9 @@ import {
   MessageToClientKind,
   FanTable,
   FanControlActivity,
-} from "../../common/types";
-import { getCall, setCall } from "../native";
-import { state } from "../state";
+} from "../../common/types.js";
+import { getCall, setCall } from "../native/index.js";
+import { state } from "../state/index.js";
 
 const WAIT_RAMP_DOWN_CYCLES = 10;
 export const WAIT_RAMP_UP_CYCLES = 2;

@@ -1,10 +1,10 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
-import { MessageToClientKind } from "../../../common/types";
-import { SimpleTooltip } from "../components/SimpleTooltip";
-import { StyledArea } from "../components/StyledArea";
-import { useWebSocket } from "../utils/hooks";
+import { MessageToClientKind } from "../../../common/types.js";
+import { SimpleTooltip } from "../components/SimpleTooltip.js";
+import { StyledArea } from "../components/StyledArea.js";
+import { useWebSocket } from "../utils/hooks.js";
 
 export function Status({ disabled }: { disabled: boolean }) {
   const tooltipRef = useRef<SVGSVGElement>(null);

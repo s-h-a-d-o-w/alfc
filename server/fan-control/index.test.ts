@@ -1,13 +1,13 @@
 // TODO: upgrade packages so that eslint recognizes vitest globals out of the box
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getCall, setCall } from "../native";
-import { state } from "../state";
+import { getCall, setCall } from "../native/index.js";
+import { state } from "../state/index.js";
 import {
   fanControl,
   fanPercentToSpeed,
   CYCLE_DURATION,
   WAIT_RAMP_UP_CYCLES,
-} from "./index";
+} from "./index.js";
 
 vi.mock("../native", () => ({
   getCall: vi.fn(),
