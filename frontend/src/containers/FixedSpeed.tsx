@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
-import React, { useCallback, useRef, useState } from 'react';
-import { StyledApplyButton } from '../components/StyledApplyButton';
-import { useWebSocket } from '../utils/hooks';
-import { errorToast, sendMessage, successToast } from '../utils/misc';
-import { disabledFormStyle, enabledFormStyle } from './styles/misc';
+import styled from "@emotion/styled";
+import React, { useEffect, useRef, useState } from "react";
+import { StyledApplyButton } from "../components/StyledApplyButton.js";
+import { useWebSocket } from "../utils/hooks.js";
+import { errorToast, successToast } from "../utils/misc.js";
+import { disabledFormStyle, enabledFormStyle } from "./styles/misc.js";
 
 const StyledForm = styled.form<{ disabled: boolean }>`
   position: relative;
@@ -24,31 +24,31 @@ const StyledInput = styled.input`
 
 export function FixedSpeed({ disabled }: { disabled: boolean }) {
   const submitRef = useRef<HTMLButtonElement>(null);
-  const [fixedPercentage, setFixedPercentage] = useState('0');
+  const [fixedPercentage, setFixedPercentage] = useState("0");
 
-  const ws = useWebSocket(
-    useCallback((event) => {
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
-        setFixedPercentage(data.fixedPercentage);
-      } else if (kind === 'success') {
-        successToast('Successfully applied.');
-      } else if (kind === 'error') {
-        errorToast(data);
-        console.error(data);
-      }
-    }, [])
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      setFixedPercentage(data.fixedPercentage.toString());
+    } else if (kind === "success") {
+      successToast("Successfully applied.");
+    } else if (kind === "error") {
+      errorToast("Couldn't apply change.");
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     submitRef.current?.focus();
-    sendMessage(ws, {
-      kind: 'fixedpercentage',
+    sendJsonMessage({
+      kind: "fixedpercentage",
       data: parseInt(fixedPercentage, 10),
     });
   };

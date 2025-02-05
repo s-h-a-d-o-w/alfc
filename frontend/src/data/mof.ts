@@ -1,5 +1,5 @@
-import { mofGet } from './mofGet';
-import { mofSet } from './mofSet';
+import { mofGet } from "./mofGet.js";
+import { mofSet } from "./mofSet.js";
 
 type Args = {
   description: string;
@@ -19,11 +19,11 @@ type WmiMethods = {
 
 function parseMof(mof: string) {
   const methods: WmiMethods = {};
-  const rawMethods = mof.split('\n');
+  const rawMethods = mof.split("\n");
   for (const rawMethod of rawMethods) {
     // parse metadata and raw args string
     const match = rawMethod.match(
-      /.+?\((?<methodId>.+?)\).+?Description\("(?<description>.+?)"\)] void (?<methodName>.+?)\((?<args>.+?)\);/
+      /.+?\((?<methodId>.+?)\).+?Description\("(?<description>.+?)"\)] void (?<methodName>.+?)\((?<args>.+?)\);/,
     );
     if (match && match.groups) {
       const { methodId, description, methodName, args } = match.groups;
@@ -31,14 +31,14 @@ function parseMof(mof: string) {
       // parse args
       const inArgs: Args[] = [];
       const outArgs: Args[] = [];
-      const rawArgs = args.substr(1).split(', [');
+      const rawArgs = args.substr(1).split(", [");
       for (const rawArg of rawArgs) {
         const argsMatch = rawArg.match(
-          /(?<kind>in|out), Description\("(?<description>.+?)"\)] (?<type>.+?) (?<name>.+?)$/
+          /(?<kind>in|out), Description\("(?<description>.+?)"\)] (?<type>.+?) (?<name>.+?)$/,
         );
         if (argsMatch && argsMatch.groups) {
           const { kind, description, type, name } = argsMatch.groups;
-          const inOrOut = kind === 'in' ? inArgs : outArgs;
+          const inOrOut = kind === "in" ? inArgs : outArgs;
           inOrOut.push({
             description,
             type,

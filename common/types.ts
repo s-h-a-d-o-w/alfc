@@ -1,8 +1,4 @@
-// Can't be imported in CRA App... -_-
-// Maybe there's a workaround. Since TS takes care of things, it
-// shouldn't matter anyway.
-
-import WebSocket from 'ws';
+import type WebSocket from "ws";
 
 export type FanTable = [number, number][];
 
@@ -27,31 +23,48 @@ export type Args = {
 };
 
 export enum MessageToClientKind {
-  FanControlActivity = 'fancontrolactivity',
-  State = 'state',
-  Success = 'success',
-  Error = 'error',
+  FanControlActivity = "fancontrolactivity",
+  State = "state",
+  Success = "success",
+  Error = "error",
 }
 
 export enum MessageToServerKind {
-  Get = 'get',
-  Set = 'set',
-  Tune = 'tune',
-  FanTable = 'fantable',
-  FixedPercentage = 'fixedpercentage',
-  DoFixedSpeed = 'dofixedspeed',
-  RegisterActivitySocket = 'registeractivitysocket',
+  Get = "get",
+  Set = "set",
+  Tune = "tune",
+  FanTable = "fantable",
+  FixedPercentage = "fixedpercentage",
+  DoFixedSpeed = "dofixedspeed",
+  RegisterActivitySocket = "registeractivitysocket",
 }
 
-export type MessageToClient =
-  | {
-      kind: MessageToClientKind.State;
-      data?: string;
-    }
-  | {
-      kind: MessageToClientKind.Success;
-      data?: unknown;
-    };
+export type FanControlActivity = {
+  appliedSpeed: number | null;
+  avgCPUTemp: number;
+  avgGPUTemp: number;
+  target: number;
+};
+
+export type MessageToClient = Pick<MessageToServer, "methodName" | "methodId"> &
+  (
+    | {
+        kind: MessageToClientKind.State;
+        data: State;
+      }
+    | {
+        kind: MessageToClientKind.Success;
+        data?: unknown;
+      }
+    | {
+        kind: MessageToClientKind.Error;
+        data: string;
+      }
+    | {
+        kind: MessageToClientKind.FanControlActivity;
+        data: FanControlActivity;
+      }
+  );
 
 export type MessageToServer = {
   kind: MessageToServerKind;

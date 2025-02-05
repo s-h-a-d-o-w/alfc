@@ -1,34 +1,22 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { errorToastStyle } from './misc';
+import useReactWebSocket, { ReadyState } from "react-use-websocket";
+import { MessageToClient } from "../../../common/types.js";
 
-export function useWebSocket(onMessage: WebSocket['onmessage']) {
-  const [ws, setWs] = useState<WebSocket>();
+const emptyObject = {};
+const shouldReconnect = (_: CloseEvent) => true;
 
-  useEffect(() => {
-    const _ws = new WebSocket('ws://localhost:5522');
+export function useWebSocket() {
+  const { lastJsonMessage, sendJsonMessage, readyState } =
+    useReactWebSocket<MessageToClient | null>("ws://localhost:5523", {
+      retryOnError: true,
+      reconnectAttempts: Number.MAX_SAFE_INTEGER,
+      shouldReconnect,
+    });
 
-    _ws.onmessage = onMessage;
-
-    _ws.onopen = () => {
-      setWs(_ws);
-    };
-
-    _ws.onclose = () => {
-      toast.error('WebSocket connection was lost. Please refresh the page.', {
-        className: errorToastStyle,
-        autoClose: false,
-        closeButton: false,
-        hideProgressBar: true,
-        draggable: false,
-        closeOnClick: false,
-      });
-    };
-
-    return () => {
-      _ws.close();
-    };
-  }, [onMessage]);
-
-  return ws;
+  return {
+    lastJsonMessage:
+      // Empty object is forced like this in order to avoid having to check for null in each component that uses this.
+      lastJsonMessage || (emptyObject as unknown as MessageToClient),
+    sendJsonMessage,
+    isConnected: readyState === ReadyState.OPEN,
+  };
 }

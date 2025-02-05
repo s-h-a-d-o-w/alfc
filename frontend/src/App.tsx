@@ -1,32 +1,16 @@
-import '@csstools/normalize.css';
-import styled from '@emotion/styled';
-import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Button } from 'reactstrap';
-import './App.css';
-import { CPUTuning } from './containers/CPUTuning';
-import { FanTable } from './containers/FanTable';
-import { FixedSpeed } from './containers/FixedSpeed';
-import { RawUI } from './containers/RawUI';
-import { Toggles } from './containers/Toggles';
-import { useWebSocket } from './utils/hooks';
-import { errorToast, sendMessage } from './utils/misc';
-
-const StyledApp = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-
-  background-color: #3c3c49;
-  color: white;
-`;
+import styled from "@emotion/styled";
+import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "reactstrap";
+import { CPUTuning } from "./containers/CPUTuning.js";
+import { FanTable } from "./containers/FanTable.js";
+import { FixedSpeed } from "./containers/FixedSpeed.js";
+import { RawUI } from "./containers/RawUI.js";
+import { Toggles } from "./containers/Toggles.js";
+import { useWebSocket } from "./utils/hooks.js";
+import { errorToast } from "./utils/misc.js";
 
 const StyledTopRow = styled.div`
   display: flex;
@@ -46,33 +30,29 @@ const StyledChangeModeContainer = styled.div`
 function App() {
   const [doFixedSpeed, setDoFixedSpeed] = useState(false);
 
-  const ws = useWebSocket(
-    useCallback((event) => {
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
-        setDoFixedSpeed(data.doFixedSpeed);
-      } else if (kind === 'error') {
-        errorToast(data);
-        console.error(data);
-      }
-    }, [])
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
-    return null;
-  }
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      setDoFixedSpeed(data.doFixedSpeed);
+    } else if (kind === "error") {
+      errorToast("Unknown error");
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
 
   const onChangeMode: React.MouseEventHandler = () => {
-    sendMessage(ws, { kind: 'dofixedspeed', data: !doFixedSpeed });
+    sendJsonMessage({ kind: "dofixedspeed", data: !doFixedSpeed });
     setDoFixedSpeed(!doFixedSpeed);
   };
 
   return (
-    <div>
-      <StyledApp>
-        <div style={{ flexGrow: 1 }}>
-          <StyledTopRow>
-            <FanTable disabled={doFixedSpeed} />
+    <>
+      <div style={{ flexGrow: 1 }}>
+        <StyledTopRow>
+          <FanTable disabled={doFixedSpeed} />
+          {isConnected && (
             <StyledChangeModeContainer>
               <Button onClick={onChangeMode}>
                 Auto
@@ -82,19 +62,18 @@ function App() {
                 Fixed
               </Button>
             </StyledChangeModeContainer>
-            <FixedSpeed disabled={!doFixedSpeed} />
-          </StyledTopRow>
-          <StyledTopRow>
-            <div style={{ maxWidth: 300, marginLeft: 32, marginTop: 24 }}>
-              <Toggles />
-              <CPUTuning />
-            </div>
-          </StyledTopRow>
-        </div>
-        <RawUI />
-        <ToastContainer style={{ borderRadius: 4 }} />
-      </StyledApp>
-    </div>
+          )}
+          <FixedSpeed disabled={!doFixedSpeed} />
+        </StyledTopRow>
+        <StyledTopRow>
+          <div style={{ maxWidth: 300, marginLeft: 32, marginTop: 24 }}>
+            <Toggles />
+            <CPUTuning />
+          </div>
+        </StyledTopRow>
+      </div>
+      <RawUI />
+    </>
   );
 }
 

@@ -1,14 +1,14 @@
-import styled from '@emotion/styled';
-import React, { useCallback, useRef, useState } from 'react';
-import { StyledApplyButton } from '../components/StyledApplyButton';
-import { StyledArea } from '../components/StyledArea';
-import { useWebSocket } from '../utils/hooks';
-import { errorToast, sendMessage, successToast } from '../utils/misc';
-import { FanTableEditor } from './FanTableEditor';
-import { Status } from './Status';
-import { disabledFormStyle, enabledFormStyle } from './styles/misc';
+import styled from "@emotion/styled";
+import React, { useEffect, useRef, useState } from "react";
+import { StyledApplyButton } from "../components/StyledApplyButton.js";
+import { StyledArea } from "../components/StyledArea.js";
+import { useWebSocket } from "../utils/hooks.js";
+import { errorToast, successToast } from "../utils/misc.js";
+import { FanTableEditor } from "./FanTableEditor.js";
+import { Status } from "./Status.js";
+import { disabledFormStyle, enabledFormStyle } from "./styles/misc.js";
 
-export type FanTableItems = [string, string][];
+export type FanTableItems = [temperature: string, speed: string][];
 
 const StyledForm = styled.form<{ disabled: boolean }>`
   position: relative;
@@ -27,30 +27,40 @@ export function FanTable({ disabled }: { disabled: boolean }) {
   const [cpuTable, setCPUTable] = useState<FanTableItems>([]);
   const [gpuTable, setGPUTable] = useState<FanTableItems>([]);
 
-  const ws = useWebSocket(
-    useCallback((event) => {
-      const { kind, data } = JSON.parse(event.data);
-      if (kind === 'state') {
-        setCPUTable(data.cpuFanTable);
-        setGPUTable(data.gpuFanTable);
-      } else if (kind === 'success') {
-        successToast('Successfully applied.');
-      } else if (kind === 'error') {
-        errorToast(data);
-        console.error(data);
-      }
-    }, [])
-  );
+  const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
 
-  if (!ws) {
+  useEffect(() => {
+    const { kind, data } = lastJsonMessage;
+    if (kind === "state") {
+      setCPUTable(
+        data.cpuFanTable.map(([temperature, speed]) => [
+          temperature.toString(),
+          speed.toString(),
+        ]),
+      );
+      setGPUTable(
+        data.gpuFanTable.map(([temperature, speed]) => [
+          temperature.toString(),
+          speed.toString(),
+        ]),
+      );
+    } else if (kind === "success") {
+      successToast("Successfully applied.");
+    } else if (kind === "error") {
+      errorToast("Couldn't apply change.");
+      console.error(data);
+    }
+  }, [lastJsonMessage]);
+
+  if (!isConnected) {
     return null;
   }
 
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     submitRef.current?.focus();
-    sendMessage(ws, {
-      kind: 'fantable',
+    sendJsonMessage({
+      kind: "fantable",
       data: {
         cpu: cpuTable.map((entry) => [
           parseInt(entry[0], 10),
@@ -66,7 +76,7 @@ export function FanTable({ disabled }: { disabled: boolean }) {
 
   return (
     <StyledForm disabled={disabled} onSubmit={onSubmit}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <StyledArea>
           <h2 style={{ marginTop: 0 }}>CPU</h2>
           <FanTableEditor

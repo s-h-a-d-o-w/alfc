@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { theme } from '../utils/consts';
+import styled from "@emotion/styled";
+import { theme } from "../utils/consts.js";
 
 export const StyledApplyButton = styled.button`
   font-size: 16px;

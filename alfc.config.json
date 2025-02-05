@@ -1,9 +1,9 @@
 {
-  "cpuFanTable": [[40, 15], [83, 50], [88, 50]],
+  "cpuFanTable": [[40, 15], [83, 50], [88, 100]],
   "gpuFanTable": [[40, 15], [78, 50], [83, 100]],
   "gpuBoost": true,
   "pl1": 37,
   "pl2": 106,
   "doFixedSpeed": false,
-  "fixedPercentage": 70
+  "fixedPercentage": 50
 }

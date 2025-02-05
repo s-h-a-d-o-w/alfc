@@ -1,4 +1,4 @@
-import { theme } from '../../utils/consts';
+import { theme } from "../../utils/consts.js";
 
 export const disabledFormStyle = (disabled?: boolean) =>
   disabled &&

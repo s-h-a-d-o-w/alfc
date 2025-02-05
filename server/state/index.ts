@@ -1,16 +1,16 @@
-import fs from 'fs';
-import stringifyCompact from 'json-stringify-pretty-compact';
-import { cloneDeep } from 'lodash';
-import path from 'path';
-import { isDev } from '../utils/consts';
-import { State } from '../../common/types';
+import fs from "fs";
+import stringifyCompact from "json-stringify-pretty-compact";
+import path from "path";
+import { isDev } from "../utils/consts.js";
+import { State } from "../../common/types.js";
+import { cloneDeep } from "lodash";
 
 const CONFIG_FILE = isDev
-  ? path.join(__dirname, '../../alfc.config.json')
-  : path.join(__dirname, '../alfc.config.json');
+  ? path.join(__dirname, "../../alfc.config.json")
+  : path.join(__dirname, "../alfc.config.json");
 
 export const state: State = JSON.parse(
-  fs.readFileSync(CONFIG_FILE, { encoding: 'utf8' })
+  fs.readFileSync(CONFIG_FILE, { encoding: "utf8" }),
 );
 
 export function persistState() {
@@ -30,14 +30,14 @@ export function persistState() {
     fs.writeFile(
       CONFIG_FILE,
       stringifyCompact(stateCopy),
-      { encoding: 'utf8' },
+      { encoding: "utf8" },
       (error) => {
         if (error) {
           console.error(error);
         }
-      }
+      },
     );
   } catch (error) {
-    console.error('Error trying to persist state: ' + error);
+    console.error("Error trying to persist state: " + error);
   }
 }
