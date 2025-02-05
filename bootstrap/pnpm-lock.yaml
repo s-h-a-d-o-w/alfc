@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@vscode/sudo-prompt':
-    hash: y2wqjrgatl26r7odpxrljlx5ci
+    hash: cda04c696c79a5459ab2358c15bfeefed502dd712aa656ac3ab51880afdc29e7
     path: patches/@vscode__sudo-prompt.patch
 
 importers:
@@ -18,7 +18,7 @@ importers:
         version: 1.2.6
       '@vscode/sudo-prompt':
         specifier: ^9.3.1
-        version: 9.3.1(patch_hash=y2wqjrgatl26r7odpxrljlx5ci)
+        version: 9.3.1(patch_hash=cda04c696c79a5459ab2358c15bfeefed502dd712aa656ac3ab51880afdc29e7)
       winston:
         specifier: ^3.17.0
         version: 3.17.0
@@ -903,7 +903,7 @@ snapshots:
 
   '@vercel/ncc@0.38.3': {}
 
-  '@vscode/sudo-prompt@9.3.1(patch_hash=y2wqjrgatl26r7odpxrljlx5ci)': {}
+  '@vscode/sudo-prompt@9.3.1(patch_hash=cda04c696c79a5459ab2358c15bfeefed502dd712aa656ac3ab51880afdc29e7)': {}
 
   '@xmldom/xmldom@0.8.10': {}
 
