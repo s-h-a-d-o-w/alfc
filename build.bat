@@ -1,5 +1,5 @@
 @echo off
-rmdir /S /Q dist
+call pnpm rimraf dist || exit /b
 
 call pnpm build || exit /b
 
