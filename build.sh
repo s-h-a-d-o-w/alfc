@@ -1,14 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+set -ex
 
 rm -rf dist
 
-cd bootstrap
 pnpm build
-cd ../server
-pnpm build
-cd ../frontend
-pnpm build
-cd ..
 
 cp -r bootstrap/dist .
 cp bootstrap/scripts/linux/* dist
@@ -25,7 +20,8 @@ cp package.json dist
 
 cd dist
 mkdir alfc
-mv * ./alfc
+shopt -s extglob
+mv !(alfc) ./alfc
 tar -czf alfc.tar.gz alfc
 
 cd ..
