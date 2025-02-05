@@ -14,7 +14,8 @@
     "prepare": "husky",
     "test": "vitest",
     "type-check": "pnpm -r --parallel type-check",
-    "del:tscache": "del-cli \"**/*.tsbuildinfo\" \"!**/node_modules/**\""
+    "del:tscache": "del-cli \"**/*.tsbuildinfo\" \"!**/node_modules/**\"",
+    "ci": "concurrently \"pnpm lint\" \"pnpm type-check\" \"pnpm test\" \"pnpm build\""
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.4",
@@ -23,6 +24,7 @@
     "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "8.19.0",
     "@typescript-eslint/parser": "8.19.0",
+    "concurrently": "^9.1.2",
     "cross-env": "7.0.3",
     "del-cli": "^6.0.0",
     "eslint": "^9.17.0",
