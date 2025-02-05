@@ -15,7 +15,7 @@
     "test": "vitest",
     "type-check": "pnpm -r --parallel type-check",
     "del:tscache": "del-cli \"**/*.tsbuildinfo\" \"!**/node_modules/**\"",
-    "ci": "concurrently \"pnpm lint\" \"pnpm type-check\" \"pnpm test\" \"pnpm build\""
+    "all-checks": "concurrently \"pnpm lint\" \"pnpm type-check\" \"pnpm test\" \"pnpm build\""
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.4",

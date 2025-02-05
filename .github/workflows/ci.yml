@@ -20,4 +20,4 @@ jobs:
         node-version: 22
     - run: |
         pnpm install
-        pnpm ci
+        pnpm all-checks
