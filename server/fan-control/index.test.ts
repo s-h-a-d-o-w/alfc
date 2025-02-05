@@ -1,5 +1,3 @@
-// TODO: upgrade packages so that eslint recognizes vitest globals out of the box
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getCall, setCall } from "../native";
 import { state } from "../state/index.js";
 import {
@@ -18,7 +16,7 @@ const mockedGetCall = vi.mocked(getCall);
 const mockedSetCall = vi.mocked(setCall);
 
 function mockTemperatures(cpu: number, gpu: number) {
-  mockedGetCall.mockImplementation((methodId) => {
+  mockedGetCall.mockImplementation((methodId: string) => {
     switch (methodId) {
       case "0xe1":
         return Promise.resolve(cpu.toString(16));
