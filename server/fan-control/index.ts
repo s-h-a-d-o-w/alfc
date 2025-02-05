@@ -3,11 +3,11 @@ import {
   FanTable,
   FanControlActivity,
 } from "../../common/types.js";
-import { getCall, setCall } from "../native/index.js";
+import { getCall, setCall } from "../native";
 import { state } from "../state/index.js";
 
-const WAIT_RAMP_DOWN_CYCLES = 10;
-export const WAIT_RAMP_UP_CYCLES = 2;
+export const WAIT_RAMP_DOWN_CYCLES = 10;
+export const WAIT_RAMP_UP_CYCLES = 3;
 export const CYCLE_DURATION = 1000;
 const TEMP_POLL_INTERVAL = 200;
 
@@ -82,26 +82,30 @@ export function fanControl() {
     return highestMatch;
   }
 
-  function getGradientTarget(lastAppliedSpeed: number, targetSpeed: number) {
-    let gradientTarget = targetSpeed;
-    if (targetSpeed > lastAppliedSpeed) {
+  function getGradientTarget(
+    lastAppliedPercentage: number,
+    targetPercentage: number,
+  ) {
+    let gradientTarget = targetPercentage;
+
+    if (targetPercentage > lastAppliedPercentage) {
       gradientTarget =
-        lastAppliedSpeed + Math.round((targetSpeed - lastAppliedSpeed) / 2);
-    } else if (targetSpeed < lastAppliedSpeed) {
+        lastAppliedPercentage +
+        Math.round((targetPercentage - lastAppliedPercentage) / 2);
+    } else if (targetPercentage < lastAppliedPercentage) {
       gradientTarget =
-        lastAppliedSpeed - Math.round((lastAppliedSpeed - targetSpeed) / 2);
+        lastAppliedPercentage -
+        Math.round((lastAppliedPercentage - targetPercentage) / 2);
     }
 
-    if (Math.abs(targetSpeed - gradientTarget) < 5) {
-      gradientTarget = targetSpeed;
-    }
-
-    return gradientTarget;
+    return Math.abs(targetPercentage - gradientTarget) < 5
+      ? targetPercentage
+      : gradientTarget;
   }
 
-  let appliedSpeed = -1;
-  let currRampDownCycle = 0;
-  let currRampUpCycle = 0;
+  let appliedPercentage = -1;
+  let currRampDownCycle = 1;
+  let currRampUpCycle = 1;
   let prevCPUFanTable = state.cpuFanTable;
   let prevGPUFanTable = state.gpuFanTable;
   const autoFanInterval = setInterval(async () => {
@@ -126,7 +130,7 @@ export function fanControl() {
         const currGPUTemp2 = await getCallInt("0xe3", "getGpuTemp2");
         const currGPUTemp = Math.max(currGPUTemp1, currGPUTemp2);
         // console.log(
-        //   `CPU and GPU1/GPU2 temperatures: ${currCPUTemp} ${currGPUTemp1}/${currGPUTemp2}`
+        //   `CPU and GPU1/GPU2 temperatures: ${currCPUTemp} ${currGPUTemp1}/${currGPUTemp2}`,
         // );
 
         CPUTemps.push(currCPUTemp);
@@ -163,44 +167,51 @@ export function fanControl() {
     ) {
       // When tables change, do nothing in this cycle but reset fans to the
       // lowest percentage currently in state.
-      appliedSpeed = resetFanSpeed();
+      appliedPercentage = resetFanSpeed();
       prevCPUFanTable = state.cpuFanTable;
       prevGPUFanTable = state.gpuFanTable;
-      currRampDownCycle = 0;
-      currRampUpCycle = 0;
-    } else if (appliedSpeed < target) {
+      currRampDownCycle = 1;
+      currRampUpCycle = 1;
+    } else if (appliedPercentage < target) {
       if (currRampUpCycle === WAIT_RAMP_UP_CYCLES) {
-        gradientTarget = getGradientTarget(appliedSpeed, target);
+        gradientTarget = getGradientTarget(
+          appliedPercentage === -1
+            ? state.cpuFanTable[0][1]
+            : appliedPercentage,
+          target,
+        );
+        // console.log(`Ramping up to ${fanPercentToSpeed(gradientTarget)}`);
         setFixedFan(gradientTarget);
 
-        currRampDownCycle = 0;
-        currRampUpCycle = 0;
-        appliedSpeed = gradientTarget;
+        currRampDownCycle = 1;
+        currRampUpCycle = 1;
+        appliedPercentage = gradientTarget;
       } else {
         currRampUpCycle++;
       }
-    } else if (target < appliedSpeed) {
+    } else if (target < appliedPercentage) {
       // Make fan behavior less erratic by waiting a few cycles until we
       // ramp down.
       if (currRampDownCycle === WAIT_RAMP_DOWN_CYCLES) {
-        gradientTarget = getGradientTarget(appliedSpeed, target);
+        gradientTarget = getGradientTarget(appliedPercentage, target);
+        // console.log(`Ramping down to ${fanPercentToSpeed(gradientTarget)}`);
         setFixedFan(gradientTarget);
 
-        currRampDownCycle = 0;
-        currRampUpCycle = 0;
-        appliedSpeed = gradientTarget;
+        currRampDownCycle = 1;
+        currRampUpCycle = 1;
+        appliedPercentage = gradientTarget;
       } else {
         currRampDownCycle++;
       }
     } else {
       // Need to reset if e.g. ramp down phase is
       // interrupted by CPU getting hot again or getting cold again.
-      currRampDownCycle = 0;
-      currRampUpCycle = 0;
+      currRampDownCycle = 1;
+      currRampUpCycle = 1;
     }
 
     sendActivity({
-      appliedSpeed: appliedSpeed === -1 ? null : appliedSpeed,
+      appliedSpeed: appliedPercentage === -1 ? null : appliedPercentage,
       avgCPUTemp,
       avgGPUTemp,
       target,
