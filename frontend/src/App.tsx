@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "reactstrap";
 import { CPUTuning } from "./containers/CPUTuning.js";
@@ -11,7 +12,8 @@ import { RawUI } from "./containers/RawUI.js";
 import { Toggles } from "./containers/Toggles.js";
 import { useWebSocket } from "./utils/useWebSocket.js";
 import { errorToast } from "./utils/misc.js";
-
+import { useVersionCheck } from "./utils/useVersionCheck.js";
+import { UpdateNotification } from "./components/UpdateNotification.js";
 const StyledTopRow = styled.div`
   display: flex;
   justify-content: center;
@@ -28,6 +30,7 @@ const StyledChangeModeContainer = styled.div`
 `;
 
 function App() {
+  const newVersionAvailable = useVersionCheck();
   const [doFixedSpeed, setDoFixedSpeed] = useState(false);
 
   const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
@@ -72,7 +75,10 @@ function App() {
           </div>
         </StyledTopRow>
       </div>
+
       <RawUI />
+      <ToastContainer />
+      {newVersionAvailable && <UpdateNotification />}
     </>
   );
 }
