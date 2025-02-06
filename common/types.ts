@@ -13,8 +13,7 @@ export type State = {
   pl1: number;
   pl2: number;
 
-  // Exclude from persistence below.
-  activitySocket?: WebSocket;
+  activitySockets?: Set<WebSocket>;
   isCpuTuningAvailable?: boolean;
 };
 
@@ -50,7 +49,7 @@ export type MessageToClient = Pick<MessageToServer, "methodName" | "methodId"> &
   (
     | {
         kind: MessageToClientKind.State;
-        data: State;
+        data: Omit<State, "activitySockets">;
       }
     | {
         kind: MessageToClientKind.Success;

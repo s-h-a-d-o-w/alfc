@@ -21,7 +21,7 @@ export function persistState() {
   }
 
   const stateCopy = cloneDeep(state);
-  delete stateCopy.activitySocket;
+  delete stateCopy.activitySockets;
   delete stateCopy.isCpuTuningAvailable;
 
   try {

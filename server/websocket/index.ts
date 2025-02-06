@@ -17,7 +17,7 @@ export const WEBSOCKET_PORT = 5523;
 
 function sendState(socket: WebSocket) {
   const stateCopy = cloneDeep(state);
-  delete stateCopy.activitySocket;
+  delete stateCopy.activitySockets;
   socket.send(
     JSON.stringify({ kind: MessageToClientKind.State, data: stateCopy }),
   );
@@ -42,8 +42,18 @@ function sendSuccess(socket: WebSocket, payload: any, data?: any) {
 export function startWebSocketServer() {
   return new Promise<void>((resolve) => {
     const wss = new WebSocketServer({ port: WEBSOCKET_PORT });
+
+    // Initialize activitySockets Set if it doesn't exist
+    if (!state.activitySockets) {
+      state.activitySockets = new Set();
+    }
+
     wss.on("connection", (socket) => {
       sendState(socket);
+
+      socket.on("close", () => {
+        state.activitySockets?.delete(socket);
+      });
 
       socket.on("message", async (message) => {
         const messageString =
@@ -58,7 +68,7 @@ export function startWebSocketServer() {
         try {
           switch (payload.kind) {
             case MessageToServerKind.RegisterActivitySocket:
-              state.activitySocket = socket;
+              state.activitySockets?.add(socket);
               return;
             case MessageToServerKind.FixedPercentage:
               state.fixedPercentage = payload.data;
