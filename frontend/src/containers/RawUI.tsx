@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
 import { getMethods, setMethods } from "../data/mof.js";
 import { theme } from "../utils/consts.js";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 
 enum Kind {
   Get = "get",

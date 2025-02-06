@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { MessageToClientKind } from "../../../common/types.js";
 import { SimpleTooltip } from "../components/SimpleTooltip.js";
 import { StyledArea } from "../components/StyledArea.js";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 
 export function Status({ disabled }: { disabled: boolean }) {
   const tooltipRef = useRef<SVGSVGElement>(null);

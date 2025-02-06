@@ -45,13 +45,28 @@ function resetFanSpeed() {
 }
 
 function sendActivity(data: FanControlActivity) {
-  if (
-    state.activitySocket &&
-    state.activitySocket.readyState === state.activitySocket.OPEN
-  ) {
-    state.activitySocket.send(
-      JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data }),
-    );
+  if (!state.activitySockets || state.activitySockets.size === 0) {
+    console.warn("No activity sockets registered");
+    return;
+  }
+
+  for (const socket of state.activitySockets) {
+    try {
+      if (socket.readyState !== socket.OPEN) {
+        console.warn("Activity socket not in OPEN state:", socket.readyState);
+        socket.close();
+        state.activitySockets.delete(socket);
+        continue;
+      }
+
+      socket.send(
+        JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data }),
+      );
+    } catch (err) {
+      console.error("Failed to send activity:", err);
+      socket.close();
+      state.activitySockets.delete(socket);
+    }
   }
 }
 

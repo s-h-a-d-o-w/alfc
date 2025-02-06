@@ -4,6 +4,7 @@ import path from "path";
 import { initNativeServices } from "./native/index.js";
 import { isDev } from "./utils/consts.js";
 import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket/index.js";
+import { setFixedFan } from "./fan-control/index.js";
 
 // This is necessary because with just logging to the console before exiting, not everything actually ended up in the log file.
 const exitWithError = () => {
@@ -43,6 +44,17 @@ const exitWithError = () => {
   }
 
   await initNativeServices();
+  // Set fans to maximum speed on exit to prevent overheating
+  const originalProcessExit = process.exit;
+  process.exit = ((code?: number) => {
+    try {
+      setFixedFan(100);
+    } catch (err) {
+      console.error("Failed to set fan speed on exit:", err);
+    }
+    originalProcessExit(code ?? 1);
+  }) as (code?: number) => never;
+
   await startWebSocketServer();
 
   const app = express();
