@@ -45,13 +45,24 @@ function resetFanSpeed() {
 }
 
 function sendActivity(data: FanControlActivity) {
-  if (
-    state.activitySocket &&
-    state.activitySocket.readyState === state.activitySocket.OPEN
-  ) {
+  if (!state.activitySocket) {
+    return;
+  }
+
+  try {
+    if (state.activitySocket.readyState !== state.activitySocket.OPEN) {
+      state.activitySocket.close();
+      state.activitySocket = undefined;
+      return;
+    }
+
     state.activitySocket.send(
       JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data }),
     );
+  } catch (err) {
+    console.error("Failed to send activity:", err);
+    state.activitySocket?.close();
+    state.activitySocket = undefined;
   }
 }
 
