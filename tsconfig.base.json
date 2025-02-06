@@ -14,6 +14,7 @@
     "noEmit": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["vitest/globals"]
   }
 }
