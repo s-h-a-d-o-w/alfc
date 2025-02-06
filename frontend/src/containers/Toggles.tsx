@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Toggle } from "../components/Toggle.js";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 import { errorToast } from "../utils/misc.js";
 import { getMethods, setMethods } from "../data/mof.js";
 import { ToggleState } from "../utils/enums.js";

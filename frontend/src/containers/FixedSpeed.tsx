@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
 import { StyledApplyButton } from "../components/StyledApplyButton.js";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 import { errorToast, successToast } from "../utils/misc.js";
 import { disabledFormStyle, enabledFormStyle } from "./styles/misc.js";
 

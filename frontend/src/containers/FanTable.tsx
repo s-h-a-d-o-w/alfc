@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React, { useEffect, useRef, useState } from "react";
 import { StyledApplyButton } from "../components/StyledApplyButton.js";
 import { StyledArea } from "../components/StyledArea.js";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 import { errorToast, successToast } from "../utils/misc.js";
 import { FanTableEditor } from "./FanTableEditor.js";
 import { Status } from "./Status.js";

@@ -6,7 +6,7 @@ import { SimpleTooltip } from "../components/SimpleTooltip.js";
 import { StyledApplyButton } from "../components/StyledApplyButton.js";
 import { StyledArea } from "../components/StyledArea.js";
 import xtuIncompatibility from "../images/xtu_incompatibility.png";
-import { useWebSocket } from "../utils/hooks.js";
+import { useWebSocket } from "../utils/useWebSocket.js";
 import { errorToast, successToast } from "../utils/misc.js";
 
 const StyledInput = styled.input`

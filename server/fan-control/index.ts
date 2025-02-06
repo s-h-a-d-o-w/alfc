@@ -59,8 +59,7 @@ function sendActivity(data: FanControlActivity) {
     state.activitySocket.send(
       JSON.stringify({ kind: MessageToClientKind.FanControlActivity, data }),
     );
-  } catch (err) {
-    console.error("Failed to send activity:", err);
+  } catch (_) {
     state.activitySocket?.close();
     state.activitySocket = undefined;
   }

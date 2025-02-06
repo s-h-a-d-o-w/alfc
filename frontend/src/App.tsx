@@ -9,7 +9,7 @@ import { FanTable } from "./containers/FanTable.js";
 import { FixedSpeed } from "./containers/FixedSpeed.js";
 import { RawUI } from "./containers/RawUI.js";
 import { Toggles } from "./containers/Toggles.js";
-import { useWebSocket } from "./utils/hooks.js";
+import { useWebSocket } from "./utils/useWebSocket.js";
 import { errorToast } from "./utils/misc.js";
 
 const StyledTopRow = styled.div`

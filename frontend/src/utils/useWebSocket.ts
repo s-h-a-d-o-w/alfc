@@ -7,6 +7,9 @@ const shouldReconnect = (_: CloseEvent) => true;
 export function useWebSocket() {
   const { lastJsonMessage, sendJsonMessage, readyState } =
     useReactWebSocket<MessageToClient | null>("ws://localhost:5523", {
+      heartbeat: {
+        interval: 30000,
+      },
       retryOnError: true,
       reconnectAttempts: Number.MAX_SAFE_INTEGER,
       shouldReconnect,

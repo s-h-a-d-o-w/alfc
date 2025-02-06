@@ -49,6 +49,11 @@ export function startWebSocketServer() {
         const messageString =
           typeof message === "string" ? message : message.toString();
 
+        if (messageString === "ping") {
+          socket.send("pong");
+          return;
+        }
+
         const payload: MessageToServer = JSON.parse(messageString);
         try {
           switch (payload.kind) {
