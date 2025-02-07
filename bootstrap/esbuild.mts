@@ -79,7 +79,8 @@ const prebuildifyPlugin = ({
   },
 });
 
-await esbuild.build({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const result = await esbuild.build({
   entryPoints: ["index.ts"],
   bundle: true,
   platform: "node",
@@ -88,9 +89,17 @@ await esbuild.build({
   outfile: "dist/index.js",
   packages: "bundle",
   external: ["./fancontrol/index.js"],
-  plugins: [
-    prebuildifyPlugin({
-      prebuildifyTargets: "win32-x64",
-    }),
-  ],
+  minify: true,
+  // metafile: true,
+  plugins:
+    process.platform === "win32"
+      ? [
+          prebuildifyPlugin({
+            prebuildifyTargets: "win32-x64",
+          }),
+        ]
+      : undefined,
 });
+
+// const analysis = await esbuild.analyzeMetafile(result.metafile);
+// console.log(analysis);
