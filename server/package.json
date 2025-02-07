@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && ncc build index.ts",
+    "build": "rimraf dist && tsx build.ts",
     "build:cpuoc": "csc /reference:native\\windows\\IntelOverclockingSDK.dll /t:library /out:native\\windows\\CPUOC.dll native\\windows\\CPUOC.cs",
     "build:wmiapi": "csc /t:library /out:native\\windows\\WmiAPI.dll native\\windows\\WmiAPI.cs",
     "start": "nodemon --ext ts,dll",

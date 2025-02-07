@@ -9,9 +9,7 @@ cp -r bootstrap/dist .
 cp bootstrap/scripts/linux/* dist
 
 cp -r server/dist dist/fancontrol
-# TODO: Equivalent to this would be somehow including the acpi-call unit
-# copy server/native/windows/*.dll dist/fancontrol
-# xcopy /I /E server/node_modules/edge-js/lib/native dist/fancontrol/native
+# TODO: Somehow include the acpi-call unit? I'm not sure whether that make sense.
 
 cp -r frontend/build dist/fancontrol/frontend
 
