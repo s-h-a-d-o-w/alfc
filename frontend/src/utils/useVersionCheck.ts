@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import packageJson from "../../../package.json";
 
-const GITHUB_RAW_URL =
-  "https://raw.githubusercontent.com/s-h-a-d-o-w/alfc/master/package.json";
+const GITHUB_API_URL =
+  "https://api.github.com/repos/s-h-a-d-o-w/alfc/releases/latest";
 const CHECK_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 
 export function useVersionCheck() {
@@ -11,14 +11,12 @@ export function useVersionCheck() {
   useEffect(() => {
     const checkVersion = async () => {
       try {
-        const response = await fetch(GITHUB_RAW_URL);
-        const data = (await response.json()) as unknown;
+        const response = await fetch(GITHUB_API_URL);
+        const data = await response.json();
 
         if (
-          typeof data === "object" &&
-          data !== null &&
-          "version" in data &&
-          data.version !== packageJson.version
+          response.ok &&
+          data?.tag_name?.replace("v", "") !== packageJson.version
         ) {
           setNewVersionAvailable(true);
         }
