@@ -20,7 +20,7 @@ const StyledLink = styled.a`
 export function UpdateNotification() {
   return (
     <StyledLink
-      href="https://github.com/s-h-a-d-o-w/alfc/releases"
+      href="https://github.com/s-h-a-d-o-w/alfc/releases/latest"
       target="_blank"
       rel="noopener noreferrer"
     >
