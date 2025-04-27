@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { theme } from "../utils/consts";
+import { useVersionCheck } from "../utils/useVersionCheck";
 
 const StyledLink = styled.a`
   position: fixed;
@@ -18,7 +19,9 @@ const StyledLink = styled.a`
 `;
 
 export function UpdateNotification() {
-  return (
+  const newVersionAvailable = useVersionCheck();
+
+  return newVersionAvailable ? (
     <StyledLink
       href="https://github.com/s-h-a-d-o-w/alfc/releases/latest"
       target="_blank"
@@ -26,5 +29,5 @@ export function UpdateNotification() {
     >
       New version available!
     </StyledLink>
-  );
+  ) : null;
 }

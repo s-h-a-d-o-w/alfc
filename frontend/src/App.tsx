@@ -12,7 +12,6 @@ import { RawUI } from "./containers/RawUI.js";
 import { Toggles } from "./containers/Toggles.js";
 import { useWebSocket } from "./utils/useWebSocket.js";
 import { errorToast } from "./utils/misc.js";
-import { useVersionCheck } from "./utils/useVersionCheck.js";
 import { UpdateNotification } from "./components/UpdateNotification.js";
 const StyledTopRow = styled.div`
   display: flex;
@@ -30,7 +29,6 @@ const StyledChangeModeContainer = styled.div`
 `;
 
 function App() {
-  const newVersionAvailable = useVersionCheck();
   const [doFixedSpeed, setDoFixedSpeed] = useState(false);
 
   const { isConnected, sendJsonMessage, lastJsonMessage } = useWebSocket();
@@ -78,7 +76,7 @@ function App() {
 
       <RawUI />
       <ToastContainer />
-      {newVersionAvailable && <UpdateNotification />}
+      <UpdateNotification />
     </>
   );
 }
