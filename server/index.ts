@@ -81,6 +81,6 @@ const exitWithError = () => {
   }
 
   app.listen(port, "localhost", () => {
-    console.log(`Start finished - UI available @ ${port}`);
+    console.log(`Start finished - UI available @ http://localhost:${port}`);
   });
 })();
