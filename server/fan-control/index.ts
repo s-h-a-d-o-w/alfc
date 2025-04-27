@@ -46,7 +46,6 @@ function resetFanSpeed() {
 
 function sendActivity(data: FanControlActivity) {
   if (!state.activitySockets || state.activitySockets.size === 0) {
-    console.warn("No activity sockets registered");
     return;
   }
 

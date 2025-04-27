@@ -131,6 +131,8 @@ switch (process.argv[2]) {
         transports: [
           new transports.File({
             filename: path.join(__dirname, "service.log"),
+            handleExceptions: true,
+            handleRejections: true,
           }),
         ],
       });
@@ -144,6 +146,8 @@ switch (process.argv[2]) {
         logger.error(err.stack || err.toString());
       });
     }
+
+    console.log("Starting service...");
 
     process.chdir(__dirname);
     process.env.NODE_ENV = "production";
