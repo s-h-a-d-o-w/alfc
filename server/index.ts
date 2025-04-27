@@ -49,6 +49,12 @@ const exitWithError = () => {
   process.exit = ((code?: number) => {
     try {
       setFixedFan(100);
+      if (code !== 0) {
+        console.error("Exiting with code " + code);
+        console.error(new Error().stack);
+      } else {
+        console.log("Exiting normally.");
+      }
     } catch (err) {
       console.error("Failed to set fan speed on exit:", err);
     }
