@@ -3,7 +3,7 @@ import os from "os";
 import path from "path";
 import { initNativeServices } from "./native/index.js";
 import { isDev } from "./utils/consts.js";
-import { startWebSocketServer, WEBSOCKET_PORT } from "./websocket/index.js";
+import { startWebSocketServer } from "./websocket/index.js";
 import { setFixedFan } from "./fan-control/index.js";
 
 // This is necessary because with just logging to the console before exiting, not everything actually ended up in the log file.
@@ -29,6 +29,8 @@ const exitWithError = () => {
 };
 
 (async () => {
+  console.log("Checking permissions...");
+
   const { default: isElevated } = await import("is-elevated");
   if (!(await isElevated())) {
     exitWithError();
@@ -40,10 +42,13 @@ const exitWithError = () => {
   // possible to just try and create a WMI instance and returns whether
   // it was able to.
   if (os.platform() === "win32") {
+    console.log("Waiting for other services... (Windows only)");
     await new Promise((resolve) => setTimeout(resolve, 1000 * 15));
   }
 
+  console.log("Initializing fan control...");
   await initNativeServices();
+
   // Set fans to maximum speed on exit to prevent overheating
   const originalProcessExit = process.exit;
   process.exit = ((code?: number) => {
@@ -61,6 +66,7 @@ const exitWithError = () => {
     originalProcessExit(code ?? 1);
   }) as (code?: number) => never;
 
+  console.log("Starting websocket server...");
   await startWebSocketServer();
 
   const app = express();
@@ -75,6 +81,6 @@ const exitWithError = () => {
   }
 
   app.listen(port, "localhost", () => {
-    console.log(`Server running @ ${port} (Websocket ${WEBSOCKET_PORT})`);
+    console.log(`Start finished - UI available @ ${port}`);
   });
 })();
