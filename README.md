@@ -1,3 +1,7 @@
+# Archival notice
+
+Having recently migrated to a desktop computer, I can't maintain this any longer. That said, hardware interaction like here rarely seems to change and changes have been minimal for years anyway (aside from one major update that had no impact on anything user-facing), so this should be good to use indefinitely.
+
 # Aorus Laptop Fan Control (alfc)
 
 **Please note that if you're using Windows 10 *and* a CPU other than the i7-10875H, you would have to look up and set the PL1 and PL2 values in order not to possibly limit the performance of your CPU** - e.g. [tech powerup database](https://www.techpowerup.com/cpu-specs/core-i7-10875h.c2277). (`alfc` will attempt to set those levels whenever it starts or you change them, using Intel XTU on Windows 10 and `constraint_0_power_limit_uw` and `constraint_1_power_limit_uw` on Linux. Windows 11 forbids using Intel XTU, at least for this. As far as I'm aware, there's no danger to setting those values too high, since CPUs won't consume more than a certain maximum, regardless of these values. On the other hand, throttling due to low values is possible!)
