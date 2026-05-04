@@ -1,6 +1,6 @@
 # Archival notice
 
-Having recently migrated to a desktop computer, I can't maintain this any longer. That said, hardware interaction like here rarely seems to change and changes have been minimal for years anyway (aside from one major update that had no impact on anything user-facing), so this should be good to use indefinitely.
+Having recently migrated to a desktop computer, I can't maintain this any longer. That said, hardware interaction like here rarely seems to change and code changes have been minimal for years anyway (aside from one major update that had no impact on anything user-facing), so this should be good to use indefinitely.
 
 # Aorus Laptop Fan Control (alfc)
 
